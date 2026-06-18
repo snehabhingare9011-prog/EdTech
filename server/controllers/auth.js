@@ -2,6 +2,8 @@
 const otpGenerator=require('otp-generator');
 const OTP=require('../models/OTP');
 const User=require('../models/user');
+const bcrypt=require('bcrypt');
+const Profile=require('../models/profile');
 
 exports.sendOTP=async(req,res)=>{
     try{
@@ -71,5 +73,113 @@ exports.sendOTP=async(req,res)=>{
             success:false,
             message:err.message
         });
+    }
+}
+
+
+exports.signUp=async(req,res)=>{
+    try{
+        const { 
+            firstName,
+            lastName,
+            email,
+            password,
+            confirmPassword,
+            accountType,
+            contactNumber,
+            otp
+
+        }=req.body;
+
+        if(!firstName||!lastName||!email||!password||!confirmPassword||!accountType||!otp||!contactNumber){
+            return res.status(400).json({
+                success:false,
+                message:"All fields are required"
+            })
+        }
+
+        const emailRegex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!emailRegex.test(email)){
+            return res.status(400).json({
+                success:false,
+                message:"Invalid email format"
+            })
+        }
+
+         if(password!==confirmPassword){
+            return res.status(400).json({
+                success:false,
+                message:"Password and confirm password do not match"
+            })
+        }
+
+        const existingUser=await User.findOne({email});
+
+        if(existingUser){
+            return res.status(409).json({
+                success:false,
+                message:"user is already registered"
+            })
+        }
+
+        const recentOtp=await OTP.find({otp}).sort({createdAt:-1}).limit(1);
+        console.log("recentOtp",recentOtp);
+        
+        if(recentOtp.length==0){
+            return res.status(400).json({
+                success:false,
+                message:"OTP not found"
+            })
+        }
+        else if(otp!==recentOtp[0].otp){
+            return res.status(400).json({
+                success:false,
+                message:"Invalid OTP"
+            })
+        }
+       
+
+        let hashPassword;
+        try{
+            hashPassword=await bcrypt.hash(password,10);
+        }catch(err){
+           return res.status(500).json({
+            success:false,
+            message:"Error while hashing password"
+           })
+        }
+
+        const profileDetails=await Profile.create({
+            gender:null,
+            dateofBirth:null,
+            about:null,
+            contactNumber:null
+        })
+
+        const user=await user.create({
+            fistname,
+            lastName,
+            password:hashPassword,
+            email,
+            accountType,
+            profile:profileDetails._id,
+            contactNumber,
+            image:`https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
+        })
+
+        return res.status(200).json({
+            success:true,
+            message:"user is registered successfully",
+            user
+        })
+
+
+
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:error.message
+        })
+
     }
 }

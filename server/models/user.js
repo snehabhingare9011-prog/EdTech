@@ -45,6 +45,10 @@ const userSchema=new mongoose.Schema({
         ref:"CourseProgress"
 
     }],
+    contactNumber:{
+        type:Number,
+        
+    }
 
 });
 
