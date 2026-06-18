@@ -261,3 +261,60 @@ exports.login=async (req,res)=>{
         })
     }
 }
+
+exports.changePassword=async(req,res)=>{
+    try{
+       const { oldPassword, newPassword, confirmNewPassword } = req.body;
+
+        if (!oldPassword || !newPassword || !confirmNewPassword) {
+            return res.status(400).json({
+                success: false,
+                message: "All fields are required"
+            });
+        }
+
+        if (newPassword !== confirmNewPassword) {
+            return res.status(400).json({
+                success: false,
+                message: "New password and confirm password do not match"
+            });
+        }
+
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        const isPasswordMatched = await bcrypt.compare(
+            oldPassword,
+            user.password
+        );
+
+        if (!isPasswordMatched) {
+            return res.status(401).json({
+                success: false,
+                message: "Old password is incorrect"
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        await User.findByIdAndUpdate(req.user.id,{ password: hashedPassword} );
+
+        return res.status(200).json({
+            success: true,
+            message: "Password changed successfully"
+        });
+
+    }
+    catch(err){
+        return res.status(500).json({
+            success:false,
+            message:err.message
+        })
+    }
+}
