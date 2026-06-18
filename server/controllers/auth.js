@@ -4,6 +4,8 @@ const OTP=require('../models/OTP');
 const User=require('../models/user');
 const bcrypt=require('bcrypt');
 const Profile=require('../models/profile');
+const jwt=require('jsonwebtoken');
+require('dotenv').config();
 
 exports.sendOTP=async(req,res)=>{
     try{
@@ -181,5 +183,81 @@ exports.signUp=async(req,res)=>{
             message:error.message
         })
 
+    }
+}
+
+exports.login=async (req,res)=>{
+    try{
+        const {email,password}=req.body;
+
+        //validation
+        if(!email||!password){
+            return res.status(400).json({
+                success:false,
+                message:"All fields are required"
+            })
+        }
+
+        //check email formate
+        const emailRegex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!emailRegex.test(email)){
+            return res.status(400).json({
+                success:false,
+                message:"Invalid email format"
+            })
+        }
+
+        let user=await User.findOne({email});
+
+        if(!user){
+            return res.status(404).json({
+                success:false,
+                message:"User not found. Please sign up first"
+            })
+        }
+        
+        if(await bcrypt.compare(password,user.password)){
+
+            const payload={
+                id:user._id,
+                role:user.accountType,
+                email:user.email
+            }
+            const token=jwt.sign(payload,process.env.SECRET_KEY,{
+                expiresIn:"5h"
+            });
+
+            user=user.toObject();
+            user.token=token;
+            user.password=undefined;
+
+            const options={
+                expires:new Date(Date.now()+ 3*24*60*60*1000),
+                httpOnly:true,
+                
+            }
+
+            res.cookie("token",token,options).json({
+                success:true,
+                message:"User logged in successfully",
+                token,
+                user,
+
+            });
+
+        }
+        else{
+            // 401 Unauthorized = authentication failed (Wrong password is an authentication issue.)
+            return res.status(401).json({
+                success:false,
+                message:"password is incorrect"
+            })
+        }
+
+    }catch(err){
+        return res.status(500).json({
+            success:false,
+            message:err.message
+        })
     }
 }
