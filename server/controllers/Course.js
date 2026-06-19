@@ -7,11 +7,11 @@ const Course=require('../models/course');
 
 exports.createCourse=async(req,res)=>{
     try{
-        const {courseName,courseDescription,category,price,whatYouWillLearn}=req.body;
+        const {courseName,courseDescription,category,price,whatYouWillLearn,tag}=req.body;
 
         const thumbnail=req.files?.thumbnailImage;
 
-        if(!courseName||!courseDescription||!category||!whatYouWillLearn||!price||!thumbnail){
+        if(!courseName||!courseDescription||!category||!whatYouWillLearn||!price||!thumbnail||!tag){
             return res.status(400).json({
                 success:false,
                 message:"All fields are required"
@@ -48,7 +48,8 @@ exports.createCourse=async(req,res)=>{
             whatYouWillLearn,
             price,
             thumbnail:thumbnailImageUrl.secure_url,
-            category:categoryDetails._id
+            category:categoryDetails._id,
+            tag
 
         })
 

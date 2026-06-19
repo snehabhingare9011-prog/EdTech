@@ -30,6 +30,7 @@ const courseSchema=new mongoose.Schema({
 
 
     }],
+    
     ratingAndReviews:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"RatingAndReview"
@@ -44,6 +45,9 @@ const courseSchema=new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"category"
 
+    },
+    tag:{
+        type:String
     },
     studentsEnrolled:[{
         type:mongoose.Schema.Types.ObjectId,
