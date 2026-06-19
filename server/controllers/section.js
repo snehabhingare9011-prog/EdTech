@@ -15,12 +15,13 @@ exports.createSection=async(req,res)=>{
         }
 
         const newSection=await Section.create({sectionName});
-
+ 
+        /// TODO:How can i populate both section and subSection : Completed ✅
         const updateCourseDetails=await Course.findByIdAndUpdate(
             courseId,
             {$push:{courseContent:newSection._id}},
             {new:true}
-        );
+        ).populate({path:"courseContent",populate:{path:"subSection"}}).exec();
 
         return res.status(200).json({
             success:true,
@@ -72,6 +73,8 @@ exports.updateSection=async(req ,res)=>{
 
 exports.deleteSection=async(req,res)=>{
     try{
+
+        // TODO: confusion sub-section also delete or not.
         const {sectionId,courseId}=req.body;
 
          if(!courseId||!sectionId){
