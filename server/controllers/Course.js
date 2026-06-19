@@ -1,6 +1,6 @@
 
 const User=require('../models/user');
-const Tag=require('../models/tags');
+const Tag=require('../models/Category');
 const {uploadImageToCloudinary}=require('../utils/imageUpload');
 require('dotenv').config();
 const Course=require('../models/course');
