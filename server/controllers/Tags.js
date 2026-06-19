@@ -5,13 +5,15 @@ exports.createTag=async(req,res)=>{
     try{
         //fetch Data 
         const {name,description}=req.body;
+
         //validation
         if(!name||!description){
-            return res.satus(400).json({
+            return res.status(400).json({
                 success:false,
                 message:"All fields are Required"
             })
         }
+
         //create entry in DB
         const tagDetails=await Tag.create({name,description});
         console.log("tagDetails",tagDetails);
