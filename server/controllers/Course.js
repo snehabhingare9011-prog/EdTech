@@ -7,7 +7,16 @@ const Course=require('../models/course');
 
 exports.createCourse=async(req,res)=>{
     try{
-        const {courseName,courseDescription,category,price,whatYouWillLearn,tag}=req.body;
+        // Get user ID from request object
+		const userId = req.user.id;
+
+        const { courseName,
+            courseDescription,
+            category,
+            price,
+            whatYouWillLearn,
+            tag,
+            status }=req.body;
 
         const thumbnail=req.files?.thumbnailImage;
 
@@ -18,19 +27,26 @@ exports.createCourse=async(req,res)=>{
             })
         }
 
-        const userId=req.user.id;
-        const instructorDetails=await User.findById(userId);
+        if (!status || status === undefined) {
+			status = "Draft";
+		}
+
+		// Check if the user is an instructor
+	    const instructorDetails = await User.findOne({
+            _id:userId,
+            accountType:"Instructor"
+        });
+        
         console.log("instructor Details",instructorDetails);
-        //TODO:verify that user.id and instructorDetails._id are same or not 
 
         if(!instructorDetails){
             return res.status(404).json({
                 success:false,
                 message:"Instructor details not found"
-            })
+            });
         }
 
-        const categoryDetails=await Category.findById(category);
+        const categoryDetails = await Category.findById(category);
 
         if(!categoryDetails){
             return res.status(404).json({
@@ -39,7 +55,7 @@ exports.createCourse=async(req,res)=>{
             })
         }
 
-        const thumbnailImageUrl=await uploadImageToCloudinary(thumbnail,process.env.FOLDER_NAME)
+        const thumbnailImageUrl=await uploadImageToCloudinary(thumbnail,process.env.FOLDER_NAME);
 
         const newCourse=await Course.create({
             courseName,
@@ -91,6 +107,46 @@ exports.showAllCourses=async(req , res)=>{
             success:false,
             message:"Failed to fetch all courses",
             error:err.message
+        })
+    }
+}
+
+
+exports.getCourseDetails=async(req,res)=>{
+    try{
+         const { courseId }=req.body;
+         if(!courseId){
+            return res.status(400).json({
+                success:false,
+                message: "Course ID is required"
+            })
+         }
+
+         const courseDetails=await Course.findById(courseId)
+         .populate({path:"instructor",populate:{path:"additionalDetails"}})
+         .populate("ratingAndReviews")
+         .populate("category")
+         .populate("studentsEnrolled")
+         .populate({path:"courseContent",populate:{path:"subSection"}}).exec();
+
+         if(!courseDetails){
+            return res.status(404).json({
+                success:false,message:"Course not found"
+            })
+         }
+
+         return res.status(200).json({
+            success:true,
+            message:"Course details fetched successfully",
+            data:courseDetails
+         })
+
+
+
+    }catch(err){
+        return res.status(500).json({
+            success:false,
+            message:err.message
         })
     }
 }

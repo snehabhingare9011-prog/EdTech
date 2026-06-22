@@ -3,7 +3,7 @@ const mongoose=require('mogoose');
 const courseSchema=new mongoose.Schema({
    
     courseName:{
-        type:String,
+        type:String,//String stores a single string value,
         trim:true,
         required:true
     },
@@ -47,13 +47,22 @@ const courseSchema=new mongoose.Schema({
 
     },
     tag:{
-        type:String
+        type:[String] // [String] stores an array of string values.
     },
+    
+    instructions: {
+		type: [String],
+	},
+    
     studentsEnrolled:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User",
         required:true
-    }]
+    }],
+    status: {
+		type: String,
+		enum: ["Draft", "Published"],
+	},
 
 
 });
