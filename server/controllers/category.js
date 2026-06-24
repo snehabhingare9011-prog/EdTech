@@ -62,7 +62,7 @@ exports.categoryPageDetails=async(req,res)=>{
         if(!categoryId){
             return res.status(400).json({
                 success:false,
-                mesage:"Category ID is required"
+                message:"Category ID is required"
             })
         }
 
@@ -70,16 +70,17 @@ exports.categoryPageDetails=async(req,res)=>{
         const selectedCategory=await Category.findById(categoryId)
         .populate("courses").exec();
 
+        // Handle the case when the category is not found
         if(!selectedCategory){
             return res.status(404).json({
                 success:false,
                 message:"Category Not Found"
             })
         }
-        // Handle the case when there are no courses
 
+        // Handle the case when there are no courses
         if(selectedCategory.courses.length===0){
-            return res.satus(404).json({
+            return res.status(404).json({
                 success:false,
                 message:"No courses found for the selected category."
             })
@@ -91,10 +92,18 @@ exports.categoryPageDetails=async(req,res)=>{
         }).populate("courses").exec();
 
         //TODO: got top 10 selling courses
-
         const topSellingCourses=await Course.find({status:"Published"});
-        topSellingCourses.sort((a,b)=>b.studentEnrolled.length-a.studentEnrolled.length);
+        topSellingCourses.sort((a,b)=>b.studentsEnrolled.length-a.studentsEnrolled.length);
         const top10Courses=topSellingCourses.slice(0,10);
+
+        // Another Way to Get 10 selling courses
+        
+        // const allCategories = await Category.find().populate("courses");
+		// const allCourses = allCategories.flatMap((category) => category.courses);
+		// const mostSellingCourses = allCourses
+		// 	.sort((a, b) => b.studentsEnrolled.length - a.studentsEnrolled.length)
+		// 	.slice(0, 10);
+
 
         //return responce
         return res.status(200).json({
@@ -102,9 +111,8 @@ exports.categoryPageDetails=async(req,res)=>{
             message:"Category page details fetched successfully",
             data:{
                 selectedCategory,
-                diffrentCategory,
+                differentCategory,
                 top10Courses
-
             }
         });
 
