@@ -2,12 +2,23 @@
 const Profile=require('../models/profile');
 const User=require('../models/user');
 const Course=require('../models/course');
+require("dotenv").config();
+const {uploadFileToCloudinary}=require('../utils/FileUpload');
+
+
+// ❓🙋‍♂️ /^[6-9]\d{9}$/ ❓🙋‍♂️
+// ^ → start of number
+// [6-9] → first digit must be 6, 7, 8, or 9
+// \d{9} → after that, exactly 9 digits
+// $ → end of number
 
 exports.updateProfile=async(req,res)=>{
     try{
         //fetchData
         const {gender,dateOfBirth="",about="",contactNumber}=req.body;
         const userId=req.user.id;
+
+        console.log("gender,dateOfBirth,contactNumber,about,userId",gender,dateOfBirth,contactNumber,about,userId)
 
         //validation
         if(!userId||!gender||!contactNumber){
@@ -16,6 +27,15 @@ exports.updateProfile=async(req,res)=>{
                 message:"Required All Fields"
             });
         }
+
+        //validate the mobile number
+		const phoneRegex = /^[6-9]\d{9}$/;
+        if(!phoneRegex.test(String(contactNumber))){
+			return res.status(400).json({
+				success:false,
+				message:"Enter a valid 10-digit mobile number"
+			})
+		}
 
         const userDetails=await User.findById(userId);
         if(!userDetails){
@@ -78,7 +98,7 @@ exports.deleteAccount = async (req, res) => {
         userDetails.isDeleted = true;
 
         userDetails.deletedAt = new Date(
-            Date.now() + 3 * 24 * 60 * 60 * 1000
+            Date.now() + 3* 24* 60* 60 * 1000
         );
 
         await userDetails.save();
@@ -127,3 +147,55 @@ exports.getUserDetails = async (req, res) => {
 
     }
 };
+
+//updateDisplayPicture
+exports.updateDisplayPicture=async(req,res)=>{
+    try{
+       const displayPicture = req.files?.displayPicture;
+        const userId = req.user.id;
+
+        if (!displayPicture) {
+            return res.status(400).json({
+                success: false,
+                message: "Display picture is required"
+            });
+        }
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+       const uploadDetails = await uploadFileToCloudinary(
+            displayPicture,
+            process.env.FOLDER_NAME,
+            
+        );
+        console.log("uploadDetails",uploadDetails);
+
+        const updatedUser=await User.findByIdAndUpdate(userId,
+            {
+                image:uploadDetails.secure_url
+            },
+            {new:true}
+        )
+        console.log("updatedUser",updatedUser);
+
+       return res.status(200).json({
+            success: true,
+            message: "Display picture updated successfully",
+            data: updatedUser
+        });
+
+    }catch(err){
+
+        return res.status(500).json({
+            success: false,
+            message: err.message
+        });
+
+
+    }
+}

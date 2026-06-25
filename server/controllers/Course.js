@@ -1,24 +1,33 @@
 
 const User=require('../models/user');
 const Category=require('../models/Category');
-const {uploadImageToCloudinary}=require('../utils/imageUpload');
+const {uploadFileToCloudinary}=require('../utils/FileUpload');
 require('dotenv').config();
 const Course=require('../models/course');
+require('../models/ratingAndReview')
 
 exports.createCourse=async(req,res)=>{
     try{
         // Get user ID from request object
 		const userId = req.user.id;
 
-        const { courseName,
+        let { courseName,
             courseDescription,
             category,
             price,
             whatYouWillLearn,
-            tag,
-            status }=req.body;
+            tag,status }=req.body;
 
         const thumbnail=req.files?.thumbnailImage;
+
+        console.log("dekhte hai bhai",courseName,
+            courseDescription,
+            category,
+            price,
+            whatYouWillLearn,
+            tag);
+
+            console.log("req.body",req.body);
 
         if(!courseName||!courseDescription||!category||!whatYouWillLearn||!price||!thumbnail||!tag){
             return res.status(400).json({
@@ -45,7 +54,7 @@ exports.createCourse=async(req,res)=>{
                 message:"Instructor details not found"
             });
         }
-
+        
         const categoryDetails = await Category.findById(category);
 
         if(!categoryDetails){
@@ -55,7 +64,8 @@ exports.createCourse=async(req,res)=>{
             })
         }
 
-        const thumbnailImageUrl=await uploadImageToCloudinary(thumbnail,process.env.FOLDER_NAME);
+        const thumbnailImageUrl=await uploadFileToCloudinary(thumbnail,process.env.FOLDER_NAME);
+        console.log("coudinary responce",thumbnailImageUrl);
 
         const newCourse=await Course.create({
             courseName,
@@ -69,14 +79,18 @@ exports.createCourse=async(req,res)=>{
 
         })
 
-        await User.findByIdAndUpdate(userId,{$push:{courses:newCourse._id}},{new:true});
+       const updatedUser = await User.findByIdAndUpdate(userId,{$push:{courses:newCourse._id}},{new:true});
+        console.log("user",updatedUser);
 
-        await Category.findByIdAndUpdate(category,{$push:{courses:newCourse._id}},{new:true});
+        const updatedCategory=await Category.findByIdAndUpdate(category,{$push:{courses:newCourse._id}},{returnDocument:'after'});
+        console.log("category",updatedCategory);
 
        return res.status(201).json({
             success:true,
             message:"Course created successfully",
-            data:newCourse
+            data:newCourse,
+            updatedCategory,
+            updatedUser
 })
 
 

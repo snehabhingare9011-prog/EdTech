@@ -1,4 +1,4 @@
-const mongoose=require('mogoose');
+const mongoose=require('mongoose');
 
 const profileSchema=new mongoose.Schema({
     gender:{

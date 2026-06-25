@@ -11,6 +11,8 @@ cron.schedule("0 0 * * *", async () => {
             isDeleted: true,
             deletedAt: { $lte: new Date() }
         });
+
+        
         
         // TODO: Find all courses where the user is enrolled and remove the user ID from Course's studentEnrolled Array: :Completed ✅
         for (const user of usersToDelete) {

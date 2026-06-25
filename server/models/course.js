@@ -1,4 +1,4 @@
-const mongoose=require('mogoose');
+const mongoose=require('mongoose');
 
 const courseSchema=new mongoose.Schema({
    
@@ -12,40 +12,42 @@ const courseSchema=new mongoose.Schema({
         trim:true,
         required:true
     },
+
     instructor:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User",
         required:true
-
-
     },
+
     whatYouWillLearn:{
         type:String,
         trim:true
-
     },
+
     courseContent:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Section"
-
-
     }],
     
     ratingAndReviews:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"RatingAndReview"
     }],
+
     price:{
         type:Number
     },
+
     thumbnail:{
         type:String
     },
+
     category:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"category"
+        ref:"Category"
 
     },
+
     tag:{
         type:[String] // [String] stores an array of string values.
     },
@@ -59,6 +61,7 @@ const courseSchema=new mongoose.Schema({
         ref:"User",
         required:true
     }],
+
     status: {
 		type: String,
 		enum: ["Draft", "Published"],

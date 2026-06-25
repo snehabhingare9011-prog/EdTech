@@ -2,11 +2,13 @@
 const mailSender=require('../utils/mailSender');
 const User=require('../models/user');
 const bcrypt=require('bcrypt');
+const crypto = require("crypto");
 
 exports.resetPasswordToken=async(req,res)=>{
     try{
         const {email}=req.body;
         const user=await User.findOne({email});
+        console.log("user",user);
 
         if(!user){
             return res.status(404).json({
@@ -16,17 +18,25 @@ exports.resetPasswordToken=async(req,res)=>{
         }
 
         const token=crypto.randomUUID();
+        console.log("token",token);
 
         const updatedDetails=await User.findOneAndUpdate(
             {email},
             {token:token, resetPasswordExpires:Date.now()+3*60*1000 },
             {new :true}
         );
+        
+        console.log("updatedUser",updatedDetails);
 
+        const url=`http://localhost:3000/update-password/${token}`;
 
-        const url=`http://localhost:3000/update-password/${token}`
+       const mailResponce= await mailSender(
+			email,
+			"Password Reset",
+			`Your Link for email verification is ${url}. Please click this url to reset your password.`
+		);
 
-        await mailSender(email,"Password Reset Link",`password Reset Line:${url}`)
+        console.log("mailResponce",mailResponce);
 
         return res.status(200).json({
             success:true,
@@ -77,7 +87,7 @@ exports.resetPassword=async(req, res)=>{
        
         await User.findOneAndUpdate({token},{password:hashPassword, token: undefined,
         resetPasswordExpires: undefined},{new:true}); // token: undefined,resetPasswordExpires: undefinedOtherwise the same token could potentially be reused until expiry.
-
+        
         return res.status(200).json({
             success:true,
             message:"Password reset successfully"

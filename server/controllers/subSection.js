@@ -3,7 +3,7 @@ const Section=require('../models/section');
 const subSection = require('../models/subSection');
 const SubSection=require('../models/subSection');
 require('dotenv').config();
-const {uploadImageToCloudinary}=require('../utils/imageUpload');
+const {uploadFileToCloudinary}=require('../utils/FileUpload');
 
 exports.createSubSection=async(req,res)=>{
     try{
@@ -18,7 +18,7 @@ exports.createSubSection=async(req,res)=>{
             });
         }
 
-        const uploadDetails=await uploadImageToCloudinary( video,process.env.FOLDER_NAME);
+        const uploadDetails=await uploadFileToCloudinary(video,process.env.FOLDER_NAME);
 
         const SubSectionDetails=await SubSection.create({
             title,
@@ -38,6 +38,7 @@ exports.createSubSection=async(req,res)=>{
             success:true,
             message:"Sub Section created successfully",
            updateSection,
+           SubSectionDetails
         })
 
 
@@ -89,7 +90,7 @@ exports.updateSubSection = async (req, res) => {
 
         if (req.files && req.files.videoFile) {
 
-            const uploadDetails = await uploadImageToCloudinary(
+            const uploadDetails = await uploadFileToCloudinary(
                 req.files.videoFile,
                 process.env.FOLDER_NAME
             );
@@ -133,6 +134,29 @@ exports.deleteSubSection=async(req,res)=>{
             });
         }
 
+        //Find section first
+        const section = await Section.findById(sectionId);
+
+        if (!section) {
+            return res.status(404).json({
+                success: false,
+                message: "Section not found"
+            });
+        }
+
+         //  Check subsection belongs to this section
+        const subSectionExistsInSection = section.subSection.some(
+            (id) => id.toString() === subSectionId
+        );
+
+        if (!subSectionExistsInSection) {
+            return res.status(400).json({
+                success: false,
+                message: "This subsection does not belong to this section"
+            });
+        }
+
+        //Delete subsection document
         const deletedSubSection=await SubSection.findByIdAndDelete(subSectionId);
 
         if (!deletedSubSection) {
@@ -140,8 +164,9 @@ exports.deleteSubSection=async(req,res)=>{
                 success: false,
                 message: "Sub Section not found"
             });
-        }
-
+        } 
+        
+        // Remove subsection ID from section's array
         const updateSection=await Section.findByIdAndUpdate(
             sectionId,
             {$pull:{subSection:deletedSubSection._id}},
@@ -150,10 +175,14 @@ exports.deleteSubSection=async(req,res)=>{
         );
 
 
+        console.log("updateSection",updateSection);
+
+
         return res.status(200).json({
             success:true,
             message:"Sub Section deleted successfully",
-            updateSection
+            data:{updateSection,
+            deletedSubSection}
         })
 
 

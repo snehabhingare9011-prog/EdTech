@@ -24,7 +24,7 @@ exports.createCategory=async(req,res)=>{
             success:true,
             message:"Category created succcessfully",
             CategoryDetails
-        })
+        });
 
     }catch(Error){
         return res.status(500).json({
@@ -35,15 +35,21 @@ exports.createCategory=async(req,res)=>{
 
 }
 
-exports.showAllCategorys=async(req , res)=>{
+exports.showallCategories=async(req , res)=>{
     try{
-        const allCategorys=await Category.find({},{name:true,description:true});
+        // const allCategories=await Category.find({},{description:false}); This returns all fields except description.
+        // const allCategories=await Category.find({},{name:true}); //This return only name and _id fields
+        // const allCategories=await Category.find({},{name:true,_id:false}); //This return only name not _id .
+        // const allCategories=await Category.find({},{name:true,description:false}); //Error
+
+
+       const allCategories=await Category.find({},{name:true,description:true});
 
         
         return res.status(200).json({
             success:true,
-            message:"All Categorys Return Successfully",
-            allCategorys
+            message:"All allCategories Return Successfully",
+           allCategories
         })
 
     }catch(Error){
@@ -66,9 +72,15 @@ exports.categoryPageDetails=async(req,res)=>{
             })
         }
 
-        //get courses for specified category
-        const selectedCategory=await Category.findById(categoryId)
-        .populate("courses").exec();
+        //// Get selected category and its courses
+         const selectedCategory = await Category.findById(categoryId)
+            .populate({
+                path: "courses",
+                // match: { status: "Published" }
+            })
+            .exec();
+
+        console.log("selectedCategory",selectedCategory);
 
         // Handle the case when the category is not found
         if(!selectedCategory){
@@ -86,23 +98,31 @@ exports.categoryPageDetails=async(req,res)=>{
             })
         }
 
-        //get courses for diffrent categories
-        const differentCategory=await Category.find({
-            _id:{$ne:categoryId}
-        }).populate("courses").exec();
+     
+      // Get other categories and their published courses
+        const differentCategory = await Category.find({
+            _id: { $ne: categoryId }
+        })
+        .populate({
+            path: "courses",
+             match: { status: "Published" }
+        })
+        .exec();
+       
 
-        //TODO: got top 10 selling courses
-        const topSellingCourses=await Course.find({status:"Published"});
-        topSellingCourses.sort((a,b)=>b.studentsEnrolled.length-a.studentsEnrolled.length);
-        const top10Courses=topSellingCourses.slice(0,10);
+
+        // //TODO: got top 10 selling courses
+        // const topSellingCourses=await Course.find({status:"Published"});
+        // topSellingCourses.sort((a,b)=>b.studentsEnrolled.length-a.studentsEnrolled.length);
+        // const top10Courses=topSellingCourses.slice(0,10);
 
         // Another Way to Get 10 selling courses
-        
-        // const allCategories = await Category.find().populate("courses");
-		// const allCourses = allCategories.flatMap((category) => category.courses);
-		// const mostSellingCourses = allCourses
-		// 	.sort((a, b) => b.studentsEnrolled.length - a.studentsEnrolled.length)
-		// 	.slice(0, 10);
+
+        const allCategories = await Category.find().populate("courses");
+		const allCourses = allCategories.flatMap((category) => category.courses);
+		const mostSellingCourses = allCourses
+			.sort((a, b) => b.studentsEnrolled.length - a.studentsEnrolled.length)
+			.slice(0, 10);
 
 
         //return responce
@@ -112,7 +132,8 @@ exports.categoryPageDetails=async(req,res)=>{
             data:{
                 selectedCategory,
                 differentCategory,
-                top10Courses
+                // top10Courses
+                mostSellingCourses
             }
         });
 

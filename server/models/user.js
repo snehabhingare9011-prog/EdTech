@@ -28,7 +28,7 @@ const userSchema=new mongoose.Schema({
     },
     additionalDetails:{
         type:mongoose.Schema.Types.ObjectId,
-        required:true,
+        // required:true,
         ref:"Profile"
     },
     courses:[{
@@ -55,6 +55,7 @@ const userSchema=new mongoose.Schema({
     resetPasswordExpires:{
         type:Date,
     },
+    
     isDeleted:{
         type:Boolean,
         default:false

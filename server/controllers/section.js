@@ -1,6 +1,8 @@
 const Section=require('../models/section');
 const Course=require('../models/course');
 const course = require('../models/course');
+const SubSection = require('../models/subSection');
+require("../models/subSection");
 
 exports.createSection=async(req,res)=>{
     try{
@@ -26,7 +28,8 @@ exports.createSection=async(req,res)=>{
         return res.status(200).json({
             success:true,
             message:"section created successfully",
-            updateCourseDetails
+            updateCourseDetails,
+            newSection
         })
 
 
@@ -51,11 +54,18 @@ exports.updateSection=async(req ,res)=>{
             })
         }
 
-        const section=await Section.findByIdAndUpdate(
+        const updatedSection=await Section.findByIdAndUpdate(
             sectionId,
             {sectionName},
-            {new:true}
+            {returnDocument:"after"}
         );
+
+         if (!updatedSection) {
+            return res.status(404).json({
+                success: false,
+                message: "Section not found"
+            });
+        }
 
         return res.status(200).json({
             success:true,
@@ -71,40 +81,81 @@ exports.updateSection=async(req ,res)=>{
     }
 }
 
-exports.deleteSection=async(req,res)=>{
-    try{
+exports.deleteSection = async (req, res) => {
+    try {
+        const { sectionId, courseId } = req.body;
 
-        // TODO: confusion sub-section also delete or not.
-        const {sectionId,courseId}=req.body;
-
-         if(!courseId||!sectionId){
+        if (!courseId || !sectionId) {
             return res.status(400).json({
-                success:false,
-                message:"All Fields are required"
-            })
+                success: false,
+                message: "Course ID and Section ID are required"
+            });
         }
 
-        const sectionDeleted=await Section.findByIdAndDelete(sectionId);
+        // 1. Find the section
+        const section = await Section.findById(sectionId);
 
-        const updateCourseDetails=await Course.findByIdAndUpdate(
-            courseId,
-            {$pull:{courseContent:sectionDeleted._id}},
-            {new:true}
+        if (!section) {
+            return res.status(404).json({
+                success: false,
+                message: "Section not found"
+            });
+        }
 
+        // 2. Find the course
+        const course = await Course.findById(courseId);
+
+        if (!course) {
+            return res.status(404).json({
+                success: false,
+                message: "Course not found"
+            });
+        }
+
+        // 3. Check this section belongs to this course
+        const sectionExistsInCourse = course.courseContent.some(
+            (id) => id.toString() === sectionId
         );
 
+        if (!sectionExistsInCourse) {
+            return res.status(400).json({
+                success: false,
+                message: "This section does not belong to this course"
+            });
+        }
+
+        // 4. Delete all subsections inside this section
+        await SubSection.deleteMany({
+            _id: { $in: section.subSection }
+        });
+
+        // 5. Remove section ID from course
+        const updatedCourseDetails = await Course.findByIdAndUpdate(
+            courseId,
+            {
+                $pull: {
+                    courseContent: sectionId
+                }
+            },
+            {
+                returnDocument: "after"
+            }
+        );
+
+        // 6. Delete section document last
+        await Section.findByIdAndDelete(sectionId);
+
         return res.status(200).json({
-            success:true,
-            message:"Section deleted successfully",
-            updateCourseDetails
-        })
+            success: true,
+            message: "Section and its subsections deleted successfully",
+            data: updatedCourseDetails
+        });
 
-
-    }catch(err){
+    } catch (err) {
         return res.status(500).json({
-            success:false,
-            message:"Failed to delete section",
-            error:err.message
-        })
+            success: false,
+            message: "Failed to delete section",
+            error: err.message
+        });
     }
-}
+};

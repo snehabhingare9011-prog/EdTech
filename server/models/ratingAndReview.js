@@ -1,4 +1,4 @@
-const mongoose=required('mongoose');
+const mongoose=require('mongoose');
 
 const ratingAndReview=new mongoose.Schema({
 
@@ -7,15 +7,18 @@ const ratingAndReview=new mongoose.Schema({
         ref:"User",
         required:true,
     },
+
     rating:{
         type:Number,
         required:true,
     },
+
     review:{
         type:String,
         required:true,
         trim:true
     },
+    
     course:{
         type:mongoose.Schema.Types.ObjectId,
         required:true,

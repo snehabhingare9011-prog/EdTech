@@ -1,12 +1,16 @@
 const jwt=require('jsonwebtoken');
+
 exports.auth=async(req,res,next)=>{
     try{
-        const token=req.header("Authorization")?.replace("Bearer ","")||req.cookies.token||req.body.token;
+        const token=req.header("Authorization")?.replace("Bearer ","")||req.cookies.token||req.body?.token;
+        console.log("header",req.header("Authorization")?.replace("Bearer ",""));
+        console.log("cookie",req.cookies.token);
+        // console.log("body",req.body.token);
         if(!token){
             return res.status(401).json({
                 success:false,
                 message:"Token is missing"
-            })
+            });
         }
 
         try{

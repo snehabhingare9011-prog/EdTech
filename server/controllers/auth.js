@@ -9,6 +9,7 @@ require('dotenv').config();
 
 exports.sendOTP=async(req,res)=>{
     try{
+
         const {email}=req.body;
 
         if(!email){
@@ -24,10 +25,11 @@ exports.sendOTP=async(req,res)=>{
         return res.status(400).json({
             success:false,
             message:"Invalid email format"
-        })
+        });
        }
 
         const checkUserPresent=await User.findOne({email});
+        console.log("checkUserPresent",checkUserPresent);
 
         if(checkUserPresent){
             return res.status(409).json({
@@ -108,6 +110,15 @@ exports.signUp=async(req,res)=>{
             })
         }
 
+        //validate the mobile number
+		const phoneRegex = /^[6-9]\d{9}$/;
+        if(!phoneRegex.test(String(contactNumber))){
+			return res.status(400).json({
+				success:false,
+				message:"Enter a valid 10-digit mobile number"
+			})
+		}
+
         if(password!==confirmPassword){
             return res.status(400).json({
                 success:false,
@@ -124,14 +135,14 @@ exports.signUp=async(req,res)=>{
             })
         }
 
-        const recentOtp=await OTP.find({otp}).sort({createdAt:-1}).limit(1);
+        const recentOtp=await OTP.find({email}).sort({createdAt:-1}).limit(1);
         console.log("recentOtp",recentOtp);
         
         if(recentOtp.length==0){
             return res.status(400).json({
                 success:false,
                 message:"OTP not found"
-            })
+            });
         }
         else if(otp!==recentOtp[0].otp){
             return res.status(400).json({
@@ -158,16 +169,19 @@ exports.signUp=async(req,res)=>{
             contactNumber:null
         })
 
-        const user=await user.create({
-            fistname,
+        console.log("profileDetails",profileDetails);
+
+        const user=await User.create({
+            firstName:firstName,
             lastName,
             password:hashPassword,
             email,
             accountType,
-            profile:profileDetails._id,
+            additionalDetails:profileDetails._id,
             contactNumber,
             image:`https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
         })
+
 
         return res.status(200).json({
             success:true,
@@ -236,6 +250,7 @@ exports.login=async (req,res)=>{
                 httpOnly:true,
                 
             }
+            console.log("options",options);
 
             res.cookie("token",token,options).json({
                 success:true,
@@ -307,7 +322,8 @@ exports.changePassword=async(req,res)=>{
 
         return res.status(200).json({
             success: true,
-            message: "Password changed successfully"
+            message: "Password changed successfully",
+            user
         });
 
     }
