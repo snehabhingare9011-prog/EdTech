@@ -79,6 +79,7 @@ exports.categoryPageDetails=async(req,res)=>{
                 // match: { status: "Published" }
             })
             .exec();
+            
 
         console.log("selectedCategory",selectedCategory);
 
