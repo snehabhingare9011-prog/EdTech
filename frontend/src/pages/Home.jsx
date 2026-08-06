@@ -56,7 +56,7 @@ const Home = () => {
         </div>
 
         {/* Code Section 1 */}
-        <div>
+        <div className="w-full mt-20">
           <CodeBlocks 
                 position={"lg:flex-row"}
                 heading={
@@ -88,7 +88,40 @@ const Home = () => {
             />
 
         </div>
+        
+         {/* Code Section 2 */}
+        <div className="w-full mt-32">
+          <CodeBlocks 
+                position={"lg:flex-row-reverse"}
+                heading={
+                    <div className='text-4xl font-semibold'>
+                       Start
+                        <HighlightText text={"coding in seconds"}/>
+                       
+                    </div>
+                }
+                subheading = {
+                    "Go ahead, give it a try. Our hands-on learning environment means you'll be writing real code from your very first lesson."
+                }
+                ctabtn1={
+                    {
+                        btnText: "Continue Lesson",
+                        linkto: "/signup",
+                        active: true,
+                    }
+                }
+                ctabtn2={
+                    {
+                        btnText: "learn more",
+                        linkto: "/login",
+                        active: false,
+                    }
+                }
+                codeblock={`<<!DOCTYPE html>\n<html>\nhead><title>Example</title><linkrel="stylesheet"href="styles.css">\n/head>\n`}
+                codeColor={"text-yellow-25"}
+            />
 
+        </div>
 
       </div>
       {/* Section 2 */}
