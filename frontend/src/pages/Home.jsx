@@ -5,6 +5,8 @@ import HighlightText from '../components/core/HomePage/HighlightText';
 import CTAButton from "../components/core/HomePage/Button";
 import Banner from "../assets/Images/banner.mp4";
 import CodeBlocks from '../components/core/HomePage/CodeBlocks';
+import TimelineSection from '../components/core/HomePage/TimelineSection';
+import LearningLanguageSection from '../components/core/HomePage/LearningLanguageSection';
 
 const Home = () => {
   return (
@@ -30,7 +32,7 @@ const Home = () => {
 
         <div className='text-center font-semibold text-4xl mt-7'>
           Empower Your Future with  
-          <HighlightText text="Coding Skills"/>
+          <HighlightText text="Coding Skills"  textColor={"text-caribbeangreen-25"}/>
         </div>
        
 
@@ -56,13 +58,13 @@ const Home = () => {
         </div>
 
         {/* Code Section 1 */}
-        <div className="w-full mt-20">
+        <div >
           <CodeBlocks 
                 position={"lg:flex-row"}
                 heading={
                     <div className='text-4xl font-semibold'>
                         Unlock Your
-                        <HighlightText text={"coding potential"}/>
+                        <HighlightText text={"coding potential"} textColor={"text-caribbeangreen-25"}/>
                         with our online courses
                     </div>
                 }
@@ -90,13 +92,13 @@ const Home = () => {
         </div>
         
          {/* Code Section 2 */}
-        <div className="w-full mt-32">
+        <div >
           <CodeBlocks 
                 position={"lg:flex-row-reverse"}
                 heading={
                     <div className='text-4xl font-semibold'>
                        Start
-                        <HighlightText text={"coding in seconds"}/>
+                        <HighlightText text={"coding in seconds"}  textColor={"text-caribbeangreen-25"}/>
                        
                     </div>
                 }
@@ -125,6 +127,64 @@ const Home = () => {
 
       </div>
       {/* Section 2 */}
+      <div className='bg-pure-greys-5 text-richblack-700'>
+
+        <div className='homepage_bg h-[333px]'>
+
+          <div className='w-11/12 max-w-maxContent flex flex-col items-center gap-5 mx-auto'>
+
+            {/* Div For Height  */}
+            <div className='h-[180px]'></div>
+
+            {/* Buttons */}
+            <div className='flex flex-row gap-7 text-white'>
+
+              <CTAButton active={true} linkto={"/signup"}>
+                <div className="flex items-center gap-2">
+                  <span>Explore Full Catalog</span>
+                  <FaArrowRight />
+                </div>  
+              </CTAButton >
+
+              <CTAButton active={false} linkto={"/login"}>
+                Learn More     
+              </CTAButton>
+
+            </div>
+          </div>
+        </div>
+
+        <div className=' mx-auto w-11/12 max-w-maxContent flex flex-col items-center justify-between gap-7'>
+
+          {/* Div For Height  */}
+          <div className='h-[50px]'></div>
+
+          <div className='flex flex-row gap-8 mb-10'>
+            <div className=' w-[45%]  font-semibold text-4xl '>
+             Get the skills you need for a
+              <HighlightText text="job that is in demand."  textColor={"bg-gradient-to-r from-[#4FACFE] to-[#00F2FE] bg-clip-text text-transparent"}/>
+            </div>
+            <div className='flex flex-col gap-10 w-[40%] items-start'>
+              <div className='text-[16px] font-semibold'>
+                The modern StudyNotion is the dictates its own terms. Today, to be a competitive specialist requires more than professional skills.
+              </div>
+              <CTAButton active={true} linkto={'/signup'}>
+                Learn More
+              </CTAButton>
+            </div>
+
+           
+          </div>
+          
+          <TimelineSection/>
+          <LearningLanguageSection/>
+
+        
+
+
+        </div>
+
+      </div>
 
       {/* Section 3 */}
 
