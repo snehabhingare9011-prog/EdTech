@@ -8,6 +8,7 @@ import CodeBlocks from '../components/core/HomePage/CodeBlocks';
 import TimelineSection from '../components/core/HomePage/TimelineSection';
 import LearningLanguageSection from '../components/core/HomePage/LearningLanguageSection';
 import InstructorSection from '../components/core/HomePage/InstructorSection';
+import Footer from '../components/common/Footer';
 
 
 const Home = () => {
@@ -190,16 +191,21 @@ const Home = () => {
       </div>
 
       {/* Section 3 */}
-      <div class="w-11/12 mx-auto max-w-maxContent flex flex-col item-center justify-between gap-8 bg-richblack-900 text-white">
+      <div className="w-11/12 mx-auto max-w-maxContent flex flex-col item-center justify-between gap-8 bg-richblack-900 text-white">
 
+      {/* first part of section 3 */}
       <InstructorSection/>
 
-      <h2>Reviews from other learners</h2>
+      {/* Second part of section 3 */}
+     <h2>Reviews from other learners</h2>
       {/* Review Slider Here */}
+
         
       </div>
 
       {/* Section 4 */}
+      <Footer/>
+
 
     </div>
   )
