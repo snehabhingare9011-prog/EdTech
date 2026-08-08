@@ -1,0 +1,85 @@
+import React from "react";
+
+const CourseCard = ({ course, index }) => {
+  const isFeatured = index === 0;
+
+  return (
+    <article
+      className={`
+        relative
+        h-[260px]
+        w-full
+        overflow-hidden
+        rounded-md
+        border
+        border-richblack-700
+        transition-all
+        duration-200
+        hover:-translate-y-1
+        ${
+          isFeatured
+            ? "bg-white text-richblack-900"
+            : "bg-richblack-800 text-white"
+        }
+      `}
+    >
+
+      {/* Course Content */}
+      <div className="p-6">
+
+        <h3 className="text-xl font-semibold">
+          {course.heading}
+        </h3>
+
+        <p
+          className={`
+            mt-3
+            text-sm
+            leading-6
+            ${
+              isFeatured
+                ? "text-richblack-600"
+                : "text-richblack-200"
+            }
+          `}
+        >
+          {course.description}
+        </p>
+
+      </div>
+
+      {/* Bottom Section */}
+      <div
+        className={`
+          absolute
+          bottom-0
+          left-0
+          flex
+          w-full
+          justify-between
+          border-t
+          border-dashed
+          px-6
+          py-4
+          text-sm
+          ${
+            isFeatured
+              ? "border-richblack-300 text-richblack-600"
+              : "border-richblack-500 text-richblack-200"
+          }
+        `}
+      >
+        <span>
+          {course.level}
+        </span>
+
+        <span>
+          {course.lessonNumber} Lessons
+        </span>
+      </div>
+
+    </article>
+  );
+};
+
+export default CourseCard;
