@@ -1,7 +1,12 @@
 import React from "react";
 import CourseCard from "./CourseCard";
+import { useState } from "react";
 
-const CourseGrid = ({ courses }) => {
+const CourseGrid = ({ courses,currentCard,setCurrentCard }) => {
+  console.log("courseGrid",currentCard)
+
+ 
+  
   return (
     <div className="
       mx-auto
@@ -19,6 +24,8 @@ const CourseGrid = ({ courses }) => {
           key={course.heading}
           course={course}
           index={index}
+          currentCard={currentCard}
+          setCurrentCard={setCurrentCard}
         />
       ))}
     </div>

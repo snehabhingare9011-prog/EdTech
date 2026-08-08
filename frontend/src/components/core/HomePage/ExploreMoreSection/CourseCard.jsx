@@ -1,7 +1,8 @@
 import React from "react";
 
-const CourseCard = ({ course, index }) => {
-  const isFeatured = index === 0;
+const CourseCard = ({ course, index ,currentCard,setCurrentCard}) => {
+  console.log("courseCard")
+ 
 
   return (
     <article
@@ -17,11 +18,12 @@ const CourseCard = ({ course, index }) => {
         duration-200
         hover:-translate-y-1
         ${
-          isFeatured
+          currentCard===index
             ? "bg-white text-richblack-900"
             : "bg-richblack-800 text-white"
         }
       `}
+      onClick={()=>setCurrentCard(index)}
     >
 
       {/* Course Content */}
@@ -37,7 +39,7 @@ const CourseCard = ({ course, index }) => {
             text-sm
             leading-6
             ${
-              isFeatured
+              currentCard===index
                 ? "text-richblack-600"
                 : "text-richblack-200"
             }
@@ -63,7 +65,7 @@ const CourseCard = ({ course, index }) => {
           py-4
           text-sm
           ${
-            isFeatured
+            currentCard===index
               ? "border-richblack-300 text-richblack-600"
               : "border-richblack-500 text-richblack-200"
           }

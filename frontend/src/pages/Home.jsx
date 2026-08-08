@@ -197,6 +197,7 @@ const Home = () => {
       {/* Section 3 */}
       <div className="w-11/12 mx-auto max-w-maxContent flex flex-col item-center justify-between gap-8 bg-richblack-900 text-white">
 
+
       {/* first part of section 3 */}
       <InstructorSection/>
 
