@@ -60,45 +60,56 @@ const TimelineSection = () => {
                 }
 
             </div>
-            <div className='relative shadow-blue-200'>
+           
+            
+        <div className='relative flex items-center justify-center'>
 
-                {/* Image */}
-               <img src={timelineImage} alt="timelineImage" />
+            {/* Blue gradient background */}
+            <div className='absolute -inset-6 rounded-2xl bg-gradient-to-r from-[#9CECFB] via-[#65C7F7] to-[#0052D4] blur-2xl opacity-70'></div>
 
-                {/* Green Card */}
-                <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-caribbeangreen-700 w-[85%] py-8 px-10 flex justify-between items-center">
+            {/* Image */}
+            <div className='relative z-10'>
+                <img
+                    src={timelineImage}
+                    alt="timelineImage"
+                    className='w-full object-contain'
+                />
+            </div>
 
-                    {/* Left */}
-                    <div className="flex items-center gap-4">
-                        <h1 className="text-4xl font-bold text-white">
-                            10
-                        </h1>
+            {/* Green Card */}
+            <div className="absolute z-20 -bottom-10 left-1/2 -translate-x-1/2 bg-caribbeangreen-700 w-[85%] py-8 px-10 flex justify-between items-center">
 
-                        <div className="text-caribbeangreen-300 uppercase text-sm">
-                            <p>Years</p>
-                            <p>Experience</p>
-                        </div>
+                {/* Left */}
+                <div className="flex items-center gap-4">
+                    <h1 className="text-4xl font-bold text-white">
+                        10
+                    </h1>
+
+                    <div className="text-caribbeangreen-300 uppercase text-sm">
+                        <p>Years</p>
+                        <p>Experience</p>
                     </div>
+                </div>
 
-                    {/* Divider */}
-                    <div className="h-12 border-l border-caribbeangreen-500"></div>
+                {/* Divider */}
+                <div className="h-12 border-l border-caribbeangreen-500"></div>
 
-                    {/* Right */}
-                    <div className="flex items-center gap-4">
-                        <h1 className="text-4xl font-bold text-white">
-                            250
-                        </h1>
+                {/* Right */}
+                <div className="flex items-center gap-4">
+                    <h1 className="text-4xl font-bold text-white">
+                        250
+                    </h1>
 
-                        <div className="text-caribbeangreen-300 uppercase text-sm">
-                            <p>Types of</p>
-                            <p>Courses</p>
-                        </div>
+                    <div className="text-caribbeangreen-300 uppercase text-sm">
+                        <p>Types of</p>
+                        <p>Courses</p>
                     </div>
-
-</div>
-                
+                </div>
 
             </div>
+
+        </div>
+        
     </div>
     </div>
   )

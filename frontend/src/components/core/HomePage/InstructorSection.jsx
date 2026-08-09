@@ -6,42 +6,51 @@ import { FaArrowRight } from "react-icons/fa";
 
 const InstructorSection = () => {
   return (
-    <div className='mt-16'>
-        <div className='flex flex-row gap-20 items-center'>
-            {/* left side */}
-            <div className='w-[50%]'>
-                <img src={InstructorImg} alt="InstructorImg" className='shadow-white'></img>
+    <div className='w-full flex flex-col md:flex-row items-center justify-evenly py-15 gap-10 md:gap-0 lg:py-20 lg:px-10'>
 
+      {/* Left Side - Instructor Image */}
+      <div className='max-w-120 md:w-[50%] shadow-[-5px_-5px_0px_rgba(255,255,255,1)] sm:shadow-[-10px_-10px_0px_rgba(255,255,255,1)] md:shadow-[-20px_-20px_0px_rgba(255,255,255,1)]'>
+        <img
+          className='w-full'
+          src={InstructorImg}
+          alt="Instructor"
+        />
+      </div>
+
+      {/* Right Side - Content */}
+      <div className='flex flex-col md:w-[45%] items-center'>
+
+        <div className='w-[85%] lg:w-[70%] flex flex-col gap-10 md:gap-15'>
+
+          {/* Heading + Description */}
+          <div className='flex flex-col gap-2'>
+
+            <div className='text-white font-semibold text-3xl lg:text-4xl w-[60%]'>
+              Become an{" "}
+              <HighlightText
+                text="instructor"
+                textColor="bg-gradient-to-r from-[#4FACFE] to-[#00F2FE] bg-clip-text text-transparent"
+              />
             </div>
 
-            {/* right side */}
-
-            <div className=' w-[50%] flex flex-col gap-10'> 
-
-            <div className=' font-semibold text-4xl w-[50%] '>
-                Become an
-                <HighlightText text="instructor"  textColor={"bg-gradient-to-r from-[#4FACFE] to-[#00F2FE] bg-clip-text text-transparent"}/>
-
-            </div>
-
-            <p className='w-[80%] font-medium text-[16px] text-richblack-300'>
+            <p className='text-richblack-300'>
               With our online coding courses, you can learn at your own pace, from anywhere in the world, and get access to a wealth of resources, including hands-on projects, quizzes, and personalized feedback from instructors.
             </p>
 
-            <div className='w-fit'>
-                
-            <CTAButton active={true} lintto={"/signup"}>
-                <div className="flex flex-row gap-2 items-center">
-                  <span>Start Teaching Today</span>
-                  <FaArrowRight />
-                </div>     
-            </CTAButton>
+          </div>
 
+          {/* CTA */}
+          <CTAButton active={true} linkto={"/signup"}>
+            <div className="flex flex-row gap-2 items-center">
+              <span>Start Teaching Today</span>
+              <FaArrowRight />
             </div>
-
+          </CTAButton>
 
         </div>
-    </div>
+
+      </div>
+
     </div>
   )
 }

@@ -1,47 +1,75 @@
 import React from "react";
+import { IoMdPeople } from "react-icons/io";
+import { TbBinaryTree2Filled } from "react-icons/tb";
 
-const CourseCard = ({ course, index ,currentCard,setCurrentCard}) => {
-  console.log("courseCard")
- 
+const CourseCard = ({
+  course,
+  index,
+  currentCard,
+  setCurrentCard,
+}) => {
+  const isSelected = currentCard === index;
 
   return (
     <article
+      onClick={() => setCurrentCard(index)}
       className={`
+        group
         relative
-        h-[260px]
+        flex
+        h-[280px]
         w-full
+        cursor-pointer
+        select-none
+        flex-col
+        justify-between
         overflow-hidden
-        rounded-md
-        border
-        border-richblack-700
+        rounded-sm
         transition-all
-        duration-200
-        hover:-translate-y-1
+        duration-300
+
         ${
-          currentCard===index
-            ? "bg-white text-richblack-900"
-            : "bg-richblack-800 text-white"
+          isSelected
+            ? `
+              bg-white
+              text-richblack-900
+              shadow-[12px_12px_0px_#FFD60A]
+            `
+            : `
+              bg-richblack-800
+              text-white
+              hover:-translate-y-1
+              hover:bg-richblack-700
+            `
         }
       `}
-      onClick={()=>setCurrentCard(index)}
     >
 
-      {/* Course Content */}
-      <div className="p-6">
+      {/* ================= CARD CONTENT ================= */}
+      <div className="flex flex-col gap-3 px-6 pt-6">
 
-        <h3 className="text-xl font-semibold">
+        <h3
+          className={`
+            text-xl
+            font-semibold
+            ${
+              isSelected
+                ? "text-richblack-900"
+                : "text-white"
+            }
+          `}
+        >
           {course.heading}
         </h3>
 
         <p
           className={`
-            mt-3
             text-sm
             leading-6
             ${
-              currentCard===index
+              isSelected
                 ? "text-richblack-600"
-                : "text-richblack-200"
+                : "text-richblack-300"
             }
           `}
         >
@@ -50,34 +78,47 @@ const CourseCard = ({ course, index ,currentCard,setCurrentCard}) => {
 
       </div>
 
-      {/* Bottom Section */}
+
+      {/* ================= BOTTOM SECTION ================= */}
       <div
         className={`
-          absolute
-          bottom-0
-          left-0
-          flex
-          w-full
-          justify-between
-          border-t
-          border-dashed
-          px-6
-          py-4
           text-sm
           ${
-            currentCard===index
-              ? "border-richblack-300 text-richblack-600"
-              : "border-richblack-500 text-richblack-200"
+            isSelected
+              ? "text-richblack-600"
+              : "text-richblack-300"
           }
         `}
       >
-        <span>
-          {course.level}
-        </span>
 
-        <span>
-          {course.lessonNumber} Lessons
-        </span>
+        {/* Dashed divider */}
+        <div
+          className={`
+            h-[2px]
+            w-full
+            ${
+              isSelected
+                ? "bg-[repeating-linear-gradient(to_right,#9E9E9E_0px,#9E9E9E_5px,transparent_5px,transparent_10px)]"
+                : "bg-[repeating-linear-gradient(to_right,#6E727F_0px,#6E727F_5px,transparent_5px,transparent_10px)]"
+            }
+          `}
+        />
+
+        {/* Card information */}
+        <div className="flex items-center justify-between px-6 py-4">
+
+          <p className="flex items-center gap-2">
+            <IoMdPeople />
+            {course.level}
+          </p>
+
+          <p className="flex items-center gap-2">
+            <TbBinaryTree2Filled />
+            {course.lessonNumber} Lessons
+          </p>
+
+        </div>
+
       </div>
 
     </article>
