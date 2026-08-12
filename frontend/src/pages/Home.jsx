@@ -2,7 +2,7 @@ import React from 'react'
 import { FaArrowRight } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import HighlightText from '../components/core/HomePage/HighlightText';
-import CTAButton from "../components/core/HomePage/Button";
+import CTAButton from "../components/common/Button"
 import Banner from "../assets/Images/banner.mp4";
 import CodeSection from '../components/core/HomePage/CodeSection';
 import TimelineSection from '../components/core/HomePage/TimelineSection';
@@ -15,8 +15,9 @@ import TimelineImage from '../assets/Images/TimelineImage.png'
 
 
 const Home = () => {
+  console.log("inside the Home")
   return (
-    <div className='w-full flex flex-col items-center mt-5'>
+    <div className='w-full flex flex-col items-center mt-4'>
 
       {/* Section 1 */}
       <div className='bg-richblack-900 flex flex-col pb-4 px-4 items-center gap-5 max-w-maxContent '>
@@ -24,7 +25,7 @@ const Home = () => {
         {/* Become An Instructor Button  */}
         <Link to={"/signup"}>
 
-          <div  className="group mx-auto mt-15 w-fit rounded-full bg-richblack-800 p-1 font-bold text-richblack-200 drop-shadow-[0_1.5px_rgba(255,255,255,0.25)] transition-all duration-200 hover:scale-95 hover:drop-shadow-none">
+          <div  className="group mx-auto mt-12 mb-7 w-fit rounded-full bg-richblack-800 p-1 font-bold text-richblack-200 drop-shadow-[0_1.5px_rgba(255,255,255,0.25)] transition-all duration-200 hover:scale-95 hover:drop-shadow-none">
 
             <div  className="flex flex-row items-center gap-2 rounded-full px-5 py-0.75 lg:px-10 lg:py-1.25 transition-all duration-200 group-hover:bg-richblack-900">
               <p>Become an Instructor</p>

@@ -159,6 +159,7 @@ html {
 .hide-scrollbar {
   -ms-overflow-style: none;
 }
+
 body {
   overflow-y: scroll;
   scrollbar-width: none; /* Firefox */
@@ -167,4 +168,5 @@ body {
 body::-webkit-scrollbar {
   display: none; /* Chrome, Edge, Safari */
 }
+
 

@@ -6,7 +6,7 @@ import logo3 from "../../../assets/TimeLineLogo/Logo3.svg"
 import logo4 from "../../../assets/TimeLineLogo/Logo4.svg"
 
 const TimelineSection = () => {
-    console.log("inside the timeline ",logo1)
+    // console.log("inside the timeline ",logo1)
     const timeline=[
         {
             logo:logo1,
