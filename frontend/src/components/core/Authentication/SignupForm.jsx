@@ -1,5 +1,10 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import {toast} from "react-hot-toast";
+import { sendOtp } from "../../../services/operations/authAPI";
+import { setSignupData } from "../../../redux/slices/authSlice";
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +15,9 @@ const SignupForm = () => {
     confirmPassword: "",
     accountType: "Student",
   });
+
+  const dispatch=useDispatch();
+  const navigate=useNavigate();
 
   const [showCreatePass, setShowCreatePass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
@@ -30,10 +38,30 @@ const SignupForm = () => {
     }));
   };
 
-  function submitHandler(event) {
+  async function submitHandler(event) {
     event.preventDefault();
-
     console.log("formData", formData);
+    dispatch(setSignupData(formData));
+    const result= await dispatch(sendOtp(formData.email));
+
+      if(result === true) {
+
+        toast.success("OTP Sent Successfully");
+        setFormData({
+          accountType : 'Student',
+          firstName: '',
+          lastName: '',
+          email: '',
+          password: '',
+          confirmPassword: ''
+        });
+        navigate("/verify-email");
+
+      }else {
+
+        toast.error(result);
+      }
+
   }
 
   return (
@@ -186,7 +214,7 @@ const SignupForm = () => {
               <input type={showCreatePass ? "text" : "password"} placeholder="Enter Password" value={formData.password} name="password" onChange={changeHandler} required className=" w-full rounded-lg border border-richblack-700 bg-richblack-800 px-4 py-3 pr-12 text-richblack-5 placeholder:text-richblack-400 outline-none transition-all duration-200 focus:border-yellow-50 " />
 
               <button type="button" onClick={() => setShowCreatePass((prev) => !prev)} className=" absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-richblack-300 hover:text-richblack-5 " >
-                  {showCreatePass ? <FaEyeSlash /> : <FaEye />}
+                  {showCreatePass ? <FaEye />: <FaEyeSlash /> }
               </button>
 
           </div>
@@ -209,7 +237,7 @@ const SignupForm = () => {
 
             <button type="button" onClick={() => setShowConfirmPass((prev) => !prev)}
              className=" absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-richblack-300 hover:text-richblack-5 " >
-                {showConfirmPass ? <FaEyeSlash /> : <FaEye />}
+                {showConfirmPass ?<FaEye />: <FaEyeSlash /> }
             </button>
 
         </div>

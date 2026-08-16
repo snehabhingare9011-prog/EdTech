@@ -51,9 +51,9 @@ exports.sendOTP=async(req,res)=>{
 
         while(result){
             otp=otpGenerator.generate(6,{
-            upperCaseAlphabets:false,
-            lowerCaseAlphabets:false,
-            specialChars:false
+                upperCaseAlphabets:false,
+                lowerCaseAlphabets:false,
+                specialChars:false
             });
 
             result=await OTP.findOne({otp:otp});
@@ -95,7 +95,7 @@ exports.signUp=async(req,res)=>{
 
         }=req.body;
 
-        if(!firstName||!lastName||!email||!password||!confirmPassword||!accountType||!otp||!contactNumber){
+        if(!firstName||!lastName||!email||!password||!confirmPassword||!accountType||!otp){
             return res.status(400).json({
                 success:false,
                 message:"All fields are required"
@@ -111,13 +111,15 @@ exports.signUp=async(req,res)=>{
         }
 
         //validate the mobile number
-		const phoneRegex = /^[6-9]\d{9}$/;
-        if(!phoneRegex.test(String(contactNumber))){
-			return res.status(400).json({
-				success:false,
-				message:"Enter a valid 10-digit mobile number"
-			})
-		}
+        if(contactNumber){
+            const phoneRegex = /^[6-9]\d{9}$/;
+            if(!phoneRegex.test(String(contactNumber))){
+                return res.status(400).json({
+                    success:false,
+                    message:"Enter a valid 10-digit mobile number"
+                })
+            }
+        }
 
         if(password!==confirmPassword){
             return res.status(400).json({

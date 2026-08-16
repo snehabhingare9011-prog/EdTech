@@ -3,7 +3,7 @@ import "./Loader.css";
 
 const Loader = () => {
   return (
-    <div className="loader-container">
+    <div className="loader-container ">
 
       {/* ================= PYRAMID ================= */}
 
@@ -26,7 +26,6 @@ const Loader = () => {
         </div>
 
       </div>
-
 
       {/* ================= LOADING TEXT ================= */}
 

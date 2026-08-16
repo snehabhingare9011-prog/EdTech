@@ -10,6 +10,7 @@ const ProfileDropdown = () => {
   console.log("inside the profile dropdown ");
 
   const { user } = useSelector((state) => state.profile);
+
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
   console.log("dropdown",dropdownRef)
@@ -30,10 +31,12 @@ const ProfileDropdown = () => {
   };
 
   return (
-    <div ref={dropdownRef} className="relative flex items-center gap-2" >
+    <div ref={dropdownRef} className="relative flex items-center gap-2" > 
+
+    {/* "useRef is used here to create a reference to the DOM element. Because we attach ref={dropdownRef} to the outer <div>, after rendering, dropdownRef.current refers to that actual DOM <div> element." */}
+
       {/* Profile Image */}
-      
-      <img
+        <img
         src={user.image}
         alt="Profile"
         className="h-9 w-9 rounded-full object-cover border border-richblack-600"
@@ -88,3 +91,7 @@ const ProfileDropdown = () => {
 };
 
 export default ProfileDropdown;
+
+// Q Why did we create a custom hook useOnClickOutside instead of simply writing the useEffect and addEventListener code directly inside ProfileDropdown?
+
+// "A custom hook is used to extract reusable logic from a component. We could write the outside-click logic directly inside ProfileDropdown, but by creating useOnClickOutside, we can reuse the same logic in other components such as modals, menus, popups, and dropdowns. It also keeps the component cleaner and easier to understand."

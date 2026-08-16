@@ -20,6 +20,7 @@ const authSlice=createSlice({
         },
        
         setSignupData:(state,action)=>{
+            
             state.signupData=action.payload
         },
         setLoading:(state,action)=>{
