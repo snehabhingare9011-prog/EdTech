@@ -27,10 +27,11 @@ app.use(fileUpload({
     tempFileDir:__dirname+'/tmp'
 
 }));
+
 app.use(  // TODO: Search About it 
     cors({
-        origin:"http:/localhost:3000",
-        credentials:true
+        origin: "http://localhost:5173",
+        credentials: true,
     })
 );
 
@@ -45,13 +46,8 @@ app.use("/api/v1/payment",paymentRoutes);
 
 //default route
 app.get('/',(req,res)=>{
-    res.send("This is my home page");
-
-    return res.json({
-        success:true,
-        message:"Your server is up and running.........."
-        
-    })
+    
+   return  res.send(" Hello Sneha is Here");    
 
 });
 

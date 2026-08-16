@@ -202,7 +202,10 @@ exports.signUp=async(req,res)=>{
 
 exports.login=async (req,res)=>{
     try{
+        console.log("inside the login controller");
+        console.log("req.body",req.body);
         const {email,password}=req.body;
+        
 
         //validation
         if(!email||!password){
@@ -252,7 +255,7 @@ exports.login=async (req,res)=>{
             }
             console.log("options",options);
 
-            res.cookie("token",token,options).json({
+          return  res.cookie("token",token,options).json({
                 success:true,
                 message:"User logged in successfully",
                 token,

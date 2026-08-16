@@ -9,7 +9,7 @@ const profileSlice=createSlice({
 
     name:"profile",
     initialState,
-    reducer:{
+    reducers:{
 
         setUser:(state,action)=>{
             state.user=action.payload

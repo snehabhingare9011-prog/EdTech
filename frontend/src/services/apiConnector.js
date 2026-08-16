@@ -8,10 +8,12 @@ const axiosInstance=axios.create({});
 
 export const  apiConnector=(method,url,bodyData,headers,params)=>{
 
+    console.log("body",bodyData);
+
     return axiosInstance({
         method,
         url,
-        body:bodyData?bodyData:null,
+        data:bodyData?bodyData:null,
         headers:headers ? headers:null,
         params:params?params:null
     });

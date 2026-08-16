@@ -6,7 +6,7 @@ import { FcGoogle } from "react-icons/fc";
 const Template = ({heading,description1,description2,type,img,frame}) => {
 
   return (
-   <div className="template-container text-white flex flex-col-reverse md:flex-row md:items-center p-6 gap-7 md:gap-16 w-full select-none">
+   <div className="template-container text-white flex flex-col-reverse md:flex-row md:items-center p-6 gap-7 md:gap-36 w-full select-none">
         {/* left */}
 
        <div className="template-left md:w-1/2 flex justify-center">

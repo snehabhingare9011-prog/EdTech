@@ -18,7 +18,7 @@ const Navbar = () => {
     const { user } = useSelector((state) => state.profile);
     const { totalItems } = useSelector((state) => state.cart);
 
-    // const [subLinks, setSubLinks] = useState([]);
+    const [subLinks, setSubLinks] = useState([]);
     const [loading, setLoading] = useState(false);
 
     // Check whether current URL matches a route
@@ -33,48 +33,49 @@ const Navbar = () => {
     };
 
     // // Fetch categories
-    // useEffect(() => {
+    useEffect(() => {
 
-    //     const fetchCategories = async () => {
+        const fetchCategories = async () => {
 
-    //         setLoading(true);
+            setLoading(true);
 
-    //         try {
+            try {
 
-    //             const response = await apiConnector("GET",categories.CATEGORIES_API);
+                const response = await apiConnector("GET",categories.CATEGORIES_API);
+                console.log("responce",response);
 
-    //             setSubLinks(response?.data?.data || []);
+                setSubLinks(response?.data?.allCategories || []);
 
-    //         } catch (error) {
+            } catch (error) {
 
-    //             console.log("Error while fetching categories:",error);
+                console.log("Error while fetching categories:",error);
 
-    //         } finally {
+            } finally {
 
-    //             setLoading(false);
+                setLoading(false);
 
-    //         }
-    //     };
+            }
+        };
 
-    //     fetchCategories();
+        fetchCategories();
 
-    // }, []);
+    }, []);
 
-      const subLinks = [
-        {
-            _id:1,
-            name: "Python",
-            link: "/catalog/python",
-        },
-        {   _id:2,
-            name: "javascript hjj",
-            link: "/catalog/javascript",
-        },
-        {  _id:3,
-            name: "web-development",
-            link: "/catalog/web-development",
-        },
-    ];
+    //   const subLinks = [
+    //     {
+    //         _id:1,
+    //         name: "Python",
+    //         link: "/catalog/python",
+    //     },
+    //     {   _id:2,
+    //         name: "javascript hjj",
+    //         link: "/catalog/javascript",
+    //     },
+    //     {  _id:3,
+    //         name: "web-development",
+    //         link: "/catalog/web-development",
+    //     },
+    // ];
 
 
     return (
@@ -192,7 +193,7 @@ const Navbar = () => {
                         <Link to="/dashboard/cart" className=" relative flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-richblack-800 " >
                             <AiOutlineShoppingCart className="text-2xl text-richblack-100" />
 
-                            {totalItems > 0 && (
+                           {totalItems > 0 && ( 
 
                                 <span className=" absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-yellow-50 px-1 text-xs font-bold text-richblack-900 " >
                                     {totalItems}

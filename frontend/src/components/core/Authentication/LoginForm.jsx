@@ -1,13 +1,21 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import CTAButton from "../../common/Button"
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { login } from "../../../services/operations/authAPI";
+import {toast} from "react-hot-toast";
 
 const LoginForm = () => {
+  const dispatch=useDispatch();
+  const navigate=useNavigate();
 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
+
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -20,9 +28,26 @@ const LoginForm = () => {
     }));
   }
 
-  function submitHandler(event) {
+async  function submitHandler(event) {
     event.preventDefault();
     console.log("formData", formData);
+    const result= await dispatch(login(formData.email,formData.password,navigate));
+
+    if(result===true){
+
+      setFormData(
+        {
+          email:"",
+          password:""
+        }
+      )
+       toast.success("Login Successfull")
+       navigate('/dashboard');
+
+    }else{
+      toast.error(result);
+    }
+    
   }
 
   return (

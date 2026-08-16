@@ -171,110 +171,50 @@ const SignupForm = () => {
 
 
       {/* Create Password + Confirm Password */}
-      <div className="flex w-full gap-4">
+      <div className="flex w-full gap-4 items-center">
 
         {/* Create Password */}
-        <label className="relative w-1/2">
+        <label className="w-1/2">
 
           <p className="mb-2 text-sm text-richblack-5">
-            Create Password
-            <sup className="ml-1 text-pink-200">*</sup>
+              Create Password
+              <sup className="ml-1 text-pink-200">*</sup>
           </p>
 
-          <input
-            type={showCreatePass ? "text" : "password"}
-            placeholder="Enter Password"
-            value={formData.password}
-            name="password"
-            onChange={changeHandler}
-            required
-            className="
-              w-full
-              rounded-lg
-              border
-              border-richblack-700
-              bg-richblack-800
-              px-4
-              py-3
-              pr-12
-              text-richblack-5
-              placeholder:text-richblack-400
-              outline-none
-              transition-all
-              duration-200
-              focus:border-yellow-50
-            "
-          />
+          <div className="relative">
 
-          <button
-            type="button"
-            onClick={() =>
-              setShowCreatePass((prev) => !prev)
-            }
-            className="
-              absolute
-              right-4
-              top-[38px]
-              text-richblack-300
-              hover:text-richblack-5
-            "
-          >
-            {showCreatePass ? <FaEyeSlash /> : <FaEye />}
-          </button>
+              <input type={showCreatePass ? "text" : "password"} placeholder="Enter Password" value={formData.password} name="password" onChange={changeHandler} required className=" w-full rounded-lg border border-richblack-700 bg-richblack-800 px-4 py-3 pr-12 text-richblack-5 placeholder:text-richblack-400 outline-none transition-all duration-200 focus:border-yellow-50 " />
+
+              <button type="button" onClick={() => setShowCreatePass((prev) => !prev)} className=" absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-richblack-300 hover:text-richblack-5 " >
+                  {showCreatePass ? <FaEyeSlash /> : <FaEye />}
+              </button>
+
+          </div>
 
         </label>
 
 
         {/* Confirm Password */}
-        <label className="relative w-1/2">
+      <label className="w-1/2">
 
-          <p className="mb-2 text-sm text-richblack-5">
+        <p className="mb-2 text-sm text-richblack-5">
             Confirm Password
             <sup className="ml-1 text-pink-200">*</sup>
-          </p>
+        </p>
 
-          <input
-            type={showConfirmPass ? "text" : "password"}
-            placeholder="Confirm Password"
-            value={formData.confirmPassword}
-            name="confirmPassword"
-            onChange={changeHandler}
-            required
-            className="
-              w-full
-              rounded-lg
-              border
-              border-richblack-700
-              bg-richblack-800
-              px-4
-              py-3
-              pr-12
-              text-richblack-5
-              placeholder:text-richblack-400
-              outline-none
-              transition-all
-              duration-200
-              focus:border-yellow-50
-            "
-          />
+        <div className="relative">
 
-          <button
-            type="button"
-            onClick={() =>
-              setShowConfirmPass((prev) => !prev)
-            }
-            className="
-              absolute
-              right-4
-              top-[38px]
-              text-richblack-300
-              hover:text-richblack-5
-            "
-          >
-            {showConfirmPass ? <FaEyeSlash /> : <FaEye />}
-          </button>
+            <input type={showConfirmPass ? "text" : "password"} placeholder="Confirm Password" value={formData.confirmPassword} name="confirmPassword" onChange={changeHandler} required 
+            className=" w-full rounded-lg border border-richblack-700 bg-richblack-800 px-4 py-3 pr-12 text-richblack-5 placeholder:text-richblack-400 outline-none transition-all duration-200 focus:border-yellow-50 " />
 
-        </label>
+            <button type="button" onClick={() => setShowConfirmPass((prev) => !prev)}
+             className=" absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-richblack-300 hover:text-richblack-5 " >
+                {showConfirmPass ? <FaEyeSlash /> : <FaEye />}
+            </button>
+
+        </div>
+
+      </label>
 
       </div>
 
