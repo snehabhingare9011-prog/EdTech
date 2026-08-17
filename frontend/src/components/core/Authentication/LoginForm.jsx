@@ -100,7 +100,7 @@ async  function submitHandler(event) {
         <div className="mt-1 text-right">
           <button
             type="button"
-            className="text-xs font-medium text-blue-100 hover:underline"
+            className="text-xs font-medium text-blue-100 hover:underline" onClick={()=>navigate("/forgot-password")}
           >
             Forgot Password
           </button>

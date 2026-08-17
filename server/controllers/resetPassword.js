@@ -4,7 +4,9 @@ const User=require('../models/user');
 const bcrypt=require('bcrypt');
 const crypto = require("crypto");
 
+
 exports.resetPasswordToken=async(req,res)=>{
+    console.log("dekhte hai bahi",req.body);
     try{
         const {email}=req.body;
         const user=await User.findOne({email});
@@ -14,7 +16,7 @@ exports.resetPasswordToken=async(req,res)=>{
             return res.status(404).json({
                 success:false,
                 message:"User not found"
-            })
+            });
         }
 
         const token=crypto.randomUUID();
@@ -28,7 +30,7 @@ exports.resetPasswordToken=async(req,res)=>{
         
         console.log("updatedUser",updatedDetails);
 
-        const url=`http://localhost:3000/update-password/${token}`;
+        const url=`http://localhost:5173/update-password/${token}`;
 
        const mailResponce= await mailSender(
 			email,
@@ -59,6 +61,8 @@ exports.resetPassword=async(req, res)=>{
     try{
         const {password,confirmPassword,token}=req.body;
 
+        console.log("aataa thet backend",req.body);
+
         if(password!==confirmPassword){
             return res.status(400).json({
                 success:false,
@@ -67,6 +71,7 @@ exports.resetPassword=async(req, res)=>{
         }
 
         const user=await User.findOne({token});
+        console.log("user sapdla ka",user)
 
         if(!user){
             return res.status(401).json({
@@ -80,7 +85,7 @@ exports.resetPassword=async(req, res)=>{
             return res.status(401).json({
                 success:false,
                 message:"Token has expired. Please generate a new token"
-            })
+            });
         }
 
         const hashPassword=await bcrypt.hash(password,10);
@@ -90,7 +95,8 @@ exports.resetPassword=async(req, res)=>{
         
         return res.status(200).json({
             success:true,
-            message:"Password reset successfully"
+            message:"Password reset successfully",
+            email: user.email
         });
 
     }catch(err){

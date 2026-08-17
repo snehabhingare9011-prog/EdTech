@@ -9,6 +9,10 @@ import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./components/core/Authentication/PrivateRoute";
 import VerifyEmail from "./pages/VerifyEmail";
 import Error from "./pages/Error";
+import { ForgotPassword } from "./pages/ForgotPassword";
+import UpdatePassword from "./pages/UpdatePassword";
+import { ResetPass2 } from "./pages/ResetPass";
+
 
 const App = () => {
   console.log("inside the app");
@@ -32,6 +36,9 @@ const App = () => {
           <Route path="/dashboard" element={ <PrivateRoute> <Dashboard /> </PrivateRoute> } />
 
           <Route path="/verify-email" element={ <OpenRoute> <VerifyEmail /> </OpenRoute> } />
+          <Route path="/forgot-password" element={<ForgotPassword/>}></Route>
+          <Route path="/update-password/:token" element={<UpdatePassword/>}></Route>
+          <Route path="/reset-password-success" element={<ResetPass2/>}/>
 
           {/* 404 Page */}
           <Route path="*" element={<Error/>}/>

@@ -1,10 +1,78 @@
 import {setLoading, setToken} from "../../redux/slices/authSlice";
-import {toast} from "react-hot-toast"
+import toast from "react-hot-toast"
 import { apiConnector } from "../apiConnector";
 import { endpoints } from "../apis";
 import { setUser } from "../../redux/slices/profileSlice";
 
-const {LOGIN_API,SENDOTP_API,SIGNUP_API} =endpoints;
+const {LOGIN_API,SENDOTP_API,SIGNUP_API, RESETPASSTOKEN_API,RESETPASSWORD_API} =endpoints;
+
+export function sendEmail(email){
+
+    return async(dispatch)=>{
+
+        dispatch(setLoading(true));
+        console.log("email in api",email);
+
+        try{
+
+            const response=await apiConnector("POST",RESETPASSTOKEN_API,{email});
+            console.log("response",response);
+
+            if(!response?.data?.success){
+                throw new Error(response?.data?.message)
+            }
+
+            return true;
+
+
+
+        }catch(error){
+             return error?.response?.data?.message || "Could not send mail";
+
+        }finally{
+            dispatch(setLoading(false));
+
+        }
+    }
+}
+
+export function resetPass(data){
+
+    let newData={
+        password:data.pass,
+        confirmPassword:data.confirmPass,
+
+        token:data.token
+    }
+
+    return  async (dispatch)=>{
+
+        console.log("aye kay idhar",data)
+         dispatch(setLoading(true));
+
+        try{
+
+            const response=await apiConnector("POST",RESETPASSWORD_API,newData)
+             console.log("response by reset pass",response);
+
+            if(!response?.data?.success){
+                throw new Error(response?.data?.message)
+            }
+
+            
+        return response.data;
+
+        }catch(error){
+           return ( error?.response?.data?.message || error?.message || "Could not reset password" );
+
+        }finally{
+
+            dispatch(setLoading(false));
+
+        }
+
+    }
+}
 
 export function login(email,password,navigate){
     console.log("inside the login",email,password)
@@ -102,7 +170,7 @@ export function logout(){
 }
 
 export function signup(signupInfo) {
-    
+
   return async (dispatch) => {
 
     const toastId = toast.loading("Creating Account...");
