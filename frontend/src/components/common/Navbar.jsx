@@ -191,11 +191,11 @@ const Navbar = () => {
                     {user?.accountType === ACCOUNT_TYPE.STUDENT && (
 
                         <Link to="/dashboard/cart" className=" relative flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-richblack-800 " >
-                            <AiOutlineShoppingCart className="text-2xl text-richblack-100" />
+                            <AiOutlineShoppingCart className="text-2xl text-richblack-100 " />
 
                            {totalItems > 0 && ( 
 
-                                <span className=" absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-yellow-50 px-1 text-xs font-bold text-richblack-900 " >
+                                <span className=" absolute -right-1 -top-1 flex h-5 min-w-5 items-center  animate-pulse justify-center rounded-full bg-yellow-50 px-1 text-xs font-bold text-richblack-900 " >
                                     {totalItems}
                                 </span>
 

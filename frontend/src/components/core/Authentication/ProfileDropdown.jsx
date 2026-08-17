@@ -49,8 +49,8 @@ const ProfileDropdown = () => {
         className="flex items-center justify-center rounded-md p-1 transition-all duration-200 hover:bg-richblack-700"
       >
         <GoTriangleDown
-          size={20}
-          className={`text-richblack-200 transition-transform duration-200 ${
+          size={25}
+          className={`text-richblack-5 transition-transform duration-200 ${
             open ? "rotate-180" : ""
           }`}
         />

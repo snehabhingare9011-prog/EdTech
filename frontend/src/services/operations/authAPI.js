@@ -102,6 +102,7 @@ export function logout(){
 }
 
 export function signup(signupInfo) {
+    
   return async (dispatch) => {
 
     const toastId = toast.loading("Creating Account...");

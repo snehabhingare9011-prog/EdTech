@@ -8,6 +8,7 @@ import OpenRoute from "./components/core/Authentication/OpenRoute";
 import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./components/core/Authentication/PrivateRoute";
 import VerifyEmail from "./pages/VerifyEmail";
+import Error from "./pages/Error";
 
 const App = () => {
   console.log("inside the app");
@@ -31,6 +32,10 @@ const App = () => {
           <Route path="/dashboard" element={ <PrivateRoute> <Dashboard /> </PrivateRoute> } />
 
           <Route path="/verify-email" element={ <OpenRoute> <VerifyEmail /> </OpenRoute> } />
+
+          {/* 404 Page */}
+          <Route path="*" element={<Error/>}/>
+
 
         </Routes>
       </div>
