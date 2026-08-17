@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { BiArrowBack } from "react-icons/bi";
 
-export const ResetPass2 = () => {
+export const ResetPasswordSucceess = () => {
   const navigate = useNavigate();
 
   const email = sessionStorage.getItem("email");
@@ -38,38 +38,11 @@ export const ResetPass2 = () => {
           to confirm your password reset.
         </p>
 
-        <button
-          onClick={() => navigate("/login")}
-          className="
-            mt-5
-            w-full
-            rounded-lg
-            bg-yellow-50
-            px-4
-            py-3
-            font-medium
-            text-richblack-900
-            transition-all
-            duration-200
-            hover:scale-[0.98]
-          "
-        >
+        <button onClick={() => navigate("/login")} className=" mt-5 w-full rounded-lg bg-yellow-50 px-4 py-3 font-medium text-richblack-900 transition-all duration-200 hover:scale-[0.98] " >
           Return to login
         </button>
 
-        <button
-          onClick={() => navigate("/login")}
-          className="
-            mt-5
-            flex
-            items-center
-            gap-x-2
-            text-sm
-            text-richblack-5
-            transition-colors
-            hover:text-yellow-50
-          "
-        >
+        <button onClick={() => navigate("/login")} className=" mt-5 flex items-center gap-x-2 text-sm text-richblack-5 transition-colors hover:text-yellow-50 " >
           <BiArrowBack />
           Back to login
         </button>

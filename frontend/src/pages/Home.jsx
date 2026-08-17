@@ -14,10 +14,15 @@ import BGHome from "../assets/Images/bghome.svg"
 import TimelineImage from '../assets/Images/TimelineImage.png'
 
 
+
 const Home = () => {
   console.log("inside the Home")
   return (
     <div className='w-full flex flex-col items-center mt-4'>
+
+      {/* HW add this interactive bg to whole project */}
+        {/* Interactive Background */}
+      {/* <InteractiveBackground /> */}
 
       {/* Section 1 */}
       <div className='bg-richblack-900 flex flex-col pb-4 px-4 items-center gap-5 max-w-maxContent '>
