@@ -83,22 +83,12 @@ exports.sendOTP=async(req,res)=>{
 
 exports.signUp=async(req,res)=>{
     try{
-        const { 
-            firstName,
-            lastName,
-            email,
-            password,
-            confirmPassword,
-            accountType,
-            contactNumber,
-            otp
-
-        }=req.body;
+        const { firstName, lastName, email, password, confirmPassword, accountType, contactNumber, otp }=req.body;
 
         if(!firstName||!lastName||!email||!password||!confirmPassword||!accountType||!otp){
             return res.status(400).json({
                 success:false,
-                message:"All fields are required"
+                message:"All fields are required "
             })
         }
 
@@ -156,7 +146,9 @@ exports.signUp=async(req,res)=>{
 
         let hashPassword;
         try{
+
             hashPassword=await bcrypt.hash(password,10);
+
         }catch(err){
            return res.status(500).json({
             success:false,

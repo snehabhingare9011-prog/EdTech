@@ -20,21 +20,17 @@ const InteractiveBackground = () => {
     const createParticles = () => {
       particles = [];
 
-      // Keep the number of particles reasonable
       const particleCount = Math.floor(
-        (window.innerWidth * window.innerHeight) / 20000
+        (window.innerWidth * window.innerHeight) / 18000
       );
 
       for (let i = 0; i < particleCount; i++) {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-
-          // Very slow movement
-          vx: (Math.random() - 0.5) * 0.2,
-          vy: (Math.random() - 0.5) * 0.2,
-
-          size: Math.random() * 1.2 + 0.4,
+          vx: (Math.random() - 0.5) * 0.25,
+          vy: (Math.random() - 0.5) * 0.25,
+          size: Math.random() * 1.4 + 0.6,
         });
       }
     };
@@ -42,15 +38,10 @@ const InteractiveBackground = () => {
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // --------------------------------
-      // Move and draw particles
-      // --------------------------------
-
       particles.forEach((particle) => {
         particle.x += particle.vx;
         particle.y += particle.vy;
 
-        // Wrap around screen
         if (particle.x < 0) {
           particle.x = canvas.width;
         }
@@ -67,7 +58,40 @@ const InteractiveBackground = () => {
           particle.y = 0;
         }
 
-        // Particle
+        // Small glow
+        const gradient = ctx.createRadialGradient(
+          particle.x,
+          particle.y,
+          0,
+          particle.x,
+          particle.y,
+          particle.size * 4
+        );
+
+        gradient.addColorStop(
+          0,
+          "rgba(31, 162, 255, 0.55)"
+        );
+
+        gradient.addColorStop(
+          1,
+          "rgba(31, 162, 255, 0)"
+        );
+
+        ctx.beginPath();
+
+        ctx.arc(
+          particle.x,
+          particle.y,
+          particle.size * 4,
+          0,
+          Math.PI * 2
+        );
+
+        ctx.fillStyle = gradient;
+        ctx.fill();
+
+        // Particle center
         ctx.beginPath();
 
         ctx.arc(
@@ -78,27 +102,26 @@ const InteractiveBackground = () => {
           Math.PI * 2
         );
 
-        ctx.fillStyle = "rgba(31, 162, 255, 0.35)";
-
+        ctx.fillStyle = "rgba(80, 200, 255, 0.65)";
         ctx.fill();
       });
 
-      // --------------------------------
-      // Connect nearby particles
-      // --------------------------------
-
+      // Connections
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
+          const dx =
+            particles[i].x - particles[j].x;
+
+          const dy =
+            particles[i].y - particles[j].y;
 
           const distance = Math.sqrt(
             dx * dx + dy * dy
           );
 
-          // Only connect close particles
-          if (distance < 120) {
-            const opacity = 1 - distance / 120;
+          if (distance < 125) {
+            const opacity =
+              (1 - distance / 125) * 0.2;
 
             ctx.beginPath();
 
@@ -112,28 +135,24 @@ const InteractiveBackground = () => {
               particles[j].y
             );
 
-            ctx.strokeStyle = `rgba(18, 216, 250, ${
-              opacity * 0.12
-            })`;
+            ctx.strokeStyle = `rgba(18, 216, 250, ${opacity})`;
 
-            ctx.lineWidth = 0.5;
+            ctx.lineWidth = 0.6;
 
             ctx.stroke();
           }
         }
       }
 
-      animationFrameId = requestAnimationFrame(draw);
+      animationFrameId =
+        requestAnimationFrame(draw);
     };
 
-    // Initial setup
     resizeCanvas();
     draw();
 
-    // Resize
     window.addEventListener("resize", resizeCanvas);
 
-    // Cleanup
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener("resize", resizeCanvas);

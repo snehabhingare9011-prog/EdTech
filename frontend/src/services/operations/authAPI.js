@@ -115,7 +115,7 @@ export function sendOtp(email){
     return async(dispatch)=>{
 
        const toastId= toast.loading("Loading...");
-        dispatch(setLoading(true));
+
         try{
             const response=await apiConnector("POST",SENDOTP_API,{
                 email
@@ -139,7 +139,7 @@ export function sendOtp(email){
                  
         } finally {
             toast.dismiss(toastId);
-            dispatch(setLoading(false));
+           
         }
 
     }

@@ -10,28 +10,26 @@ import { sendOtp, signup } from "../services/operations/authAPI";
 import { toast } from "react-hot-toast";
 
 const VerifyEmail = () => {
-
+    
+    
     const [otp, setOtp] = useState("");
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    
+    console.log("inside the verify email",otp);
 
-    const { loading, signupData } = useSelector(
-        (state) => state.auth
-    );
+    const { loading, signupData } = useSelector( (state) => state.auth );
 
-    // useEffect(() => {
-    //     if (!signupData) {
-    //         navigate("/signup");
-    //     }
-    // }, []);
+    useEffect(() => {
+        if (!signupData) {
+            navigate("/signup");
+        }
+    }, []);
 
     const handleVerifyAndSignup = async (event) => {
         event.preventDefault();
 
-        if (otp.length !== 6) {
-            toast.error("Please enter the complete OTP");
-            return;
-        }
+        
 
         let signupInfo = {
             ...signupData,
@@ -77,7 +75,7 @@ const VerifyEmail = () => {
                 <div className="max-w-125 p-4 pb-8 flex flex-col justify-center">
 
                     <h2 className="text-richblack-5 font-semibold text-[1.875rem] leading-9.5]">
-                        Verify Email
+                        Verify Email 
                     </h2>
 
                     <p className="text-[1.125rem] leading-6.5 my-4 text-richblack-100">
