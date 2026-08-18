@@ -1,21 +1,33 @@
 import React, {useState} from "react";
 import countryCodes from "../../data/countrycode.json";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import {contactUs} from "../../services/operations/authAPI";
+import {toast} from "react-hot-toast"
+
 
 const ContactUsForm = () => {
 
   const { register, handleSubmit, reset, formState: { errors }, } = useForm();
   const [loading, setLoading] = useState(false);
+   const dispatch = useDispatch();
 
 
   const submitContactForm = async (data) => {
     
     console.log("form data:", data);
 
-      // TODO: API call
-      // await contactUsAPI(data);
+     const result=await dispatch(contactUs(data,setLoading));
 
-      reset();
+     if(result===true){
+       toast.success("Message sent successfully!");
+       reset();
+     }else{
+      toast.error(result);
+
+     }
+
+      
    
   };
 
@@ -156,7 +168,7 @@ const ContactUsForm = () => {
                   ? "border-yellow-100"
                   : "border-richblack-700 focus:border-yellow-50 focus:ring-1 focus:ring-yellow-50"
               }`}
-              {...register("phoneNo", {
+              {...register("phoneNumber", {
                 required: {
                   value: true,
                   message: "Please enter your phone number.",
@@ -181,9 +193,9 @@ const ContactUsForm = () => {
 
 
           {/* Phone Error */}
-          {errors.phoneNo && (
+          {errors.phoneNumber && (
             <span className="text-xs text-yellow-100">
-              {errors.phoneNo.message}
+              {errors.phoneNumber.message}
             </span>
           )}
 
@@ -227,7 +239,7 @@ const ContactUsForm = () => {
               <>
                 <span className="h-5 w-5 animate-spin rounded-full border-2 border-richblack-900 border-t-transparent"></span>
                 Sending...
-              </> ) : ("Send Message" )
+              </> ) : ("Send Message")
           }
         </button>
 

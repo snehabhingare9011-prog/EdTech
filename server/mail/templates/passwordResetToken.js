@@ -1,4 +1,4 @@
-const passwordResetTemplate = (url) => {
+const passwordResetToken = (url) => {
     return `
         <!DOCTYPE html>
         <html>
@@ -142,5 +142,5 @@ const passwordResetTemplate = (url) => {
 };
 
 module.exports = {
-    passwordResetTemplate
+    passwordResetToken
 };

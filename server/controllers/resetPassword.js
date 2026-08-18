@@ -3,7 +3,8 @@ const mailSender=require('../utils/mailSender');
 const User=require('../models/user');
 const bcrypt=require('bcrypt');
 const crypto = require("crypto");
-const {passwordResetTemplate}=require("../mail/templates/passwordResetTemplate")
+const {passwordResetToken}=require("../mail/templates/passwordResetToken");
+const { passwordUpdatedSuccess } = require('../mail/templates/passwordUpdatedSuccess');
 
 
 exports.resetPasswordToken=async(req,res)=>{
@@ -36,7 +37,7 @@ exports.resetPasswordToken=async(req,res)=>{
        const mailResponse = await mailSender(
             email,
             "Reset Your Password",
-            passwordResetTemplate(url)
+            passwordResetToken(url)
         );
 
         // console.log("mailResponce",mailResponce);
@@ -91,8 +92,14 @@ exports.resetPassword=async(req, res)=>{
 
         const hashPassword=await bcrypt.hash(password,10);
        
-        await User.findOneAndUpdate({token},{password:hashPassword, token: undefined,
+        const updatedUser =  await User.findOneAndUpdate({token},{password:hashPassword, token: undefined,
         resetPasswordExpires: undefined},{new:true}); // token: undefined,resetPasswordExpires: undefinedOtherwise the same token could potentially be reused until expiry.
+
+        await mailSender(
+            updatedUser.email,
+            "Password Updated Successfully",
+            passwordUpdatedSuccess(updatedUser.email, updatedUser.firstName)
+        );
         
         return res.status(200).json({
             success:true,

@@ -3,8 +3,11 @@ import toast from "react-hot-toast"
 import { apiConnector } from "../apiConnector";
 import { endpoints } from "../apis";
 import { setUser } from "../../redux/slices/profileSlice";
+import {contactusEndpoint} from "../apis";
 
 const {LOGIN_API,SENDOTP_API,SIGNUP_API, RESETPASSTOKEN_API,RESETPASSWORD_API} =endpoints;
+const { CONTACT_US_API}=contactusEndpoint;
+
 
 export function sendPasswordResetEmail(email, setEmailSent) {
 
@@ -190,4 +193,34 @@ export function signup(signupInfo) {
 
     }
   };
+}
+
+export function contactUs(data,setLoading){
+    return async (dispatch)=>{
+        try{
+            setLoading(true);
+            const response=await apiConnector("POST", CONTACT_US_API,data);
+            console.log("CONTACT US API RESPONSE:", response);
+
+            if (!response?.data?.success) {
+                throw new Error(
+                response?.data?.message || "Could not send message"
+                );
+            }
+
+            return true;
+        }
+        catch(error){
+            console.log("CONTACT US API ERROR:", error);
+
+            return (
+                error?.response?.data?.message ||
+                error?.message ||
+                "Could not send message"
+            );
+
+        }finally{
+            setLoading(false);
+        }
+    }
 }
