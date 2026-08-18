@@ -16,6 +16,7 @@ import { ForgotPassword } from "./pages/ForgotPassword";
 import UpdatePassword from "./pages/UpdatePassword";
 import {ResetPasswordSucceess } from "./pages/ResetPasswordSucceess";
 import InteractiveBackground from "./pages/InteractiveBackground"
+import Contact from "./pages/Contact";
 
 const App = () => {
   console.log("inside the app");
@@ -55,6 +56,7 @@ const App = () => {
 
             {/* Other Pages */}
             <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
 
             {/* Protected Route */} 
             <Route path="/dashboard" element={ <PrivateRoute> <Dashboard /> </PrivateRoute> } />
