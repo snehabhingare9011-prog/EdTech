@@ -1,5 +1,6 @@
 const mailSender = require("../utils/mailSender")
 const { contactUsEmail } = require("../mail/templates/contactUsEmail")
+require('dotenv').config();
 
 exports.contactUs = async (req, res) => {
   try {
@@ -13,7 +14,27 @@ exports.contactUs = async (req, res) => {
       });
     }
 
-    await mailSender( email, "Contact Form Confirmation", contactUsEmail( email, firstName, lastName, message, phoneNumber, countryCode ) );
+     // 1️⃣ Send user's message to support email
+        await mailSender(
+        process.env.MAIL_USER,
+
+        `New Contact Us Message from ${firstName} ${lastName}`,
+        
+        `
+            <h2>New Contact Us Message</h2>
+
+            <p><strong>Name:</strong> ${firstName} ${lastName}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Phone:</strong> ${countryCode} ${phoneNumber}</p>
+
+            <p><strong>Message:</strong></p>
+            <p>${message}</p>
+        `
+        );
+
+     // 2️⃣ Send confirmation email to user
+       await mailSender( email, "Contact Form Confirmation", contactUsEmail( email, firstName, lastName, message, phoneNumber, countryCode ) );
+
 
     return res.status(200).json({
       success: true,
