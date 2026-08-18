@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import HighlightText from "../HighlightText";
+import HighlightText from "../../../common/HighlightText"
 
 import { HomePageExplore } from "../../../../data/homepage-explore";
 import CourseGrid from "./CourseGrid";

@@ -1,5 +1,5 @@
 import React from 'react'
-import HighlightText from './HighlightText'
+import HighlightText from "../../common/HighlightText"
 import CTAButton from "../../common/Button"
 import Plan_your_lessons from "../../../assets/Images/Plan_your_lessons.png";
 import Know_your_progress from "../../../assets/Images/Know_your_progress.svg";

@@ -1,6 +1,6 @@
 import { TypeAnimation } from "react-type-animation";
 import CTAButton from "../../common/Button"
-import HighlightText from "./HighlightText";
+import HighlightText from "../../common/HighlightText"
 import { FaArrowRight } from "react-icons/fa";
 
 const CodeSection = ({ heading, description, ctabtn1, ctabtn2, reverse, ellipseColor, codeColor="white", codeBlock}) => {
