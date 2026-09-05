@@ -108,31 +108,75 @@ export function  updateProfile(token,data){
   }
 }
 
+export function changePassword(token, data) {
+  return async (dispatch) => {
+    const toastId = toast.loading("Loading..........");
 
-export function changePassword(token,data){
-   return async(dispatch)=>{
-
-     const toastId=toast.loading("Loading..........")
-
-      try{
-        const response=await apiConnector("POST",  CHANGE_PASSWORD_API,data,
-          {Authorization:`Bearer ${token}`}
-        )
-
-        if (!response.data.success) {
-          throw new Error(response.data.message);
+    try {
+      const response = await apiConnector(
+        "POST",
+        CHANGE_PASSWORD_API,
+        data,
+        {
+          Authorization: `Bearer ${token}`,
         }
+      );
 
-      toast.success("password chnage successfully");
-
-
-
-
-      }catch(error){
-        toast.error( error?.response?.data?.message || error?.message || "Could Not change Password" );
-        console.log("update password error............", error)
-
+      if (!response.data.success) {
+        throw new Error(response.data.message);
       }
-       toast.dismiss(toastId)
-   }
+
+      toast.success("Password changed successfully");
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message ||
+        error?.message ||
+        "Could Not Change Password"
+      );
+
+      console.log("Update password error............", error);
+    }
+
+    toast.dismiss(toastId);
+  };
+}
+
+
+export function deleteProfile(token) {
+  return async (dispatch) => {
+    const toastId = toast.loading("Processing...");
+
+    try {
+      const response = await apiConnector(
+        "DELETE",
+        DELETE_PROFILE_API,
+        null,
+        {
+          Authorization: `Bearer ${token}`,
+        }
+      );
+
+      if (!response.data.success) {
+        throw new Error(response.data.message);
+      }
+
+      toast.success(
+        "Account scheduled for deletion. You have 3 days to cancel."
+      );
+
+      return true;
+    } catch (error) {
+      console.log("DELETE PROFILE ERROR............", error);
+
+      toast.error(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Could Not Delete Profile"
+      );
+
+      return false;
+    } finally {
+      toast.dismiss(toastId);
+    }
+  };
 }
