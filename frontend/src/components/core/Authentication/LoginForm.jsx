@@ -31,7 +31,7 @@ const LoginForm = () => {
 async  function submitHandler(event) {
     event.preventDefault();
     console.log("formData", formData);
-    const result= await dispatch(login(formData.email,formData.password,navigate));
+    const result= await dispatch(login(formData.email,formData.password));
 
     if(result===true){
 

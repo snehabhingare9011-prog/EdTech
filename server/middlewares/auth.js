@@ -4,7 +4,7 @@ exports.auth=async(req,res,next)=>{
     try{
         const token=req.header("Authorization")?.replace("Bearer ","")||req.cookies.token||req.body?.token;
         console.log("header",req.header("Authorization")?.replace("Bearer ",""));
-        console.log("cookie",req.cookies.token);
+        console.log("cookie",req.cookies?.token);
         // console.log("body",req.body.token);
         if(!token){
             return res.status(401).json({
@@ -22,7 +22,7 @@ exports.auth=async(req,res,next)=>{
          }catch(Err){
             return res.status(401).json({
                 success:false,
-                message:"token is invalid"
+                message:Err.message
             })
 
          }

@@ -17,6 +17,9 @@ import UpdatePassword from "./pages/UpdatePassword";
 import {ResetPasswordSucceess } from "./pages/ResetPasswordSucceess";
 import InteractiveBackground from "./pages/InteractiveBackground"
 import Contact from "./pages/Contact";
+import MyProfile from "./components/core/Dashboard/MyProfile";
+import Settings from "./components/core/Dashboard/settings/Settings";
+import DashboardDefaultPage from "./components/core/Dashboard/DashboardDefaultPage";
 
 const App = () => {
   console.log("inside the app");
@@ -48,18 +51,26 @@ const App = () => {
 
             <Route path="/verify-email" element={ <OpenRoute> <VerifyEmail /> </OpenRoute> } />
 
-            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/forgot-password" element={<OpenRoute><ForgotPassword /></OpenRoute>} />
 
-            <Route path="/update-password/:token" element={<UpdatePassword />} />
+            <Route path="/update-password/:token" element={<OpenRoute><UpdatePassword /></OpenRoute>} />
 
-            <Route path="/reset-password-success" element={<ResetPasswordSucceess />} />
+            <Route path="/reset-password-success" element={<OpenRoute><ResetPasswordSucceess /></OpenRoute>} />
 
             {/* Other Pages */}
             <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
+            <Route path="/contact" element={<Contact />}/>
 
             {/* Protected Route */} 
-            <Route path="/dashboard" element={ <PrivateRoute> <Dashboard /> </PrivateRoute> } />
+            <Route path="/dashboard" element={ <PrivateRoute><div className='h-[calc(100vh-66px)] w-full overflow-hidden'><Dashboard /></div></PrivateRoute> } >
+            
+            <Route index element={<DashboardDefaultPage/>}/>
+
+            <Route path="my-profile" element={<MyProfile/>}/>
+            <Route path="settings" element={<Settings/>}/>
+            
+            </Route>
+
 
             {/* 404 */}
             <Route path="*" element={<Error />} />

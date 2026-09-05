@@ -67,12 +67,14 @@ export function resetPassword( password, confirmPassword, token, navigate ) {
   };
 }
 
-export function login(email,password,navigate){
-    console.log("inside the login",email,password)
+export function login(email,password){
+    console.log("inside the login",email,password);
 
     return async (dispatch)=>{
+
         const toastId = toast.loading("Loading...");
         dispatch(setLoading(true));
+
         try{
             
             const response=await apiConnector("POST",LOGIN_API,{
@@ -80,9 +82,10 @@ export function login(email,password,navigate){
             });
 
             // login successfull think about what to do after login 
-            // 1) save token and user in react redux state
-            // 2) save in local storage also token and user 
-            // 3) return true
+            // 1) save token and user in react redux state.
+            // 2) save in local storage also token and user. 
+            // 3) return true.
+
 
             console.log("response",response);
 

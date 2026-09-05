@@ -23,6 +23,7 @@ const authSlice=createSlice({
             
             state.signupData=action.payload
         },
+        
         setLoading:(state,action)=>{
             state.loading=action.payload
 

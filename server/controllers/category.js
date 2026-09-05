@@ -35,6 +35,7 @@ exports.createCategory=async(req,res)=>{
 
 }
 
+
 exports.showallCategories=async(req , res)=>{
     try{
         // const allCategories=await Category.find({},{description:false}); This returns all fields except description.
@@ -60,6 +61,7 @@ exports.showallCategories=async(req , res)=>{
 
     }
 }
+
 
 exports.categoryPageDetails=async(req,res)=>{
     try{
@@ -88,7 +90,7 @@ exports.categoryPageDetails=async(req,res)=>{
             return res.status(404).json({
                 success:false,
                 message:"Category Not Found"
-            })
+            });
         }
 
         // Handle the case when there are no courses
@@ -146,3 +148,4 @@ exports.categoryPageDetails=async(req,res)=>{
         })
     }
 }
+

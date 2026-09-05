@@ -15,16 +15,16 @@ const {uploadFileToCloudinary}=require('../utils/FileUpload');
 exports.updateProfile=async(req,res)=>{
     try{
         //fetchData
-        const {gender,dateOfBirth="",about="",contactNumber}=req.body;
+        const {firstName,lastName,gender,dateOfBirth="",about="",contactNumber}=req.body;
         const userId=req.user.id;
 
         console.log("gender,dateOfBirth,contactNumber,about,userId",gender,dateOfBirth,contactNumber,about,userId)
 
         //validation
-        if(!userId||!gender||!contactNumber){
+        if (!userId || !firstName || !lastName || !gender || !contactNumber) {
             return res.status(400).json({
-                success:false,
-                message:"Required All Fields"
+                success: false,
+                message: "Required All Fields",
             });
         }
 
@@ -45,6 +45,11 @@ exports.updateProfile=async(req,res)=>{
             })
         }
 
+        userDetails.firstName=firstName;
+        userDetails.lastName=lastName;
+
+        await userDetails.save();
+
         const profileId=userDetails.additionalDetails;
 
         const profileDetails=await Profile.findById(profileId);
@@ -63,14 +68,15 @@ exports.updateProfile=async(req,res)=>{
 
         await profileDetails.save(); //On calling save(), mongoDB detects which fields were changed and generates an update query only for those modified fields, instead of updating the entire document. ✅
 
-          
+        const updatedUser = await User.findById(userId)
+            .populate("additionalDetails")
+            .exec();
 
         return res.status(200).json({
-            success:true,
-            message:"Profile updated successfully",
-            profileDetails
+            success: true,
+            message: "Profile updated successfully",
+            user: updatedUser,
         })
-
 
     }catch(err){
         return res.status(500).json({
@@ -180,7 +186,8 @@ exports.updateDisplayPicture=async(req,res)=>{
                 image:uploadDetails.secure_url
             },
             {new:true}
-        )
+        ).populate("additionalDetails");
+        
         console.log("updatedUser",updatedUser);
 
        return res.status(200).json({

@@ -12,7 +12,7 @@ router.post('/auth/isStudent',auth,isStudent,(req,res)=>{
     return res.status(200).json({
         success:true,
         message:"welcome student"
-    })
+    });
 });
 
 router.post('/auth/isAdmin',auth,isAdmin,(req,res)=>{

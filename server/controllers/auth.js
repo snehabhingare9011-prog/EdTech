@@ -58,7 +58,7 @@ exports.sendOTP=async(req,res)=>{
 
             result=await OTP.findOne({otp:otp});
 
-        }
+        } ;
 
         const otpPayload={email,otp};
         console.log("otpPayload",otpPayload);
@@ -69,7 +69,7 @@ exports.sendOTP=async(req,res)=>{
         return res.status(200).json({
             success:true,
             message:"OTP sent successfully"
-        })
+        });
 
 
     }catch(err){
@@ -136,6 +136,7 @@ exports.signUp=async(req,res)=>{
                 message:"OTP not found"
             });
         }
+        
         else if(otp!==recentOtp[0].otp){
             return res.status(400).json({
                 success:false,
@@ -161,7 +162,7 @@ exports.signUp=async(req,res)=>{
             dateofBirth:null,
             about:null,
             contactNumber:null
-        })
+        });
 
         console.log("profileDetails",profileDetails);
 
@@ -218,7 +219,7 @@ exports.login=async (req,res)=>{
             })
         }
 
-        let user=await User.findOne({email});
+        let user=await User.findOne({email}).populate("additionalDetails");
 
         if(!user){
             return res.status(404).json({

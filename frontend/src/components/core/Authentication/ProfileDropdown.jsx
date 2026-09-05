@@ -37,7 +37,7 @@ const ProfileDropdown = () => {
 
       {/* Profile Image */}
         <img
-        src={user.image}
+        src={user?.image}
         alt="Profile"
         className="h-9 w-9 rounded-full object-cover border border-richblack-600"
       />
