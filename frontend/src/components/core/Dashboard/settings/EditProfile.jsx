@@ -27,9 +27,8 @@ const EditProfile = () => {
   };
 
   return (
-    <div className="bg-richblack-900 px-4 py-5 text-white">
-      <div className="mx-auto w-full max-w-[1035px]">
-      
+    <div className="bg-richblack-900 text-white mt-10  ">
+      <div className="w-full ">
       <form onSubmit={handleSubmit(submitHandler)}>
 
         {/* ================= CARD ================= */}
@@ -236,7 +235,7 @@ const EditProfile = () => {
         </div>
 
         {/* ================= BUTTONS ================= */}
-        <div className="mt-4 flex justify-end gap-3">
+        <div className="mt-7 flex justify-end gap-3">
 
           <button
             type="button"
