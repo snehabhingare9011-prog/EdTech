@@ -1,8 +1,11 @@
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProfile } from "../../../../services/operations/settingAPI";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast"
 
 const EditProfile = () => {
+  const navigate = useNavigate();
   const token = useSelector((state) => state.auth.token);
   const user = useSelector((state) => state.profile.user);
 
@@ -24,7 +27,7 @@ const EditProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-richblack-900 px-4 py-5 text-white">
+    <div className="bg-richblack-900 px-4 py-5 text-white">
       <div className="mx-auto w-full max-w-[1035px]">
       
       <form onSubmit={handleSubmit(submitHandler)}>
@@ -233,11 +236,11 @@ const EditProfile = () => {
         </div>
 
         {/* ================= BUTTONS ================= */}
-        <div className="mt-11 flex justify-end gap-3">
+        <div className="mt-4 flex justify-end gap-3">
 
           <button
             type="button"
-            onClick={() =>
+            onClick={() =>{
                reset({
                   firstName: user?.firstName || "",
                   lastName: user?.lastName || "",
@@ -248,7 +251,10 @@ const EditProfile = () => {
                      user?.additionalDetails?.contactNumber || "",
                   about: user?.additionalDetails?.about || "",
                })
-            }
+
+              toast.success("Changes discarded");
+              navigate("/dashboard/my-profile");
+            }}
             className="rounded-lg bg-richblack-700 px-6 py-3 text-sm font-semibold text-richblack-100 hover:bg-richblack-600"
           >
             Cancel

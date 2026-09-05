@@ -107,3 +107,32 @@ export function  updateProfile(token,data){
       toast.dismiss(toastId)
   }
 }
+
+
+export function changePassword(token,data){
+   return async(dispatch)=>{
+
+     const toastId=toast.loading("Loading..........")
+
+      try{
+        const response=await apiConnector("POST",  CHANGE_PASSWORD_API,data,
+          {Authorization:`Bearer ${token}`}
+        )
+
+        if (!response.data.success) {
+          throw new Error(response.data.message);
+        }
+
+      toast.success("password chnage successfully");
+
+
+
+
+      }catch(error){
+        toast.error( error?.response?.data?.message || error?.message || "Could Not change Password" );
+        console.log("update password error............", error)
+
+      }
+       toast.dismiss(toastId)
+   }
+}

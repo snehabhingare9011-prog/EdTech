@@ -275,60 +275,52 @@ exports.login=async (req,res)=>{
     }
 }
 
-exports.changePassword=async(req,res)=>{
-    try{
-       const { oldPassword, newPassword, confirmNewPassword } = req.body;
-
-        if (!oldPassword || !newPassword || !confirmNewPassword) {
+exports.changePassword = async (req, res) => {
+    try {
+        const { oldPassword, newPassword } = req.body;
+    
+        const email = req.user.email;
+        if(!email) {
             return res.status(400).json({
                 success: false,
-                message: "All fields are required"
-            });
+                message: 'Email Not Found!',
+            })
         }
 
-        if (newPassword !== confirmNewPassword) {
+        if(!oldPassword || !newPassword) {
             return res.status(400).json({
                 success: false,
-                message: "New password and confirm password do not match"
-            });
+                message: 'All Fields Required',
+            })
         }
+        
 
-        const user = await User.findById(req.user.id);
-
-        if (!user) {
-            return res.status(404).json({
+        const user = await User.findOne({email});
+        
+        if(!await bcrypt.compare(oldPassword, user.password)) {
+            return res.status(400).json({
                 success: false,
-                message: "User not found"
-            });
+                message: 'Invalid Old Password',
+            })
         }
 
-        const isPasswordMatched = await bcrypt.compare(
-            oldPassword,
-            user.password
+        // password matched so update pw in db
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        await User.findByIdAndUpdate(user._id, 
+            {$set: {password: hashedPassword}},
         );
 
-        if (!isPasswordMatched) {
-            return res.status(401).json({
-                success: false,
-                message: "Old password is incorrect"
-            });
-        }
-
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-        await User.findByIdAndUpdate(req.user.id,{ password: hashedPassword} );
-
         return res.status(200).json({
-            success: true,
-            message: "Password changed successfully",
-            user
-        });
-
-    }
-    catch(err){
+            success: true, 
+            message: 'Password Updated Successfully',
+        })
+        
+    }catch(err) {
+        console.log(`Error while changing password : ${err}`);
+        
         return res.status(500).json({
-            success:false,
-            message:err.message
+            success: false,
+            message: 'Error While Changing Password!',
         })
     }
 }
