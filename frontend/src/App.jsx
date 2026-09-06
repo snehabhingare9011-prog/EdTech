@@ -20,6 +20,7 @@ import Contact from "./pages/Contact";
 import MyProfile from "./components/core/Dashboard/MyProfile";
 import Settings from "./components/core/Dashboard/settings/Settings";
 import DashboardDefaultPage from "./components/core/Dashboard/DashboardDefaultPage";
+import EnrolledCourses from "./components/core/Dashboard/EnrolledCourses";
 
 const App = () => {
   console.log("inside the app");
@@ -68,6 +69,7 @@ const App = () => {
 
             <Route path="my-profile" element={<MyProfile/>}/>
             <Route path="settings" element={<Settings/>}/>
+            <Route path ="enrolled-courses" element ={<EnrolledCourses/>}/>
             
             </Route>
 

@@ -87,7 +87,6 @@ exports.updateProfile=async(req,res)=>{
     }
 }
 
-
 exports.deleteAccount = async (req, res) => {
   try {
     console.log("hmmm ", req.user.id);
@@ -211,6 +210,49 @@ exports.updateDisplayPicture=async(req,res)=>{
             message: err.message
         });
 
+
+    }
+}
+
+//getEnrolledCourses
+exports.getEnrolledCourses=async(req,res)=>{
+    try{
+
+        const userId=req.user.id;
+
+        console.log("inside the backend getEnrolledCourses",req.user.id);
+
+        const userDetails=await User.findById(userId)
+            .populate({
+                path:"courses",
+                populate:{
+                    path:"courseContent",
+                    populate:{
+                        path:"subSection"
+                    }
+                }
+
+            }).exec();
+
+        if(!userDetails){
+           return  res.status(404).json({
+                success:false,
+                message:"User not Found"
+            })
+        }
+
+        return res.status(200).json({
+            success:true,
+            data:userDetails.courses
+        })
+
+    }catch(error){
+
+        console.log('Error in getting enrolled courses: ', error);
+        return res.status(500).json({
+            success: false,
+            message: error.message,
+        });
 
     }
 }

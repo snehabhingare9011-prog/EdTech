@@ -29,21 +29,15 @@ const Loader = () => {
 };
 
 const LoaderOverlay = styled.div`
-  /*
-    IMPORTANT:
-    Your navbar is around 125px high.
-    Loader starts BELOW the navbar.
-  */
+  position: absolute;
 
-  position: fixed;
-
-  top: 125px;
+  top: 0;
   left: 0;
   right: 0;
   bottom: 0;
 
   width: 100%;
-  height: calc(100vh - 125px);
+  height: 100%;
 
   display: flex;
   justify-content: center;
@@ -51,33 +45,17 @@ const LoaderOverlay = styled.div`
 
   background: #020a18;
 
-  /*
-    Keep loader below navbar.
-    Your navbar should have z-index higher than this.
-  */
-  z-index: 100;
+  z-index: 50;
 
   overflow: hidden;
-
-
-  /* --------------------------------
-     Main content
-  -------------------------------- */
 
   .loader-content {
     display: flex;
     flex-direction: column;
-
     align-items: center;
     justify-content: center;
-
     text-align: center;
   }
-
-
-  /* --------------------------------
-     Spinner
-  -------------------------------- */
 
   .spinner {
     width: 90px;
@@ -99,9 +77,6 @@ const LoaderOverlay = styled.div`
     position: relative;
   }
 
-
-  /* Inner glow */
-
   .spinner-inner {
     position: absolute;
 
@@ -118,11 +93,6 @@ const LoaderOverlay = styled.div`
     animation: inner-spin 1.5s linear infinite reverse;
   }
 
-
-  /* --------------------------------
-     Loading Text
-  -------------------------------- */
-
   h2 {
     margin: 28px 0 6px;
 
@@ -135,7 +105,6 @@ const LoaderOverlay = styled.div`
     letter-spacing: 2px;
   }
 
-
   p {
     margin: 0;
 
@@ -146,23 +115,16 @@ const LoaderOverlay = styled.div`
     letter-spacing: 1px;
   }
 
-
-  /* --------------------------------
-     Dots
-  -------------------------------- */
-
   .dots {
     display: flex;
 
     justify-content: center;
-
     align-items: center;
 
     gap: 8px;
 
     margin-top: 18px;
   }
-
 
   .dots span {
     width: 7px;
@@ -178,25 +140,17 @@ const LoaderOverlay = styled.div`
     animation: bounce 1.2s infinite ease-in-out;
   }
 
-
   .dots span:nth-child(1) {
     animation-delay: 0s;
   }
-
 
   .dots span:nth-child(2) {
     animation-delay: 0.15s;
   }
 
-
   .dots span:nth-child(3) {
     animation-delay: 0.3s;
   }
-
-
-  /* --------------------------------
-     Spinner Animation
-  -------------------------------- */
 
   @keyframes spin {
     from {
@@ -208,11 +162,6 @@ const LoaderOverlay = styled.div`
     }
   }
 
-
-  /* --------------------------------
-     Inner Spinner Animation
-  -------------------------------- */
-
   @keyframes inner-spin {
     from {
       transform: rotate(0deg);
@@ -223,36 +172,18 @@ const LoaderOverlay = styled.div`
     }
   }
 
-
-  /* --------------------------------
-     Dots Animation
-  -------------------------------- */
-
   @keyframes bounce {
     0%,
     60%,
     100% {
       transform: translateY(0);
-
       opacity: 0.4;
     }
 
     30% {
       transform: translateY(-6px);
-
       opacity: 1;
     }
-  }
-
-
-  /* --------------------------------
-     Responsive
-  -------------------------------- */
-
-  @media (max-width: 768px) {
-    top: 80px;
-
-    height: calc(100vh - 80px);
   }
 `;
 
