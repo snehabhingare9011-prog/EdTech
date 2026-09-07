@@ -34,7 +34,7 @@ const EnrolledCourses=()=>{
 
     },[]);
 
-    return <div>
+    return <div className="max-w-250 mx-auto">
         <div className="text-3xl text-richblack-50">Enrolled Courses</div>
           
         {

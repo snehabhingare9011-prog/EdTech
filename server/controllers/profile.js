@@ -238,7 +238,7 @@ exports.getEnrolledCourses=async(req,res)=>{
            return  res.status(404).json({
                 success:false,
                 message:"User not Found"
-            })
+            });
         }
 
         return res.status(200).json({

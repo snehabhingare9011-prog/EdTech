@@ -116,6 +116,7 @@ exports.createRating=async (req,res)=>{
 
 exports.getAverageRating=async (req,res)=>{
     try{
+        
         let {courseId} =req.body;
 
         if(!courseId){

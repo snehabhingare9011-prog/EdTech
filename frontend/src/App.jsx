@@ -9,7 +9,7 @@ import About from "./pages/About";
 import OpenRoute from "./components/core/Authentication/OpenRoute";
 import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./components/core/Authentication/PrivateRoute";
-
+import Cart from "./components/core/Dashboard/Cart/Cart";
 import VerifyEmail from "./pages/VerifyEmail";
 import Error from "./pages/Error";
 import { ForgotPassword } from "./pages/ForgotPassword";
@@ -69,6 +69,7 @@ const App = () => {
 
             <Route path="my-profile" element={<MyProfile/>}/>
             <Route path="settings" element={<Settings/>}/>
+            <Route path="cart" element={<Cart/>}/>
             <Route path ="enrolled-courses" element ={<EnrolledCourses/>}/>
             
             </Route>

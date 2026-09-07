@@ -8,7 +8,7 @@ const MyProfile = () => {
   console.log("user in profile", user);
 
   return (
-    <div className="font-inter pb-6">
+    <div className="font-inter pb-6 max-w-250 mx-auto">
 
       {/* ================= My Profile ================= */}
 
