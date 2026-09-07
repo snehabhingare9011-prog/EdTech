@@ -38,5 +38,5 @@ export const profileEndpoints = {
 
 // RATINGS AND REVIEWS
 export const ratingsEndpoints = {
-  GET_AVG_RATING_API: BASE_URL + "/course/getAverageRating",
+ 
 }
