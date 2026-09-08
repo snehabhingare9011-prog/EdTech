@@ -5,7 +5,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Navbar from "./components/common/Navbar";
 import About from "./pages/About";
-
+import Instructor from "./components/core/Dashboard/Instructor";
 import OpenRoute from "./components/core/Authentication/OpenRoute";
 import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./components/core/Authentication/PrivateRoute";
@@ -21,6 +21,7 @@ import MyProfile from "./components/core/Dashboard/MyProfile";
 import Settings from "./components/core/Dashboard/settings/Settings";
 import DashboardDefaultPage from "./components/core/Dashboard/DashboardDefaultPage";
 import EnrolledCourses from "./components/core/Dashboard/EnrolledCourses";
+import AddCourse from "./components/core/Dashboard/AddCourse";
 
 const App = () => {
   console.log("inside the app");
@@ -63,16 +64,17 @@ const App = () => {
             <Route path="/contact" element={<Contact />}/>
 
             {/* Protected Route */} 
-            <Route path="/dashboard" element={ <PrivateRoute><div className='h-[calc(100vh-66px)] w-full overflow-hidden'><Dashboard /></div></PrivateRoute> } >
+          <Route path="/dashboard" element={ <PrivateRoute><div className='h-[calc(100vh-66px)] w-full   overflow-hidden'><Dashboard /></div></PrivateRoute> } >
             
             <Route index element={<DashboardDefaultPage/>}/>
-
             <Route path="my-profile" element={<MyProfile/>}/>
             <Route path="settings" element={<Settings/>}/>
             <Route path="cart" element={<Cart/>}/>
             <Route path ="enrolled-courses" element ={<EnrolledCourses/>}/>
+            <Route path ="instructor" element={<Instructor/>}/>
+            <Route path="add-course" element={<AddCourse/>}/>
             
-            </Route>
+          </Route>
 
 
             {/* 404 */}
