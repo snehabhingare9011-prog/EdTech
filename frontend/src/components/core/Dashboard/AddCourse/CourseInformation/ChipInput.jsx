@@ -1,97 +1,79 @@
+import React, { useState } from "react";
+import { MdClose } from "react-icons/md";
 
-import { useEffect, useState } from "react"
-import { MdClose } from "react-icons/md"
-import { useSelector } from "react-redux"
+const ChipInput = ({ label, name, register, setValue, setValues, placeholder, errors, }) => {
+  const [chips, setChips] = useState([]);
 
+  function KeyDownHandler(event) {
+    console.log("event dekhna hai", event);
 
-export default function ChipInput({ label, name, placeholder, register, errors, setValue, getValues, }) {
+    if (event.key === "," || event.key === "Enter") {
+      event.preventDefault();
 
-//   const { editCourse, course } = useSelector((state) => state.course)
-  const [chips, setChips] = useState([])
+      if (!chips.includes(event.target.value)) {
+        let add = event.target.value;
 
-//   useEffect(() => {
-//     if (editCourse) {
-//       // console.log(course)
-//       setChips(course?.tag)
-//     }
-//     register(name, { required: true, validate: (value) => value.length > 0 })
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, [])
-
-//   useEffect(() => {
-//     setValue(name, chips)
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, [chips])
-
-  // Function to handle user input when chips are added
-  const handleKeyDown = (event) => {
-    console.log("evernt.key",event.key);
-
-    if (event.key === "Enter" || event.key === ",") {
-     
-      event.preventDefault()
-      const chipValue = event.target.value.trim()
-
-      if (chipValue && !chips.includes(chipValue)) { 
-        const newChips = [...chips, chipValue]
-        setChips(newChips)
-        event.target.value = ""
+        setChips([...chips, add.trim()]);
       }
+
+      event.target.value = "";
     }
   }
 
-  // Function to handle deletion of a chip
-  const handleDeleteChip = (chipIndex) => { 
-    const newChips = chips.filter((_, index) => index !== chipIndex)
-    setChips(newChips)
-  }
+  function removeChips(chip) {
+    console.log("remove wala", chip);
 
+    if (chips.includes(chip)) {
+      let remove = chips.filter((item) => item !== chip);
+
+      setChips(remove);
+    }
+  }
 
   return (
     <div className="flex flex-col space-y-2">
-      
-      <label className="text-sm text-richblack-5" htmlFor={name}>
-        {label} <sup className="text-pink-200">*</sup>
+
+      <label htmlFor="tags" className="text-sm text-richblack-5" >
+        {label}{" "}
+        <sup className="text-pink-200">*</sup>
       </label>
 
-     
       <div className="flex w-full flex-wrap gap-y-2">
-     
         {chips.map((chip, index) => (
           <div
+            className="m-1 flex items-center rounded-full bg-yellow-400 px-2 py-1 text-sm text-richblack-900"
             key={index}
-            className="m-1 flex items-center rounded-full bg-yellow-400 px-2 py-1 text-sm text-richblack-5"
           >
-            {/* Render the chip value */}
-            {chip}
+            <span>{chip}</span>
 
-            {/* Render the button to delete the chip */}
-            <button
-              type="button"
-              className="ml-2 focus:outline-none"
-              onClick={() => handleDeleteChip(index)}
-            >
-              <MdClose className="text-sm" />
-            </button>
+            <MdClose
+              onClick={() => removeChips(chip)}
+              className="ml-2 cursor-pointer text-sm"
+            />
           </div>
         ))}
-  
-        <input
-          id={name}
-          name={name}
-          type="text"
-          placeholder={placeholder}
-          onKeyDown={handleKeyDown}
-          className="form-style w-full"
-        />
       </div>
 
-     
+      <input
+        id="tags"
+        placeholder={placeholder}
+        {...register(name, {
+          required: {
+            value: true,
+            message: "tags are required",
+          },
+        })}
+        onKeyDown={KeyDownHandler}
+        className="form-style w-full"
+      />
+
       {errors[name] && (
         <span className="ml-2 text-xs tracking-wide text-pink-200">
-          {label} is required
+          {errors[name].message}
         </span>
       )}
     </div>
-  )
-}
+  );
+};
+
+export default ChipInput;
