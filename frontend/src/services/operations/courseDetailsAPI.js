@@ -1,5 +1,6 @@
 import { courseEndpoints } from "../apis"
-import { apiConnector } from "../apiConnector"
+import { apiConnector } from "../apiConnector";
+import toast from "react-hot-toast"
 const {
   COURSE_DETAILS_API,
   COURSE_CATEGORIES_API,
@@ -34,5 +35,29 @@ export const fetchCourseCategories = async () => {
     console.log("COURSE_CATEGORY_API API ERROR............", error)
     toast.error(error.message)
   }
+  return result
+}
+
+// add the course details
+export const addCourseDetails = async (data, token) => {
+    console.log("data in back",data);
+  let result = null
+  const toastId = toast.loading("Loading...")
+  try {
+    const response = await apiConnector("POST", CREATE_COURSE_API, data, {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    })
+    console.log("CREATE COURSE API RESPONSE............", response)
+    if (!response?.data?.success) {
+      throw new Error("Could Not Add Course Details")
+    }
+    toast.success("Course Details Added Successfully")
+    result = response?.data?.data
+  } catch (error) {
+    console.log("CREATE COURSE API ERROR............", error)
+    toast.error(error.message)
+  }
+  toast.dismiss(toastId)
   return result
 }

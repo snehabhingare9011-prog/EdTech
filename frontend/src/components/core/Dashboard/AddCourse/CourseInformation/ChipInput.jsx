@@ -1,19 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
+import { useSelector } from "react-redux";
 
-const ChipInput = ({ label, name, register, setValue, setValues, placeholder, errors, }) => {
+const ChipInput = ({ label, name, register, setValue, placeholder, errors, }) => {
   const [chips, setChips] = useState([]);
+  const {course,editCourse}=useSelector(state=>state.course);
 
   function KeyDownHandler(event) {
-    console.log("event dekhna hai", event);
-
     if (event.key === "," || event.key === "Enter") {
       event.preventDefault();
 
-      if (!chips.includes(event.target.value)) {
-        let add = event.target.value;
+      const value = event.target.value.trim();
 
-        setChips([...chips, add.trim()]);
+      if (value && !chips.includes(value)) {
+        const newChips = [...chips, value];
+
+        setChips(newChips);
       }
 
       event.target.value = "";
@@ -21,27 +23,48 @@ const ChipInput = ({ label, name, register, setValue, setValues, placeholder, er
   }
 
   function removeChips(chip) {
-    console.log("remove wala", chip);
-
     if (chips.includes(chip)) {
-      let remove = chips.filter((item) => item !== chip);
+      const remove = chips.filter((item) => item !== chip);
 
       setChips(remove);
     }
   }
 
+  // {courseTitle: 'new course', courseShortDesc: 'very very good girl kepp it up', coursePrice: 56, courseCategory: '69c59b73145188072629de4c', courseBenefi
+
+  useEffect(() => {
+
+    if(editCourse){
+      setChips(course.tag);
+    }
+
+    register(name, { 
+      required: { value: true, message: "Tags are required", }, 
+      validate: (value) => value.length > 0 || "Tags are required", });
+
+    
+    }, []);
+
+  useEffect(() => {
+    setValue(name, chips);
+  }, [chips, name, setValue]);
+
   return (
     <div className="flex flex-col space-y-2">
 
-      <label htmlFor="tags" className="text-sm text-richblack-5" >
+      <label
+        htmlFor={name}
+        className="text-sm text-richblack-5"
+      >
         {label}{" "}
         <sup className="text-pink-200">*</sup>
       </label>
 
       <div className="flex w-full flex-wrap gap-y-2">
+
         {chips.map((chip, index) => (
           <div
-            className="m-1 flex items-center rounded-full bg-yellow-400 px-2 py-1 text-sm text-richblack-900"
+            className="m-1 flex items-center rounded-full bg-yellow-50 px-2 py-1 text-sm text-richblack-900"
             key={index}
           >
             <span>{chip}</span>
@@ -52,20 +75,14 @@ const ChipInput = ({ label, name, register, setValue, setValues, placeholder, er
             />
           </div>
         ))}
-      </div>
 
-      <input
-        id="tags"
-        placeholder={placeholder}
-        {...register(name, {
-          required: {
-            value: true,
-            message: "tags are required",
-          },
-        })}
-        onKeyDown={KeyDownHandler}
-        className="form-style w-full"
-      />
+        <input
+          id={name}
+          placeholder={placeholder}
+          onKeyDown={KeyDownHandler}
+          className="form-style w-full"
+        />
+      </div>
 
       {errors[name] && (
         <span className="ml-2 text-xs tracking-wide text-pink-200">

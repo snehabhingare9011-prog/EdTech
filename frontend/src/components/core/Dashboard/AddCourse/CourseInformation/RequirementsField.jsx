@@ -1,15 +1,13 @@
 import React from "react";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 
-const RequirementsField = ({ name, label, errors }) => {
+const RequirementsField = ({ name, label, errors,register,setValue }) => {
   const [requirement, setRequirement] = useState("");
   const [requirementsList, setRequirementsList] = useState([]);
 
   function handleAddRequirement() {
     if (requirement) {
-      console.log("i have to see", requirement);
-      console.log("i have to see list", requirementsList);
-
+    
       setRequirementsList([...requirementsList, requirement]);
       setRequirement("");
     }
@@ -22,6 +20,15 @@ const RequirementsField = ({ name, label, errors }) => {
 
     setRequirementsList(updatedRequirements);
   }
+
+  useEffect(()=>{
+    register(name,{required:true});
+  },[register]);
+
+  useEffect(()=>{
+    setValue(name,requirementsList)
+
+  },[name,setValue,requirementsList]);
 
   return (
     <div className="flex flex-col space-y-2">

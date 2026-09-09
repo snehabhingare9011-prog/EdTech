@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { FiUploadCloud } from "react-icons/fi";
 
-const Upload = ({ name, label, errors }) => {
+const Upload = ({ name, label, errors,register,setValue }) => {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState("");
 
@@ -42,7 +42,20 @@ const Upload = ({ name, label, errors }) => {
         "image/*": [".jpeg", ".jpg", ".png"],
       },
     });
+    
+    useEffect(()=>{
 
+      register(name,{
+        required:true
+      });
+
+    },[register]);
+
+    useEffect(()=>{
+
+      setValue(name,file);
+
+    },[file,name,setValue])
   return (
     <div className="flex flex-col space-y-2">
 
@@ -70,7 +83,7 @@ const Upload = ({ name, label, errors }) => {
             <img
               src={preview}
               alt="Uploaded"
-              className="max-h-[250px] w-full rounded-md object-contain"
+              className="max-h-[200px] max-w-full rounded-md object-contain"
             />
 
             <p className="mt-3 text-sm text-richblack-200">

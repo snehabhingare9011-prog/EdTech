@@ -5,18 +5,43 @@ import { fetchCourseCategories } from "../../../../../services/operations/course
 import ChipInput from "./ChipInput";
 import Upload from "./Upload";
 import RequirementsField from "./RequirementsField";
+import { useDispatch, useSelector } from "react-redux";
+import { setStep } from "../../../../../redux/slices/courseSlice";
+import { MdNavigateNext } from "react-icons/md";
+import { addCourseDetails } from "../../../../../services/operations/courseDetailsAPI";
+import { COURSE_STATUS } from "../../../../../utils/constants";
+import toast from "react-hot-toast";
+import { setCourse } from "../../../../../redux/slices/courseSlice";
+
 
 const CourseInformation = () => {
+  const dispatch=useDispatch();
   const { register, handleSubmit, setValue, getValues, formState: { errors }, } = useForm();
   const [loading, setLoading] = useState(false);
   const [courseCategories, setCourseCategories] = useState([]);
+  const {course,editCourse}=useSelector(state=>state.course);
+  const {token}=useSelector(state=>state.auth)
 
   const getCategories = async () => {
     try {
       setLoading(true);
-
       const categories = await fetchCourseCategories();
       setCourseCategories(categories);
+
+      //  // if form is in edit mode
+      if (editCourse) {
+
+        console.log("inside the editCourse");
+        
+        setValue("courseName", course.courseName)
+        setValue("courseDescription", course.courseDescription)
+        setValue("coursePrice", course.price)
+        setValue("tag", course.tag)
+        setValue("courseBenefits", course.whatYouWillLearn)
+        setValue("category", course.category)
+        setValue("courseRequirements", course.instructions)
+        setValue("courseImage", course.thumbnail)
+      }
 
     } catch (error) {
       console.log("error during fetch course category", error);
@@ -29,9 +54,89 @@ const CourseInformation = () => {
     getCategories();
   }, []);
 
+  const onSubmit = async (data) => {
+    console.log("data1",data)
+
+    if (editCourse) {
+      
+      if (isFormUpdated()) {
+        const currentValues = getValues()
+        const formData = new FormData()
+     
+        formData.append("courseId", course._id)
+        if (currentValues.courseTitle !== course.courseName) {
+          formData.append("courseName", data.courseTitle)
+        }
+        if (currentValues.courseShortDesc !== course.courseDescription) {
+          formData.append("courseDescription", data.courseShortDesc)
+        }
+        if (currentValues.coursePrice !== course.price) {
+          formData.append("price", data.coursePrice)
+        }
+        if (currentValues.courseTags.toString() !== course.tag.toString()) {
+          formData.append("tag", JSON.stringify(data.courseTags))
+        }
+        if (currentValues.courseBenefits !== course.whatYouWillLearn) {
+          formData.append("whatYouWillLearn", data.courseBenefits)
+        }
+        if (currentValues.courseCategory._id !== course.category._id) {
+          formData.append("category", data.courseCategory)
+        }
+        if (
+          currentValues.courseRequirements.toString() !==
+          course.instructions.toString()
+        ) {
+          formData.append(
+            "instructions",
+            JSON.stringify(data.courseRequirements)
+          )
+        }
+        if (currentValues.courseImage !== course.thumbnail) {
+          formData.append("thumbnailImage", data.courseImage)
+        }
+        // console.log("Edit Form data: ", formData)
+        setLoading(true)
+        const result = await editCourseDetails(formData, token)
+        setLoading(false)
+        if (result) {
+          dispatch(setCourse(result))
+          dispatch(setStep(2))
+        }
+      } else {
+        toast.error("No changes made to the form")
+      }
+      return;
+    }
+
+    const formData = new FormData()
+    formData.append("courseName", data.courseName)
+    formData.append("courseDescription", data.courseDescription)
+    formData.append("price", data.coursePrice)
+    formData.append("tag", JSON.stringify(data.tag))
+    formData.append("whatYouWillLearn", data.courseBenefits)
+    formData.append("category", data.category)
+    formData.append("status", COURSE_STATUS.DRAFT)
+    formData.append("instructions", JSON.stringify(data.courseRequirements))
+    formData.append("thumbnailImage", data.courseImage)
+
+  //   for (const [key, value] of formData.entries()) {
+  //   console.log("formData",key, value);
+  // }
+
+    setLoading(true);
+    const result = await addCourseDetails(formData, token)
+    console.log("result",result);
+    if (result) {
+      dispatch(setStep(2));
+      dispatch(setCourse(result));
+    }
+    setLoading(false);
+  }
+
   return (
     <div className="text-white mt-9">
-      <form className="space-y-8 rounded-md border border-richblack-700 bg-richblack-800 p-6">
+      <form className="space-y-8 rounded-md border border-richblack-700 bg-richblack-800 p-6"
+       onSubmit={handleSubmit(onSubmit)}>
 
         {/* Course Title */}
         <div className="flex flex-col space-y-2">
@@ -128,7 +233,6 @@ const CourseInformation = () => {
         {/* Course Category */}
         <div className="flex flex-col space-y-2">
           <label className="text-sm text-richblack-5" htmlFor="category" > Course Category{" "} <sup className="text-pink-200">*</sup> </label>
-
           <select
             id="category"
             {...register("category", {
@@ -141,9 +245,13 @@ const CourseInformation = () => {
               Choose a Category
             </option>
 
+            {!loading && courseCategories.length === 0 && (
+              <option disabled>No categories available</option>
+            )}
+
             {!loading &&
-              courseCategories?.map((category, indx) => (
-                <option key={indx} value={category?.name}>
+              courseCategories.map((category, indx) => (
+                <option key={indx} value={category?._id}>
                   {category?.name}
                 </option>
               ))}
@@ -172,6 +280,8 @@ const CourseInformation = () => {
           name="courseImage"
           label="Course Thumbnail"
           errors={errors}
+          register={register}
+          setValue={setValue}
         />
 
         {/* Benefits of the course */}
@@ -205,8 +315,37 @@ const CourseInformation = () => {
           register={register}
           setValue={setValue}
           errors={errors}
-          getValues={getValues}
+          
         />
+
+         {/* Next Button */}
+      <div className="flex justify-end gap-x-2">
+        {editCourse && (
+          <button
+            type="button"
+            onClick={() => dispatch(setStep(2))}
+            disabled={loading}
+            className={`flex cursor-pointer items-center gap-x-2 rounded-md bg-richblack-300 py-2 px-5 font-semibold text-richblack-900`}
+          >
+            Continue Wihout Saving
+          </button>
+        )}
+      
+        <button
+          type="submit"
+          disabled={loading}
+          className="flex items-center cursor-pointer gap-x-2 rounded-md bg-yellow-50 px-5 py-2 font-semibold text-richblack-900"
+        >
+          Next
+          <MdNavigateNext className="text-xl" />
+        </button>
+
+      </div>
+
+
+       
+
+
 
       </form>
     </div>
