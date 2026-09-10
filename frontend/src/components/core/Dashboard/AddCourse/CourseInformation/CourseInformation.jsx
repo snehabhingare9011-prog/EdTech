@@ -12,6 +12,7 @@ import { addCourseDetails } from "../../../../../services/operations/courseDetai
 import { COURSE_STATUS } from "../../../../../utils/constants";
 import toast from "react-hot-toast";
 import { setCourse } from "../../../../../redux/slices/courseSlice";
+import { editCourseDetails } from "../../../../../services/operations/courseDetailsAPI";
 
 
 const CourseInformation = () => {
@@ -54,58 +55,96 @@ const CourseInformation = () => {
     getCategories();
   }, []);
 
+  const isFormUpdated=()=>{
+     
+    let currentValues=getValues();
+    console.log("currentValues",currentValues);
+    console.log("course",course);
+
+    if(currentValues.category!==course.category||
+      currentValues.courseBenefits!==course.whatYouWillLearn||
+      currentValues.courseDescription!==course.courseDescription||
+      currentValues.courseImage!==course.thumbnail||
+      currentValues.courseName!==course.courseName||
+      currentValues.coursePrice!==course.price||
+      JSON.stringify(currentValues.courseRequirements) !== JSON.stringify(course.instructions)||
+      JSON.stringify(currentValues.tag) !== JSON.stringify(course.tag)
+    ){
+      return true;
+    }
+    else{
+      return false;
+    }
+
+  }
+
   const onSubmit = async (data) => {
     console.log("data1",data)
 
     if (editCourse) {
       
       if (isFormUpdated()) {
-        const currentValues = getValues()
-        const formData = new FormData()
-     
-        formData.append("courseId", course._id)
-        if (currentValues.courseTitle !== course.courseName) {
-          formData.append("courseName", data.courseTitle)
-        }
-        if (currentValues.courseShortDesc !== course.courseDescription) {
-          formData.append("courseDescription", data.courseShortDesc)
-        }
-        if (currentValues.coursePrice !== course.price) {
-          formData.append("price", data.coursePrice)
-        }
-        if (currentValues.courseTags.toString() !== course.tag.toString()) {
-          formData.append("tag", JSON.stringify(data.courseTags))
-        }
-        if (currentValues.courseBenefits !== course.whatYouWillLearn) {
-          formData.append("whatYouWillLearn", data.courseBenefits)
-        }
-        if (currentValues.courseCategory._id !== course.category._id) {
-          formData.append("category", data.courseCategory)
-        }
-        if (
-          currentValues.courseRequirements.toString() !==
-          course.instructions.toString()
-        ) {
-          formData.append(
-            "instructions",
-            JSON.stringify(data.courseRequirements)
-          )
-        }
-        if (currentValues.courseImage !== course.thumbnail) {
-          formData.append("thumbnailImage", data.courseImage)
-        }
-        // console.log("Edit Form data: ", formData)
-        setLoading(true)
-        const result = await editCourseDetails(formData, token)
-        setLoading(false)
-        if (result) {
-          dispatch(setCourse(result))
-          dispatch(setStep(2))
-        }
-      } else {
-        toast.error("No changes made to the form")
+
+      const currentValues = getValues()
+      console.log("true ho gya");
+      const formData = new FormData();
+      formData.append("courseId",course._id);
+
+      if(currentValues.courseName!==course.courseName){
+        formData.append("courseName", currentValues.courseName)
       }
-      return;
+
+      if( currentValues.courseDescription!==course.courseDescription){
+        formData.append("courseDescription", currentValues.courseDescription)
+      }
+
+      if(currentValues.coursePrice!==course.price){
+        formData.append("price", currentValues.coursePrice)
+      }
+
+      if( JSON.stringify(currentValues.tag) !== JSON.stringify(course.tag)){
+        formData.append("tag", JSON.stringify(currentValues.tag))
+
+      }
+
+      if( currentValues.courseBenefits!==course.whatYouWillLearn){
+        formData.append("whatYouWillLearn", currentValues.courseBenefits)
+
+      }
+      
+      if(currentValues.category!==course.category){
+        formData.append("category", currentValues.category)
+      }
+
+      if(JSON.stringify(currentValues.courseRequirements) !== JSON.stringify(course.instructions)){
+          formData.append("instructions", JSON.stringify(currentValues.courseRequirements))
+      }
+      
+      if(currentValues.courseImage!==course.thumbnail){
+        formData.append("thumbnailImage", currentValues.courseImage)
+      }
+      
+      for (const [key, value] of formData.entries()) {
+        console.log("formData",key, value);
+       }
+      
+      setLoading(true);
+      const result=await editCourseDetails(formData, token);
+      setLoading(false);
+      if(result){
+        console.log("after edit course",result)
+        dispatch(setCourse(result));
+        dispatch(setStep(2));
+      }else{
+         toast.error("No changes made to the form")
+      }
+      
+
+        return ;
+
+      }
+
+    
     }
 
     const formData = new FormData()
@@ -127,6 +166,7 @@ const CourseInformation = () => {
     const result = await addCourseDetails(formData, token)
     console.log("result",result);
     if (result) {
+      console.log("after creation of course",result);
       dispatch(setStep(2));
       dispatch(setCourse(result));
     }
@@ -315,8 +355,8 @@ const CourseInformation = () => {
           register={register}
           setValue={setValue}
           errors={errors}
-          
         />
+
 
          {/* Next Button */}
       <div className="flex justify-end gap-x-2">
@@ -336,7 +376,7 @@ const CourseInformation = () => {
           disabled={loading}
           className="flex items-center cursor-pointer gap-x-2 rounded-md bg-yellow-50 px-5 py-2 font-semibold text-richblack-900"
         >
-          Next
+          {editCourse? "Save Changes":"Next"}
           <MdNavigateNext className="text-xl" />
         </button>
 

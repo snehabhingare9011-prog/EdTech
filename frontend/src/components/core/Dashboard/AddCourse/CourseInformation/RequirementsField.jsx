@@ -1,9 +1,11 @@
 import React from "react";
 import { useState,useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const RequirementsField = ({ name, label, errors,register,setValue }) => {
   const [requirement, setRequirement] = useState("");
   const [requirementsList, setRequirementsList] = useState([]);
+  const {course,editCourse}=useSelector(state=>state.course);
 
   function handleAddRequirement() {
     if (requirement) {
@@ -22,6 +24,11 @@ const RequirementsField = ({ name, label, errors,register,setValue }) => {
   }
 
   useEffect(()=>{
+
+    if(editCourse){
+      setRequirementsList(course.instructions);
+    }
+
     register(name,{required:true});
   },[register]);
 

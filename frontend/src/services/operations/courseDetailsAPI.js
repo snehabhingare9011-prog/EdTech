@@ -48,7 +48,7 @@ export const addCourseDetails = async (data, token) => {
       "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${token}`,
     })
-    console.log("CREATE COURSE API RESPONSE............", response)
+    console.log("CREATE COURSE API RESPONSE............", response);
     if (!response?.data?.success) {
       throw new Error("Could Not Add Course Details")
     }
@@ -61,3 +61,44 @@ export const addCourseDetails = async (data, token) => {
   toast.dismiss(toastId)
   return result
 }
+
+export const editCourseDetails = async (data, token) => {
+  let result = null;
+  let toastId = null;
+
+  try {
+    toastId = toast.loading("Loading......");
+
+    const response = await apiConnector(
+      "PUT",
+      EDIT_COURSE_API,
+      data,
+      {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      }
+    );
+
+    console.log("EDIT COURSE API RESPONSE............", response);
+
+    if (!response?.data?.success) {
+      throw new Error(response?.data?.message);
+    }
+
+    toast.success("Course Edit Successfully");
+
+    result = response?.data?.data;
+
+  } catch (error) {
+    console.log("EDIT COURSE API ERROR............", error);
+
+    toast.error(error?.response?.data?.message || "Course Edit Failed");
+
+  } finally {
+    if (toastId) {
+      toast.dismiss(toastId);
+    }
+  }
+
+  return result;
+};

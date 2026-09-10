@@ -30,6 +30,8 @@ const ChipInput = ({ label, name, register, setValue, placeholder, errors, }) =>
     }
   }
 
+  
+
   // {courseTitle: 'new course', courseShortDesc: 'very very good girl kepp it up', coursePrice: 56, courseCategory: '69c59b73145188072629de4c', courseBenefi
 
   useEffect(() => {

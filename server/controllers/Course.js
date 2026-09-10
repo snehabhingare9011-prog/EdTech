@@ -204,3 +204,98 @@ exports.getCourseDetails=async(req,res)=>{
         })
     }
 }
+
+exports.editCourse=async(req,res)=>{
+    try{
+        const {courseId}=req.body;
+        const course=await Course.findById(courseId);
+
+        console.log("inside the edit re",req.body);
+
+        if(!course){
+          return   res.status(404).json({
+                success:false,
+                message:"course not found"
+            })
+        }
+
+         // Object containing ONLY the fields sent by frontend
+        const updateData = {};
+
+        if(req.body.category!==undefined){
+
+            await Category.findByIdAndUpdate(course.category,{
+                $pull:{courses:courseId}
+            });
+
+            await Category.findByIdAndUpdate(req.body.category,{
+                $addToSet:{courses:courseId}
+            })
+
+            updateData.category=req.body.category
+        }
+        if (req.body.courseName !== undefined) {
+            updateData.courseName = req.body.courseName;
+        }
+
+        if (req.body.courseDescription !== undefined) {
+            updateData.courseDescription = req.body.courseDescription;
+        }
+
+        if (req.body.price !== undefined) {
+            updateData.price = req.body.price;
+        }
+
+        if (req.body.whatYouWillLearn !== undefined) {
+            updateData.whatYouWillLearn = req.body.whatYouWillLearn;
+        }
+
+        if (req.body.tag !== undefined) {
+            updateData.tag = JSON.parse(req.body.tag);
+        }
+
+        if (req.body.instructions !== undefined) {
+            updateData.instructions = JSON.parse(req.body.instructions);
+        }
+
+        if (req.body.status !== undefined) {
+            updateData.status = req.body.status;
+        }
+
+
+        // If new image is sent, upload and update it
+        if (req.files?.thumbnailImage) {
+            const thumbnail = req.files.thumbnailImage;
+
+            const uploadResult = await uploadFileToCloudinary(
+                thumbnail,
+                process.env.FOLDER_NAME
+            );
+
+            updateData.thumbnail = uploadResult.secure_url;
+        }
+
+         // Update ONLY the fields present in updateData
+        const updatedCourse = await Course.findByIdAndUpdate(
+            courseId,
+            { $set: updateData },
+            { new: true }
+        );
+
+       
+        return res.status(200).json({
+            success: true,
+            message: "Course updated successfully",
+            data: updatedCourse,
+            });
+
+        } catch (err) {
+            console.log("EDIT COURSE ERROR:", err);
+
+            return res.status(500).json({
+            success: false,
+            message: "Something went wrong while editing course",
+            error: err.message,
+            });
+        }
+};
