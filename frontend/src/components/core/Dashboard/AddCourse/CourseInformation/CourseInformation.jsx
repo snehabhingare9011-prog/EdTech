@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { HiOutlineCurrencyRupee } from "react-icons/hi"
 import { fetchCourseCategories } from "../../../../../services/operations/courseDetailsAPI";
 import ChipInput from "./ChipInput";
-import Upload from "./Upload";
+import Upload from "../Upload";
 import RequirementsField from "./RequirementsField";
 import { useDispatch, useSelector } from "react-redux";
 import { setStep } from "../../../../../redux/slices/courseSlice";
@@ -79,7 +79,7 @@ const CourseInformation = () => {
   }
 
   const onSubmit = async (data) => {
-    console.log("data1",data)
+    console.log(" inside the submit data1",data)
 
     if (editCourse) {
       
@@ -135,17 +135,21 @@ const CourseInformation = () => {
         console.log("after edit course",result)
         dispatch(setCourse(result));
         dispatch(setStep(2));
-      }else{
-         toast.error("No changes made to the form")
       }
       
 
-        return ;
-
+       
+      }else{
+      
+        toast.error("No changes made to the form");
+      
       }
+
+      return ;
 
     
     }
+
 
     const formData = new FormData()
     formData.append("courseName", data.courseName)

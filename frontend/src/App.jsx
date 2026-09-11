@@ -22,6 +22,7 @@ import Settings from "./components/core/Dashboard/settings/Settings";
 import DashboardDefaultPage from "./components/core/Dashboard/DashboardDefaultPage";
 import EnrolledCourses from "./components/core/Dashboard/EnrolledCourses";
 import AddCourse from "./components/core/Dashboard/AddCourse";
+import CourseBuilderForm from "./components/core/Dashboard/AddCourse/CourseBuilder/CourseBuilderForm";
 
 const App = () => {
   console.log("inside the app");
@@ -73,6 +74,7 @@ const App = () => {
             <Route path ="enrolled-courses" element ={<EnrolledCourses/>}/>
             <Route path ="instructor" element={<Instructor/>}/>
             <Route path="add-course" element={<AddCourse/>}/>
+            <Route path="second" element={<CourseBuilderForm/>}/>
             
           </Route>
 

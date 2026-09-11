@@ -43,43 +43,55 @@ exports.createSection=async(req,res)=>{
     }
 }
 
-exports.updateSection=async(req ,res)=>{
-    try{
-        const {sectionName,sectionId}=req.body;
+exports.updateSection = async (req, res) => {
+  try {
+    const { sectionName, sectionId, courseId } = req.body;
+    console.log("req body",req.body)
 
-        if(!sectionName||!sectionId){
-            return res.status(400).json({
-                success:false,
-                message:"All Fields are required"
-            })
-        }
-
-        const updatedSection=await Section.findByIdAndUpdate(
-            sectionId,
-            {sectionName},
-            {returnDocument:"after"}
-        );
-
-         if (!updatedSection) {
-            return res.status(404).json({
-                success: false,
-                message: "Section not found"
-            });
-        }
-
-        return res.status(200).json({
-            success:true,
-            message:"Section Updated successfully"
-        })
-
-
-    }catch(err){
-        return res.status(500).json({
-            success:false,
-            message:"Failed to update Section"
-        })
+    if (!sectionName || !sectionId || !courseId) {
+      return res.status(400).json({
+        success: false,
+        message: "All Fields are required",
+      });
     }
-}
+
+    const updatedSection = await Section.findByIdAndUpdate(
+      sectionId,
+      { sectionName },
+      { new: true }
+    );
+
+    if (!updatedSection) {
+      return res.status(404).json({
+        success: false,
+        message: "Section not found",
+      });
+    }
+
+    const updatedCourse = await Course.findById(courseId)
+      .populate({
+        path: "courseContent",
+        populate: {
+          path: "subSection",
+        },
+      });
+
+    return res.status(200).json({
+      success: true,
+      message: "Section Updated successfully",
+      data: updatedCourse,
+    });
+
+  } catch (err) {
+    console.log(err);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to update Section",
+    });
+  }
+};
+
 
 exports.deleteSection = async (req, res) => {
     try {
@@ -140,7 +152,12 @@ exports.deleteSection = async (req, res) => {
             {
                 returnDocument: "after"
             }
-        );
+        ) .populate({
+            path: "courseContent",
+            populate: {
+            path: "subSection",
+            },
+        });
 
         // 6. Delete section document last
         await Section.findByIdAndDelete(sectionId);
