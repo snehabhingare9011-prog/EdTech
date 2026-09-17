@@ -3,7 +3,16 @@ import { useDropzone } from "react-dropzone";
 import { FiUploadCloud } from "react-icons/fi";
 import { useSelector } from "react-redux";
 
-const Upload = ({ name, label, errors, register, setValue }) => {
+const Upload = ({
+  name,
+  label,
+  errors,
+  register,
+  setValue,
+  video = false,
+  viewData = null,
+  editData = null,
+}) => {
   const { editCourse, course } = useSelector((state) => state.course);
 
   const [file, setFile] = useState(null);
@@ -15,17 +24,25 @@ const Upload = ({ name, label, errors, register, setValue }) => {
     if (selectedFile) {
       setFile(selectedFile);
     }
-
   };
 
-  // Show existing course image when editing
+  // Existing image/video while editing/viewing
   useEffect(() => {
-    if (editCourse && course?.thumbnail) {
+    if (viewData) {
+      setPreview(viewData);
+    }
+
+    if (editData) {
+      setPreview(editData);
+    }
+
+    // Existing course image
+    if (!video && editCourse && course?.thumbnail) {
       setPreview(course.thumbnail);
     }
-  }, [editCourse, course]);
+  }, [viewData, editData, editCourse, course, video]);
 
-  // Create preview for newly selected image
+  // Preview newly selected file
   useEffect(() => {
     if (!file) {
       return;
@@ -43,18 +60,21 @@ const Upload = ({ name, label, errors, register, setValue }) => {
   const removeFile = () => {
     setFile(null);
     setPreview("");
-    
   };
 
-  const { getRootProps, getInputProps, isDragActive, } = useDropzone({
-      onDrop,
-      multiple: false,
-      disabled: !!file,
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    multiple: false,
+    disabled: !!file,
 
-      accept: {
-        "image/*": [".jpeg", ".jpg", ".png"],
-      },
-    });
+    accept: video
+      ? {
+          "video/*": [".mp4", ".webm", ".mov"],
+        }
+      : {
+          "image/*": [".jpeg", ".jpg", ".png"],
+        },
+  });
 
   useEffect(() => {
     register(name, {
@@ -69,7 +89,7 @@ const Upload = ({ name, label, errors, register, setValue }) => {
   return (
     <div className="flex flex-col space-y-2">
 
-      <label htmlFor={name} className="text-sm text-richblack-5" >
+      <label htmlFor={name} className="text-sm text-richblack-5">
         {label}{" "}
         <sup className="text-pink-200">*</sup>
       </label>
@@ -87,12 +107,20 @@ const Upload = ({ name, label, errors, register, setValue }) => {
         {preview ? (
           <div className="flex w-full flex-col items-center p-6">
 
-            <img
-              src={preview}
-              alt="Uploaded"
-              className="max-h-[200px] max-w-full rounded-md object-contain"/>
+            {video ? (
+              <video
+                src={preview}
+                controls
+                className="max-h-[250px] max-w-full rounded-md"
+              />
+            ) : (
+              <img
+                src={preview}
+                alt="Uploaded"
+                className="max-h-[200px] max-w-full rounded-md object-contain"
+              />
+            )}
 
-            {/* Show file name only when a new file is selected */}
             {file && (
               <p className="mt-3 text-sm text-richblack-200">
                 {file.name}
@@ -119,17 +147,19 @@ const Upload = ({ name, label, errors, register, setValue }) => {
             </div>
 
             <p className="mt-2 max-w-50 text-center text-sm text-richblack-200">
-              Drag and drop an image, or click to{" "}
+              Drag and drop a {video ? "video" : "image"}, or click to{" "}
               <span className="font-semibold text-yellow-50">
                 Browse
               </span>{" "}
               a file
             </p>
 
-            <ul className="mt-10 flex list-disc justify-between space-x-12 text-center text-xs text-richblack-200">
-              <li>Aspect ratio 16:9</li>
-              <li>Recommended size 1024x576</li>
-            </ul>
+            {!video && (
+              <ul className="mt-10 flex list-disc justify-between space-x-12 text-center text-xs text-richblack-200">
+                <li>Aspect ratio 16:9</li>
+                <li>Recommended size 1024x576</li>
+              </ul>
+            )}
 
           </div>
         )}
