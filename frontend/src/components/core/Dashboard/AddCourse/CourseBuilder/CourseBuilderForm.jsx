@@ -95,54 +95,96 @@ const CourseBuilderForm = () => {
 
   }
 
-  return (
-    <div className='text-white'>
+ return (
+  <div className="space-y-8 rounded-md border border-richblack-700 bg-richblack-800 p-6 mt-4">
 
-      <p>Course Builder</p>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label htmlFor='sectionName'>Section name<sup>*</sup></label>
-          <input
-            id="sectionName"
-            disabled={loading}
-            placeholder="Add section name"
-            {...register("sectionName", {
-              required: true
-            })}
-            className="w-full border-2"
-          />
+    <p className="text-2xl font-semibold text-richblack-5">
+      Course Builder
+    </p>
 
-          {errors.sectionName && <p>Section name is Required</p>}
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-4"
+    >
+      <div className="flex flex-col space-y-2">
 
-        </div>
+        <label
+          className="text-sm text-richblack-5"
+          htmlFor="sectionName"
+        >
+          Section Name <sup className="text-pink-200">*</sup>
+        </label>
 
-        <div className='mt-10 flex gap-3  '>
-          <button
-            type="submit"
-            disabled={loading}
-            className="border p-2 flex gap-1 items-center text-amber-300">
-            {editSectionName ? "edit section Name" : "create Section"}
-            <GoPlusCircle />
-          </button>
+        <input
+          id="sectionName"
+          disabled={loading}
+          placeholder="Add a section to build your course"
+          {...register("sectionName", {
+            required: true
+          })}
+          className="form-style w-full"
+        />
 
-          {editSectionName && <button type="button" onClick={cancelEdit} className='text-sm text-richblack-300 underline' >
-            Cancel edit</button>}
-        </div>
-  
-
-      </form>
-
-      { course.courseContent.length>0 && <NestedView handleChangeEditSectionName={handleChangeEditSectionName}/> }
-
-      <div className='flex justify-end gap-x-3 mt-10 '>
-
-        <button onClick={goBack} className='rounded-md cursor-pointer flex item-center border p-3 bg-amber-600'>Back</button>
-        <button onClick={goToNext} className='flex rounded-md border p-3 bg-amber-600'>Next <MdNavigateNext className="text-xl " /></button>
+        {errors.sectionName && (
+          <span className="ml-2 text-xs tracking-wide text-pink-200">
+            Section name is required
+          </span>
+        )}
 
       </div>
-       
+
+      <div className="flex items-end gap-x-4">
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="flex cursor-pointer items-center gap-x-2 rounded-md border border-richblack-600 bg-richblack-700 px-5 py-2 font-semibold text-yellow-50"
+        >
+          {editSectionName ? "Edit Section Name" : "Create Section"}
+          <GoPlusCircle />
+        </button>
+
+        {editSectionName && (
+          <button
+            type="button"
+            onClick={cancelEdit}
+            className="text-sm text-richblack-300 underline"
+          >
+            Cancel Edit
+          </button>
+        )}
+
+      </div>
+    </form>
+
+    {course.courseContent.length > 0 && (
+      <NestedView
+        handleChangeEditSectionName={handleChangeEditSectionName}
+      />
+    )}
+
+    {/* Next Prev Button */}
+    <div className="flex justify-end gap-x-3">
+
+      <button
+        onClick={goBack}
+        className="flex cursor-pointer items-center gap-x-2 rounded-md bg-richblack-300 px-5 py-2 font-semibold text-richblack-900"
+      >
+        Back
+      </button>
+
+      <button
+        onClick={goToNext}
+        className="flex cursor-pointer items-center gap-x-2 rounded-md bg-yellow-50 px-5 py-2 font-semibold text-richblack-900"
+      >
+        Next
+        <MdNavigateNext className="text-xl" />
+      </button>
+
     </div>
-  )
+
+  </div>
+)
 }
 
 export default CourseBuilderForm

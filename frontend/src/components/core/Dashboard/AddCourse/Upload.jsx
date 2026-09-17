@@ -64,9 +64,7 @@ const Upload = ({
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    multiple: false,
-    disabled: !!file,
-
+    disabled: !!file || !!viewData || !!editData||!!preview,
     accept: video
       ? {
           "video/*": [".mp4", ".webm", ".mov"],
@@ -127,7 +125,7 @@ const Upload = ({
               </p>
             )}
 
-            <button
+            { !viewData && <button
               type="button"
               onClick={(event) => {
                 event.stopPropagation();
@@ -136,7 +134,7 @@ const Upload = ({
               className="mt-3 text-richblack-400 underline"
             >
               Cancel
-            </button>
+            </button>}
 
           </div>
         ) : (
