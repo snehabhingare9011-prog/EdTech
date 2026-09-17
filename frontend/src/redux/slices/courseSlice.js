@@ -20,10 +20,15 @@ const courseSlice=createSlice({
         },
         setEditCourse:(state,action)=>{
             state.editCourse=action.payload
-        }
+        },
+        resetCourseState: (state) => {
+            state.step = 1
+            state.course = null
+            state.editCourse = false
+        },
 
     }
 });
 
-export const {setStep,setEditCourse,setCourse}=courseSlice.actions;
+export const {setStep,setEditCourse,setCourse, resetCourseState}=courseSlice.actions;
 export default courseSlice.reducer;

@@ -179,8 +179,10 @@ export const updateSection = async (data, token) => {
 // create a subsection
 export const createSubSection = async (data, token) => {
   let result = null
+  const toastId = toast.loading("Loading...")
 
   try {
+    
     const response = await apiConnector(
       "POST",
       CREATE_SUBSECTION_API,
@@ -207,7 +209,7 @@ export const createSubSection = async (data, token) => {
       "Failed to create lecture"
     )
   }
-
+  toast.dismiss(toastId);
   return result
 }
 
@@ -215,8 +217,9 @@ export const createSubSection = async (data, token) => {
 // update a subsection
 export const updateSubSection = async (data, token) => {
   let result = null
-
+const toastId = toast.loading("Loading...")
   try {
+    
     const response = await apiConnector(
       "PUT",
       UPDATE_SUBSECTION_API,
@@ -243,7 +246,7 @@ export const updateSubSection = async (data, token) => {
       "Failed to update lecture"
     )
   }
-
+  toast.dismiss(toastId)
   return result
 }
 
@@ -272,8 +275,9 @@ export const deleteSection = async (data, token) => {
 // delete a subsection
 export const deleteSubSection = async (data, token) => {
   let result = null
-
+ const toastId = toast.loading("Loading...")
   try {
+   
     const response = await apiConnector(
       "DELETE",
       DELETE_SUBSECTION_API,
@@ -300,6 +304,6 @@ export const deleteSubSection = async (data, token) => {
       "Failed to delete lecture"
     )
   }
-
+  toast.dismiss(toastId);
   return result
 }

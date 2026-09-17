@@ -387,10 +387,6 @@ const CourseInformation = () => {
       </div>
 
 
-       
-
-
-
       </form>
     </div>
   );
