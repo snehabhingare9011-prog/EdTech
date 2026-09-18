@@ -20,6 +20,110 @@ const {
   LECTURE_COMPLETION_API,
 } = courseEndpoints
 
+
+
+export const getFullDetailsOfCourse = async (courseId, token) => {
+  let result = null
+  let toastId = null
+
+  console.log("dekhna pdega",courseId);
+
+  try {
+    toastId = toast.loading("Loading course details...")
+
+    const response = await apiConnector(
+      "POST",
+      GET_FULL_COURSE_DETAILS_AUTHENTICATED,
+      {courseId},
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    )
+
+    if (!response?.data?.success) {
+      throw new Error(response?.data?.message)
+    }
+
+    result = response?.data
+  } catch (error) {
+    console.log("GET FULL COURSE DETAILS ERROR:", error)
+
+    toast.error(
+      error?.response?.data?.message ||
+        "Failed to fetch course details"
+    )
+  } finally {
+    if (toastId) {
+      toast.dismiss(toastId)
+    }
+  }
+
+  return result
+}
+
+export const deleteCourse = async (courseId, token) => {
+  let result = null
+
+  try {
+    const response = await apiConnector(
+      "DELETE",
+      DELETE_COURSE_API,
+      { courseId },
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    )
+
+    console.log("DELETE COURSE API RESPONSE:", response)
+
+    if (!response?.data?.success) {
+      throw new Error(response?.data?.message)
+    }
+
+    result = response?.data?.data
+
+    toast.success("Course deleted successfully")
+  } catch (error) {
+    console.log("DELETE COURSE API ERROR:", error)
+
+    toast.error(
+      error?.response?.data?.message || "Failed to delete course"
+    )
+  }
+
+  return result
+}
+
+export const getInstructorCourses = async (token) => {
+  let result = null
+
+  try {
+    const response = await apiConnector(
+      "GET",
+      GET_ALL_INSTRUCTOR_COURSES_API,
+      null,
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    )
+
+    console.log("GET INSTRUCTOR COURSES API RESPONSE:", response)
+
+    if (!response?.data?.success) {
+      throw new Error(response?.data?.message)
+    }
+
+    result = response?.data?.data
+  } catch (error) {
+    console.log("GET INSTRUCTOR COURSES API ERROR:", error)
+    toast.error(
+      error?.response?.data?.message ||
+      "Failed to fetch instructor courses"
+    )
+  }
+
+  return result
+}
 // fetching the available course categories
 export const fetchCourseCategories = async () => {
   let result = []

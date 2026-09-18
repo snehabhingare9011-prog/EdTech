@@ -102,10 +102,10 @@ const Sidebar = () => {
       </div>
 
 
-      {/* Confirmation Modal */}
+    
+  {/* Confirmation Modal */}
 
       { confirmationModal && ( <ConfirmationModal modalData={confirmationModal} /> )}
-
     </div>
   );
 };

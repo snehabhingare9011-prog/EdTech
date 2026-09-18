@@ -39,7 +39,8 @@ const CourseInformation = () => {
         setValue("coursePrice", course.price)
         setValue("tag", course.tag)
         setValue("courseBenefits", course.whatYouWillLearn)
-        setValue("category", course.category)
+        setValue("category", course.category._id);
+        console.log("courseCategory",course.category._id)
         setValue("courseRequirements", course.instructions)
         setValue("courseImage", course.thumbnail)
       }
@@ -61,7 +62,7 @@ const CourseInformation = () => {
     console.log("currentValues",currentValues);
     console.log("course",course);
 
-    if(currentValues.category!==course.category||
+    if(currentValues.category!==course.category._id||
       currentValues.courseBenefits!==course.whatYouWillLearn||
       currentValues.courseDescription!==course.courseDescription||
       currentValues.courseImage!==course.thumbnail||
@@ -82,8 +83,14 @@ const CourseInformation = () => {
     console.log(" inside the submit data1",data)
 
     if (editCourse) {
+
+      const currentValues=getValues();
+      console.log("pani ka pani",currentValues);
       
       if (isFormUpdated()) {
+
+        console.log("Inside the isFormUpdated",getValues());
+        console.log("course",course);
 
       const currentValues = getValues()
       console.log("true ho gya");
@@ -112,7 +119,8 @@ const CourseInformation = () => {
 
       }
       
-      if(currentValues.category!==course.category){
+      if(currentValues.category!==course.category._id){
+        console.log("currentValue.category and course.category",currentValues.category,course.category)
         formData.append("category", currentValues.category)
       }
 
@@ -294,8 +302,8 @@ const CourseInformation = () => {
             )}
 
             {!loading &&
-              courseCategories.map((category, indx) => (
-                <option key={indx} value={category?._id}>
+              courseCategories.map((category) => (
+                <option key={category._id} value={category?._id}>
                   {category?.name}
                 </option>
               ))}

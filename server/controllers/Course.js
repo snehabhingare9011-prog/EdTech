@@ -5,6 +5,8 @@ const {uploadFileToCloudinary}=require('../utils/FileUpload');
 require('dotenv').config();
 const Course=require('../models/course');
 require('../models/ratingAndReview')
+const Section =require("../models/section");
+const SubSection =require("../models/subSection");
 
 exports.createCourse = async (req, res) => {
     try {
@@ -94,7 +96,9 @@ exports.createCourse = async (req, res) => {
             tag,
             status,
             instructions,
-        });
+        })
+
+        await newCourse.populate("category")
 
         // Add course to instructor
         const updatedUser = await User.findByIdAndUpdate(
@@ -168,7 +172,9 @@ exports.showAllCourses=async(req , res)=>{
 
 exports.getCourseDetails=async(req,res)=>{
     try{
+       
          const { courseId }=req.body;
+         console.log("dekhti hun meina",req.body )
          if(!courseId){
             return res.status(400).json({
                 success:false,
@@ -280,7 +286,7 @@ exports.editCourse=async(req,res)=>{
             courseId,
             { $set: updateData },
             { new: true }
-        );
+        ).populate("category");
 
        
         return res.status(200).json({
@@ -299,3 +305,93 @@ exports.editCourse=async(req,res)=>{
             });
         }
 };
+
+
+
+exports.getInstructorCourses = async (req, res) => {
+  try {
+    const instructorId = req.user.id;
+
+    const courses = await Course.find({
+      instructor: instructorId,
+    })
+      .populate("category")
+      .populate("courseContent")
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      message: "Instructor courses fetched successfully",
+      data: courses,
+    });
+  } catch (error) {
+    console.log("GET INSTRUCTOR COURSES ERROR:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch instructor courses",
+    });
+  }
+};
+
+
+exports.deleteCourse = async (req, res) => {
+  try {
+    const { courseId } = req.body
+
+    if (!courseId) {
+      return res.status(400).json({
+        success: false,
+        message: "Course ID is required",
+      })
+    }
+
+    // Find course
+    const course = await Course.findById(courseId);
+
+    if (!course) {
+      return res.status(404).json({
+        success: false,
+        message: "Course not found",
+      })
+    }
+
+    // Get all section IDs of this course
+    const sectionIds = course.courseContent;
+
+    // Find all sections
+    const sections = await Section.find({
+      _id: { $in: sectionIds },
+    })
+
+    // Get all subsection IDs
+    const subSectionIds = sections.flatMap(
+      (section) => section.subSection
+    )
+
+    // Delete all subsections
+    await SubSection.deleteMany({
+      _id: { $in: subSectionIds },
+    })
+
+    // Delete all sections
+    await Section.deleteMany({
+      _id: { $in: sectionIds },
+    })
+
+    // Delete course
+    await Course.findByIdAndDelete(courseId);
+
+    return res.status(200).json({
+      success: true,
+      message: "Course deleted successfully",
+    })
+  } catch (error) {
+    console.log("DELETE COURSE ERROR:", error)
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to delete course",
+    })
+  }
+}
