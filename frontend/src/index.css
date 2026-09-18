@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 html,body{
     overflow-x: hidden;
 }
@@ -195,4 +196,10 @@ input:-webkit-autofill:focus {
 
 .form-style:focus {
   outline: none;
+}
+
+@media screen and (min-width: 768px) {
+  .responsiveTable td:before {
+    display: none !important;
+  }
 }
