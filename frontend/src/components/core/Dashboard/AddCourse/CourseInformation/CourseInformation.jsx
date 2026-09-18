@@ -6,7 +6,7 @@ import ChipInput from "./ChipInput";
 import Upload from "../Upload";
 import RequirementsField from "./RequirementsField";
 import { useDispatch, useSelector } from "react-redux";
-import { setStep } from "../../../../../redux/slices/courseSlice";
+import { setEditCourse, setStep } from "../../../../../redux/slices/courseSlice";
 import { MdNavigateNext } from "react-icons/md";
 import { addCourseDetails } from "../../../../../services/operations/courseDetailsAPI";
 import { COURSE_STATUS } from "../../../../../utils/constants";
@@ -21,7 +21,7 @@ const CourseInformation = () => {
   const [loading, setLoading] = useState(false);
   const [courseCategories, setCourseCategories] = useState([]);
   const {course,editCourse}=useSelector(state=>state.course);
-  const {token}=useSelector(state=>state.auth)
+  const {token}=useSelector(state=>state.auth);
 
   const getCategories = async () => {
     try {
@@ -53,8 +53,16 @@ const CourseInformation = () => {
   };
 
   useEffect(() => {
+    
     getCategories();
+   
+
   }, []);
+
+
+
+
+ 
 
   const isFormUpdated=()=>{
      
@@ -80,7 +88,7 @@ const CourseInformation = () => {
   }
 
   const onSubmit = async (data) => {
-    console.log(" inside the submit data1",data)
+    console.log(" inside the submit data1",data);
 
     if (editCourse) {
 

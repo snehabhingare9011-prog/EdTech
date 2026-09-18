@@ -130,7 +130,7 @@ const handleDeleteSection = async (sectionId) => {
                 <div className="px-6 pb-4">
 
                   {
-                    section.subSection.map((data) => (
+                    section?.subSection?.map((data) => (
 
                       <div
                         key={data._id}

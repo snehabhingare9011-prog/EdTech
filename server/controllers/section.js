@@ -23,7 +23,7 @@ exports.createSection=async(req,res)=>{
             courseId,
             {$push:{courseContent:newSection._id}},
             {new:true}
-        ).populate({path:"courseContent",populate:{path:"subSection"}}).exec();
+        ).populate({path:"courseContent",populate:{path:"subSection"}}).populate("category").exec();
 
         return res.status(200).json({
             success:true,
@@ -74,7 +74,7 @@ exports.updateSection = async (req, res) => {
         populate: {
           path: "subSection",
         },
-      });
+      }).populate("category");
 
     return res.status(200).json({
       success: true,
@@ -157,7 +157,7 @@ exports.deleteSection = async (req, res) => {
             populate: {
             path: "subSection",
             },
-        });
+        }).populate("category")
 
         // 6. Delete section document last
         await Section.findByIdAndDelete(sectionId);

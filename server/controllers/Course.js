@@ -286,7 +286,9 @@ exports.editCourse=async(req,res)=>{
             courseId,
             { $set: updateData },
             { new: true }
-        ).populate("category");
+        )
+         .populate("category")
+        .populate({path:"courseContent",populate:{path:"subSection"}}).exec();
 
        
         return res.status(200).json({

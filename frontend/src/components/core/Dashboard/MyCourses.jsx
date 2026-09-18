@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { getInstructorCourses } from '../../../../services/operations/courseDetailsAPI';
+import { getInstructorCourses } from '../../../services/operations/courseDetailsAPI';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import CoursesTable from '../InstructorCourses/CoursesTable';
+import CoursesTable from './InstructorCourses/CoursesTable';
 
 const MyCourses = () => {
 
