@@ -78,7 +78,7 @@ exports.categoryPageDetails=async(req,res)=>{
          const selectedCategory = await Category.findById(categoryId)
             .populate({
                 path: "courses",
-                // match: { status: "Published" }
+                match: { status: "Published" }
             })
             .exec();
             
@@ -108,7 +108,7 @@ exports.categoryPageDetails=async(req,res)=>{
         })
         .populate({
             path: "courses",
-             match: { status: "Published" }
+            match: { status: "Published" }
         })
         .exec();
        
