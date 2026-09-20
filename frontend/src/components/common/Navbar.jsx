@@ -23,6 +23,8 @@ const Navbar = () => {
 
     // Check whether current URL matches a route
     const matchRoute = (route) => {
+        console.log("route",route);
+        console.log("pathName",location.pathname)
 
         return matchPath(
             {

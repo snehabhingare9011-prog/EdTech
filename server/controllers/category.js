@@ -120,8 +120,10 @@ exports.categoryPageDetails=async(req,res)=>{
         // const top10Courses=topSellingCourses.slice(0,10);
 
         // Another Way to Get 10 selling courses
-
-        const allCategories = await Category.find().populate("courses");
+       const allCategories = await Category.find().populate({ 
+            path: "courses", 
+            match: { status: "Published" } 
+        });
 		const allCourses = allCategories.flatMap((category) => category.courses);
 		const mostSellingCourses = allCourses
 			.sort((a, b) => b.studentsEnrolled.length - a.studentsEnrolled.length)

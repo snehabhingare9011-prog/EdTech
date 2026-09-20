@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-
+import Catalog from "./pages/Catalog";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -82,6 +82,8 @@ const App = () => {
             
           </Route>
 
+          {/* Catalog */}
+          <Route path="/catalog/:catalogName" element={<Catalog/>}/>
 
             {/* 404 */}
             <Route path="*" element={<Error />} />
