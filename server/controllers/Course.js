@@ -337,7 +337,7 @@ exports.getInstructorCourses = async (req, res) => {
 };
 
 
-exports.deleteCourse = async (req, res) => {
+ exports.deleteCourse = async (req, res) => {
   try {
     const { courseId } = req.body
 
@@ -397,3 +397,65 @@ exports.deleteCourse = async (req, res) => {
     })
   }
 }
+
+
+exports.deleteAllInstructorCourses = async (req, res) => {
+  try {
+    const instructorId = req.user.id;
+
+    // Find all courses created by this instructor
+    const courses = await Course.find({
+      instructor: instructorId,
+    });
+
+    if (courses.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No courses found for this instructor",
+      });
+    }
+
+    // Get all section IDs from these courses
+    const sectionIds = courses.flatMap(
+      (course) => course.courseContent || []
+    );
+
+    // Find all sections
+    const sections = await Section.find({
+      _id: { $in: sectionIds },
+    });
+
+    // Get all subsection IDs
+    const subSectionIds = sections.flatMap(
+      (section) => section.subSection || []
+    );
+
+    // Delete all subsections
+    await SubSection.deleteMany({
+      _id: { $in: subSectionIds },
+    });
+
+    // Delete all sections
+    await Section.deleteMany({
+      _id: { $in: sectionIds },
+    });
+
+    // Delete all courses
+    const result = await Course.deleteMany({
+      instructor: instructorId,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "All instructor courses deleted successfully",
+      deletedCount: result.deletedCount,
+    });
+  } catch (error) {
+    console.log("DELETE ALL COURSES ERROR:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to delete all courses",
+    });
+  }
+};

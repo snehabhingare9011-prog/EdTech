@@ -18,6 +18,7 @@ const {
   GET_FULL_COURSE_DETAILS_AUTHENTICATED,
   CREATE_RATING_API,
   LECTURE_COMPLETION_API,
+  DELETE_ALL_INSTRUCTOR_COURSES_API
 } = courseEndpoints
 
 
@@ -411,3 +412,43 @@ export const deleteSubSection = async (data, token) => {
   toast.dismiss(toastId);
   return result
 }
+
+//deleteAllInstructorCourses
+export async function deleteAllInstructorCourses(token) {
+  const toastId = toast.loading("Deleting all courses...");
+
+  try {
+    const response = await apiConnector(
+      "DELETE",
+      DELETE_ALL_INSTRUCTOR_COURSES_API,
+      null,
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
+
+    if (!response.data.success) {
+      throw new Error(response.data.message);
+    }
+
+    toast.success("All courses deleted successfully");
+
+    return true;
+  } catch (error) {
+    console.log(
+      "DELETE_ALL_INSTRUCTOR_COURSES_API ERROR:",
+      error
+    );
+
+    toast.error(
+      error?.response?.data?.message ||
+        error?.message ||
+        "Could not delete all courses"
+    );
+
+    return false;
+  } finally {
+    toast.dismiss(toastId);
+  }
+}
+

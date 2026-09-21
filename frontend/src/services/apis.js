@@ -43,6 +43,7 @@ export const ratingsEndpoints = {
 
 // COURSE ENDPOINTS
 export const courseEndpoints = {
+  DELETE_ALL_INSTRUCTOR_COURSES_API:BASE_URL+"/course/delete-all-courses",
   GET_ALL_COURSE_API: BASE_URL + "/course/getAllCourses",
   COURSE_DETAILS_API: BASE_URL + "/course/getCourseDetails",
   EDIT_COURSE_API: BASE_URL + "/course/editCourse",

@@ -1,7 +1,7 @@
 const express=require('express');
 const { auth,isAdmin,isInstructor,isStudent } = require('../middlewares/auth');
 const { createCategory,showallCategories,getCategoryPageDetails } = require('../controllers/category');
-const { createCourse,getCourseDetails,showAllCourses, editCourse, getInstructorCourses, deleteCourse } = require('../controllers/Course');
+const { createCourse,getCourseDetails,showAllCourses, editCourse, getInstructorCourses, deleteCourse ,deleteAllInstructorCourses} = require('../controllers/Course');
 const {createSection,updateSection,deleteSection}=require('../controllers/section');
 const {createSubSection,updateSubSection,deleteSubSection}=require('../controllers/subSection');
 const {createRating, getAverageRating ,getAllRating}=require("../controllers/RatingAndReviewController");
@@ -34,6 +34,8 @@ router.get("/getAllRating",getAllRating)
 
 router.get("/getInstructorCourses",auth,isInstructor,getInstructorCourses)
 router.get("/getCategoryPageDetails/:categoryId", getCategoryPageDetails)
+
+router.delete( "/delete-all-courses", auth, isInstructor, deleteAllInstructorCourses );
 
 
 

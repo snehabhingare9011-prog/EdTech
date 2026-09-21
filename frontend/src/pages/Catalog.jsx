@@ -142,7 +142,7 @@ const Catalog = () => {
 
       {/* Section 3 */}
       <div className=" mx-auto w-full max-w-maxContentTab px-8 py-12 lg:max-w-maxContent">
-        <div className="section_heading">Explore More Courses</div>
+        <div className="section_heading">Explore Other Categories</div>
         <div className="pt-4">
             
          {catalogPageData?.data?.differentCategory.map((category) => (
