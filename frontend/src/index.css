@@ -203,3 +203,46 @@ input:-webkit-autofill:focus {
     display: none !important;
   }
 }
+
+/* Equivalent of section_heading */
+.section_heading {
+  font-size: 24px; /* text-2xl */
+  font-weight: 700;
+  color: #f1f2ff; /* richblack-5 */
+}
+@media (min-width: 1024px) {
+  .section_heading {
+    font-size: 36px; /* text-4xl */
+  }
+}
+
+.course-swiper {
+  position: relative;
+  padding-bottom: 45px !important;
+}
+
+.course-swiper .swiper-pagination {
+  bottom: 5px !important;
+}
+
+.course-swiper .swiper-pagination-bullet {
+  width: 7px !important;
+  height: 7px !important;
+  margin: 0 4px !important;
+  background: #6b7280 !important;
+  opacity: 0.6 !important;
+}
+
+.course-swiper .swiper-pagination-bullet-active {
+  width: 20px !important;
+  border-radius: 999px;
+  background: #ffd60a !important;
+  opacity: 1 !important;
+}
+
+.course-swiper .swiper-pagination-bullet-active {
+  width: 20px !important;
+  border-radius: 999px;
+  background: #ffd60a !important;
+  opacity: 1 !important;
+}

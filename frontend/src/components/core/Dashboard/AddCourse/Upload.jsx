@@ -70,7 +70,7 @@ const Upload = ({
           "video/*": [".mp4", ".webm", ".mov"],
         }
       : {
-          "image/*": [".jpeg", ".jpg", ".png"],
+          "image/*": [".jpeg", ".jpg", ".png",".avif"],
         },
   });
 

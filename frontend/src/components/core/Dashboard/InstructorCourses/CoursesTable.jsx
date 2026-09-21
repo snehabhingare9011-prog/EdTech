@@ -78,6 +78,7 @@ const CoursesTable = ({ courses, setCourses }) => {
                             )
                             :
                             courses.map((course) => {
+                                console.log("course hai jeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",course);
 
                                 return (
                                     <Tr
@@ -102,7 +103,8 @@ const CoursesTable = ({ courses, setCourses }) => {
                                                     </p>
 
                                                     <p className=" text-sm text-richblack-300">
-                                                        {course.courseDescription}
+                                                        {/* {course.courseDescription} */}
+                                                        {course.category.name}
                                                     </p>
 
                                                     <p className="mt-10 text-xs text-richblack-400">
