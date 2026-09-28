@@ -9,6 +9,7 @@ import {Provider} from "react-redux";
 
 
 
+
 ReactDOM.createRoot(document.getElementById("root")).render(
 
   <Provider store={store}>
@@ -17,6 +18,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <App />   
       <Toaster/>
     </BrowserRouter>
+
  
 
   </Provider> 

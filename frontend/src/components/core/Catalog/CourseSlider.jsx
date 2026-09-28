@@ -7,7 +7,6 @@ import "swiper/css/pagination";
 
 // Swiper modules
 import { FreeMode, Pagination } from "swiper/modules";
-
 import CourseCard from "./CourseCard";
 
 function CourseSlider({ Courses }) {
