@@ -184,3 +184,50 @@ exports.verifySignature = async (req, res) => {
   }
 };
 
+// Send Payment Success Email
+exports.sendPaymentSuccessEmail = async (req, res) => {
+  const { orderId, paymentId, amount } = req.body;
+
+  const userId = req.user.id;
+
+  if (!orderId || !paymentId || !amount || !userId) {
+    return res.status(400).json({
+      success: false,
+      message: "Please provide all the details",
+    });
+  }
+
+  try {
+    const enrolledStudent = await User.findById(userId);
+
+    if (!enrolledStudent) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    await mailSender(
+      enrolledStudent.email,
+      "Payment Received",
+      paymentSuccessEmail(
+        `${enrolledStudent.firstName} ${enrolledStudent.lastName}`,
+        amount / 100,
+        orderId,
+        paymentId
+      )
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Payment success email sent successfully",
+    });
+  } catch (error) {
+    console.log("ERROR IN SENDING PAYMENT SUCCESS EMAIL:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Could not send email",
+    });
+  }
+};
