@@ -63,7 +63,7 @@ const EnrolledCourses=()=>{
                      
                      {
                         enrolledCourses.map((course,index)=>(
-                            <div>
+                            <div key={index}>
                                 {/* left  */}
                                 <div>
                                     <img src={course.thumbnail}/>
@@ -73,16 +73,16 @@ const EnrolledCourses=()=>{
                                     </div>
                                 </div>
 
-                                {/* middle */}
+                                {/* middle
                                 <div>
                                     {course.totalDuration}
-                                </div>
+                                </div> */}
 
                                 {/* right */}
-                                <div>
+                                {/* <div>
                                     <p>Progress:{course.progressPercentage||0}%</p>
                                     <ProgressBar completed={course.progressPercentage||0} height="8px" isLabelVisible={false} />
-                                </div>
+                                </div> */}
 
                             </div>
 

@@ -5,6 +5,7 @@ const sendMail=require('../utils/mailSender');
 const { default: mongoose } = require('mongoose');
 const {courseEnrollmentEmail} =require("../mail/templates/courseEnrollmentEmail")
 require("dotenv").config();
+const { paymentSuccessEmail}=require("../mail/templates/paymentSuccessEmail")
 const crypto=require("crypto");
 
 exports.createPaymentOrder= async (req, res) => {
@@ -207,7 +208,7 @@ exports.sendPaymentSuccessEmail = async (req, res) => {
       });
     }
 
-    await mailSender(
+    await sendMail(
       enrolledStudent.email,
       "Payment Received",
       paymentSuccessEmail(
@@ -222,6 +223,7 @@ exports.sendPaymentSuccessEmail = async (req, res) => {
       success: true,
       message: "Payment success email sent successfully",
     });
+    
   } catch (error) {
     console.log("ERROR IN SENDING PAYMENT SUCCESS EMAIL:", error);
 

@@ -25,6 +25,7 @@ import AddCourse from "./components/core/Dashboard/AddCourse";
 import CourseBuilderForm from "./components/core/Dashboard/AddCourse/CourseBuilder/CourseBuilderForm";
 import MyCourses from "./components/core/Dashboard/MyCourses";
 import EditCourse from "./components/core/Dashboard/EditCourse/EditCourse";
+import CourseDetails from "./pages/CourseDetails";
 
 const App = () => {
   console.log("inside the app");
@@ -84,6 +85,7 @@ const App = () => {
 
           {/* Catalog */}
           <Route path="/catalog/:catalogName" element={<Catalog/>}/>
+          <Route path="/courses/:courseId" element={<CourseDetails/>}/>
 
             {/* 404 */}
             <Route path="*" element={<Error />} />
