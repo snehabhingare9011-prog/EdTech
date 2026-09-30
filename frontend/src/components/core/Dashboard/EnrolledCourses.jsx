@@ -66,7 +66,7 @@ const EnrolledCourses=()=>{
                             <div key={index}>
                                 {/* left  */}
                                 <div>
-                                    <img src={course.thumbnail}/>
+                                    <img src={course.thumbnail} alt="course_img" className="h-14 w-14 rounded-lg object-cover" />
                                     <div>
                                         <p>{course.courseName}</p>
                                         <p>{course.courseDescription}</p>

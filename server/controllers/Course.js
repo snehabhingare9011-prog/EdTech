@@ -186,7 +186,6 @@ exports.getCourseDetails=async(req,res)=>{
          .populate({path:"instructor",populate:{path:"additionalDetails"}})
          .populate("ratingAndReviews")
          .populate("category")
-         .populate("studentsEnrolled")
          .populate({path:"courseContent",populate:{path:"subSection"}}).exec();
 
          if(!courseDetails){
