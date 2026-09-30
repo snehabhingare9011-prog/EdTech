@@ -194,10 +194,24 @@ exports.getCourseDetails=async(req,res)=>{
             })
          }
 
+          // Calculate total course duration
+            let totalDurationInSeconds = 0;
+
+            courseDetails.courseContent.forEach((section) => {
+            section.subSection.forEach((subSection) => {
+                const timeDurationInSeconds = parseInt(
+                subSection.timeDuration
+                );
+
+                totalDurationInSeconds += timeDurationInSeconds;
+            });
+            });
+
          return res.status(200).json({
             success:true,
             message:"Course details fetched successfully",
-            data:courseDetails
+            data:courseDetails,
+            totalDuration: totalDurationInSeconds,
          })
 
 

@@ -12,7 +12,7 @@ import { FiEdit2 } from "react-icons/fi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { HiClock } from "react-icons/hi";
 import { FaCheck } from "react-icons/fa";
-import { formatDate } from '../../../../services/formateDate';
+import { formatDate } from '../../../../utils/formateDate';
 
 const CoursesTable = ({ courses, setCourses }) => {
 

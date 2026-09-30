@@ -64,7 +64,7 @@ const Upload = ({
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    disabled: !!file || !!viewData || !!editData||!!preview,
+    disabled: !!file || !!viewData ||!!preview,
     accept: video
       ? {
           "video/*": [".mp4", ".webm", ".mov"],

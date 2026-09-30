@@ -45,7 +45,9 @@ export const getFullDetailsOfCourse = async (courseId, token) => {
       throw new Error(response?.data?.message)
     }
 
-    result = response?.data
+    console.log("getCourseDetails aip response",response);
+
+    result = response
   } catch (error) {
     console.log("GET FULL COURSE DETAILS ERROR:", error)
 

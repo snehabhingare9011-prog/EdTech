@@ -24,10 +24,13 @@ exports.createSubSection = async (req, res) => {
       process.env.FOLDER_NAME
     )
 
+    console.log("i have to see the upload result",uploadResult)
+
     // Create subsection
     const subSection = await SubSection.create({
       title,
       description,
+      timeDuration:uploadResult.duration,
       videoUrl: uploadResult.secure_url,
     })
 
@@ -89,6 +92,7 @@ exports.updateSubSection = async (req, res) => {
       )
 
       updateData.videoUrl = uploadResult.secure_url
+      updateData.timeDuration=uploadResult.duration
     }
 
     const updatedSubSection =
