@@ -30,7 +30,7 @@ const CourseDetails = () => {
   const [confirmationModal, setConfirmationModal] = useState(null);
   const { paymentLoading } = useSelector((state) => state.course);
   const { loading } = useSelector((state) => state.profile);
-  const [isActive, setIsActive] = useState(Array(0))
+  const [isActive, setIsActive] = useState([]);
 
   const handleActive = (id) => {
     setIsActive( !isActive.includes(id) ? isActive.concat([id]) : isActive.filter((e) => e !== id) )
@@ -107,6 +107,7 @@ const CourseDetails = () => {
       btn2Handler: () => setConfirmationModal(null),
     });
   }
+  
 
   // Show loader while payment is being processed
   if (paymentLoading) {
@@ -206,10 +207,7 @@ const CourseDetails = () => {
                   <span>{formatDuration(courseData.totalDuration)} total length</span>
                 </div>
                 <div>
-                  <button
-                    className="text-yellow-25"
-                    onClick={() => setIsActive([])}
-                  >
+                  <button className="text-yellow-25" onClick={() => setIsActive([])} >
                     Collapse all sections
                   </button>
                 </div>
@@ -218,9 +216,9 @@ const CourseDetails = () => {
 
             {/* Course Details Accordion */}
             <div className="py-4">
-              {courseData.data.courseContent?.map((course, index) => (
+              {courseData.data.courseContent?.map((section, index) => (
                 <CourseAccordionBar
-                  course={course}
+                  section={section}
                   key={index}
                   isActive={isActive}
                   handleActive={handleActive}
@@ -245,18 +243,21 @@ const CourseDetails = () => {
               </div>
              
             </div>
+
           </div>
 
           
         </div>
       </div>
-
+      
+      {/* Footer */}
       <Footer/>
       
-
       {confirmationModal && (
         <ConfirmationModal modalData={confirmationModal} />
       )}
+      
+
     </div>
   );
 };

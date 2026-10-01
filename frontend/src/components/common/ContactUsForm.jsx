@@ -50,8 +50,8 @@ const ContactUsForm = () => {
               placeholder="Enter first name"
               className={`w-full rounded-lg border bg-richblack-800 px-4 py-3 text-richblack-5 placeholder:text-richblack-400 outline-none transition-all duration-200 ${
                 errors.firstName
-                  ? "border-yellow-100"
-                  : "border-richblack-700 focus:border-yellow-50 focus:ring-1 focus:ring-yellow-50"
+                  ? "border-richblack-700"
+                  : "border-richblack-700 focus:border-richblack-700 focus:border-b-white focus:ring-0"
               }`}
               {...register("firstName", {
                 required: "Please enter your first name.",
@@ -78,8 +78,8 @@ const ContactUsForm = () => {
               placeholder="Enter last name"
               className={`w-full rounded-lg border bg-richblack-800 px-4 py-3 text-richblack-5 placeholder:text-richblack-400 outline-none transition-all duration-200 ${
                 errors.lastName
-                  ? "border-yellow-100"
-                  : "border-richblack-700 focus:border-yellow-50 focus:ring-1 focus:ring-yellow-50"
+                  ? "border-richblack-700"
+                  : "border-richblack-700 focus:border-richblack-700 focus:border-b-white focus:ring-0"
               }`}
               {...register("lastName", {
                 required: "Please enter your last name.",
@@ -108,8 +108,8 @@ const ContactUsForm = () => {
             placeholder="Enter email address"
             className={`w-full rounded-lg border bg-richblack-800 px-4 py-3 text-richblack-5 placeholder:text-richblack-400 outline-none transition-all duration-200 ${
               errors.email
-                ? "border-yellow-100"
-                : "border-richblack-700 focus:border-yellow-50 focus:ring-1 focus:ring-yellow-50"
+                ? "border-richblack-700"
+                : "border-richblack-700 focus:border-richblack-700 focus:border-b-white focus:ring-0"
             }`}
             {...register("email", {
               required: "Please enter your email address.",
@@ -141,8 +141,8 @@ const ContactUsForm = () => {
               id="countryCode"
               className={`w-[150px] cursor-pointer rounded-lg border bg-richblack-800 px-3 py-3 text-richblack-5 outline-none transition-all duration-200 ${
                 errors.countryCode
-                  ? "border-yellow-100"
-                  : "border-richblack-700 focus:border-yellow-50 focus:ring-1 focus:ring-yellow-50"
+                  ? "border-richblack-700"
+                  : "border-richblack-700 focus:border-richblack-700 focus:border-b-white focus:ring-0"
               }`}
               {...register("countryCode", {
                 required: "Please select a country code.",
@@ -165,8 +165,8 @@ const ContactUsForm = () => {
               placeholder="1234567890"
               className={`flex-1 rounded-lg border bg-richblack-800 px-4 py-3 text-richblack-5 placeholder:text-richblack-400 outline-none transition-all duration-200 ${
                 errors.phoneNo
-                  ? "border-yellow-100"
-                  : "border-richblack-700 focus:border-yellow-50 focus:ring-1 focus:ring-yellow-50"
+                  ? "border-richblack-700"
+                  : "border-richblack-700 focus:border-richblack-700 focus:border-b-white focus:ring-0"
               }`}
               {...register("phoneNumber", {
                 required: {
@@ -212,8 +212,8 @@ const ContactUsForm = () => {
             placeholder="Enter your message..."
             className={`h-40 w-full resize-none rounded-lg border bg-richblack-800 px-4 py-3 text-richblack-5 placeholder:text-richblack-400 outline-none transition-all duration-200 ${
               errors.message
-                ? "border-yellow-100"
-                : "border-richblack-700 focus:border-yellow-50 focus:ring-1 focus:ring-yellow-50"
+                 ? "border-richblack-700"
+                  : "border-richblack-700 focus:border-richblack-700 focus:border-b-white focus:ring-0"
             }`}
             {...register("message", {
               required: "Please enter your message.",
