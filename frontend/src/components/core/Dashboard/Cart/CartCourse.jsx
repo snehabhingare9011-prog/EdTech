@@ -4,8 +4,12 @@ import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { FiTrash2 } from "react-icons/fi";
 const ReactStars = ReactStarsModule.default;
 import { removeFromCart } from "../../../../redux/slices/cartSlice";
+import { useDispatch } from "react-redux";
+
 
 const CartCourse = ({ course }) => {
+
+    const dispatch=useDispatch();
    
     // Calculate average rating without API call
     function getAverageRating(reviews){

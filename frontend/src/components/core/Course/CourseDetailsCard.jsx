@@ -11,6 +11,8 @@ import toast from "react-hot-toast";
 function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse, }) {
   const { user } = useSelector((state) => state.profile);
   const { token } = useSelector((state) => state.auth);
+  const {cart}=useSelector(state=>state.cart);
+
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -27,6 +29,10 @@ function CourseDetailsCard({ course, setConfirmationModal, handleBuyCourse, }) {
     }
 
     if (token) {
+
+      console.log("cart",cart);
+      console.log("course",course);
+      
       dispatch(addToCart(course));
       return;
     }

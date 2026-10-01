@@ -33,7 +33,7 @@ const EmptyCart = () => {
 
                     {/* Explore Button */}
                     <button
-                        onClick={() => navigate("/catalog")}
+                        onClick={() => navigate("/catalog/webdev")}
                         className="mt-6 flex items-center gap-2 rounded-md bg-yellow-50 px-6 py-3 text-sm font-semibold text-richblack-900 transition-all duration-200 hover:scale-95 hover:bg-yellow-100"
                     >
                         Explore Courses

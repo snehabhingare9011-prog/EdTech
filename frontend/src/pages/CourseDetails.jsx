@@ -214,9 +214,10 @@ const CourseDetails = () => {
               </div>
             </div>
 
-            {/* Course Details Accordion */}
+            {/* Course Accordion ==> the complete expand/collapse system. */}
             <div className="py-4">
               {courseData.data.courseContent?.map((section, index) => (
+                // Accordion Item / Accordion Bar → one individual section inside the accordion that can be expanded or collapsed.
                 <CourseAccordionBar
                   section={section}
                   key={index}

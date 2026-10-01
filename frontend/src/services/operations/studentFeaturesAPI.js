@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import { studentEndpoints } from "../apis";
 import { apiConnector } from "../apiConnector";
-import { resetCart } from "../../redux/slices/cartSlice";
+import { removeFromCart, resetCart } from "../../redux/slices/cartSlice";
 import { setPaymentLoading } from "../../redux/slices/courseSlice";
 
 const {
@@ -31,7 +31,7 @@ function loadScript(src) {
 }
 
 // Buy Course
-export async function BuyCourse( token, courses, user_details, navigate, dispatch ) {
+export async function BuyCourse( token, courses, user_details, navigate, dispatch,purchaseType="BuyNow" ) {
   const toastId = toast.loading("Processing payment...");
 
   try {
@@ -82,7 +82,7 @@ export async function BuyCourse( token, courses, user_details, navigate, dispatc
       handler: function (response) {
         console.log("RAZORPAY PAYMENT RESPONSE:", response);
         sendPaymentSuccessEmail( response, orderResponse.data.data.amount, token );
-        verifyPayment( { ...response, courses }, token, navigate, dispatch );
+        verifyPayment( { ...response, courses }, token, navigate, dispatch,purchaseType  );
       },
 
     };
@@ -109,9 +109,11 @@ export async function BuyCourse( token, courses, user_details, navigate, dispatc
 }
 
 // Verify the Payment
-export async function verifyPayment( bodyData, token, navigate, dispatch ) {
+export async function verifyPayment( bodyData, token, navigate, dispatch ,purchaseType ) {
   const toastId = toast.loading("Verifying Payment...");
   dispatch(setPaymentLoading(true));
+  const {courses}=bodyData;
+  console.log("courses dekhungi mein",courses);
 
   try {
     const response = await apiConnector(
@@ -132,8 +134,15 @@ export async function verifyPayment( bodyData, token, navigate, dispatch ) {
     toast.success( "Payment Successful. You are enrolled in the course." );
 
     navigate("/dashboard/enrolled-courses");
+    if(purchaseType==='cart'){
+      dispatch(resetCart());
 
-    dispatch(resetCart());
+    }
+    if(purchaseType==="BuyNow"){
+      dispatch(removeFromCart(courses[0]));
+    }
+
+   
 
   } catch (error) {
     console.log( "PAYMENT VERIFY ERROR:", error );

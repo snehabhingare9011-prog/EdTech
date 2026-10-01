@@ -1,14 +1,20 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { BuyCourse } from "../../../../services/operations/studentFeaturesAPI";
+import { useNavigate } from "react-router-dom";
 
 const RenderTotalAmount = () => {
 
-    const { total, cart } = useSelector( (state) => state.cart );
+    const { total, cart ,purchaseType } = useSelector( (state) => state.cart );
+    const {token}=useSelector(state=>state.auth);
+    const {user}=useSelector(state=>state.profile);
+    const dispatch=useDispatch();
+    const navigate=useNavigate();
 
-    function handleBuyCourse() {
+    async function handleBuyCourse() {
 
-        // TODO: Payment Integration
         const courses = cart.map( (course) => course._id );
-        console.log("courses", courses);
+        const result=await BuyCourse(token,courses,user,navigate,dispatch,purchaseType );
+        
     }
 
     return (
