@@ -21,6 +21,8 @@ const EnrolledCourses=()=>{
             console.log("response inside the enrolled coursese",response);
             setEnrolledCourses(response);
 
+            
+
 
         }catch(error){
              console.log("Could not fetch enrolled courses.",error);
@@ -73,16 +75,16 @@ const EnrolledCourses=()=>{
                                     </div>
                                 </div>
 
-                                {/* middle
+                                 {/* middle */}
                                 <div>
-                                    {course.totalDuration}
-                                </div> */}
+                                    {/* {course?.totalDuration} */}
+                                </div> 
 
-                                {/* right */}
-                                {/* <div>
-                                    <p>Progress:{course.progressPercentage||0}%</p>
-                                    <ProgressBar completed={course.progressPercentage||0} height="8px" isLabelVisible={false} />
-                                </div> */}
+                                {/* right */} 
+                                <div>
+                                    <p>Progress:{course?.progressPercentage||0}%</p>
+                                    <ProgressBar completed={course?.progressPercentage||0} height="8px" isLabelVisible={false} />
+                                </div>
 
                             </div>
 

@@ -241,9 +241,26 @@ exports.getEnrolledCourses=async(req,res)=>{
             });
         }
 
+         // Calculate total course duration
+        let totalDurationInSeconds = 0;
+
+           userDetails.courses.courseContent.forEach((section) => {
+            section.subSection.forEach((subSection) => {
+                const timeDurationInSeconds = parseInt(
+                subSection.timeDuration
+                );
+
+                totalDurationInSeconds += timeDurationInSeconds;
+            });
+            });
+
         return res.status(200).json({
             success:true,
-            data:userDetails.courses
+            data:{
+               courses: userDetails.courses,
+               totalDurationInSeconds
+            }
+
         })
 
     }catch(error){

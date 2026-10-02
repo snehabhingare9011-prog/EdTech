@@ -7,6 +7,7 @@ const Course=require('../models/course');
 require('../models/ratingAndReview')
 const Section =require("../models/section");
 const SubSection =require("../models/subSection");
+const CourseProgress=require("../models/courseProgress");
 
 exports.createCourse = async (req, res) => {
     try {
@@ -207,6 +208,10 @@ exports.getCourseDetails=async(req,res)=>{
             });
             });
 
+            
+
+
+
          return res.status(200).json({
             success:true,
             message:"Course details fetched successfully",
@@ -223,6 +228,122 @@ exports.getCourseDetails=async(req,res)=>{
         })
     }
 }
+
+//Full Course Details Controller with totalNoOfLec, CourseProgress, totalDuration
+exports.getFullCourseDetails = async (req, res) => {
+  try {
+    const { courseId } = req.body;
+    const userId = req.user.id;
+
+    // 1. Find the logged-in user
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // 2. Find the course
+    let courseDetails = await Course.findOne({
+      _id: courseId,
+    })
+      .populate({
+        path: "instructor",
+        populate: {
+          path: "additionalDetails",
+        },
+      })
+      .populate("category")
+      .populate("ratingAndReviews")
+      .populate({
+        path: "courseContent",
+        populate: {
+          path: "subSection",
+        },
+      })
+      .exec();
+
+    if (!courseDetails) {
+      return res.status(400).json({
+        success: false,
+        message: `Could not find course with id: ${courseId}`,
+      });
+    }
+
+    // 3. Prevent students from accessing draft courses
+    if (
+      req.user.accountType === "Student" &&
+      courseDetails.status === "Draft"
+    ) {
+      return res.status(403).json({
+        success: false,
+        message: "Accessing a draft course is forbidden",
+      });
+    }
+
+    // 4. Check whether student purchased/enrolled in this course
+    if (req.user.accountType === "Student") {
+      const isEnrolled = user.courses.some(
+        (course) => course.toString() === courseId.toString()
+      );
+
+      if (!isEnrolled) {
+        return res.status(403).json({
+          success: false,
+          message: "You are not enrolled in this course",
+        });
+      }
+    }
+
+    // 5. Get student's progress for this course
+    const courseProgress = await CourseProgress.findOne({
+      courseId: courseId,
+      userId: userId,
+    });
+
+    // 6. Calculate total duration and lectures
+    let totalDurationInSeconds = 0;
+    let lectures = 0;
+
+    courseDetails.courseContent.forEach((section) => {
+      section.subSection.forEach((subSection) => {
+        lectures++;
+
+        const timeDurationInSeconds = parseInt(
+          subSection.timeDuration
+        );
+
+        totalDurationInSeconds += timeDurationInSeconds;
+      });
+    });
+
+    // 7. Convert Mongoose document into normal object
+    courseDetails = courseDetails.toObject();
+
+    // 8. Add total number of lectures
+    courseDetails.totalNoOfLectures = lectures;
+
+    // 9. Send response
+    return res.status(200).json({
+      success: true,
+      data: {
+        courseDetails,
+        totalDuration: totalDurationInSeconds,
+        completedVideos: courseProgress?.completedVideos || [],
+      },
+    });
+
+  } catch (error) {
+    console.log("Error in getFullCourseDetails:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 exports.editCourse=async(req,res)=>{
     try{
@@ -350,8 +471,11 @@ exports.getInstructorCourses = async (req, res) => {
 };
 
 
- exports.deleteCourse = async (req, res) => {
-  try {
+
+
+exports.deleteCourse = async (req, res) => {
+  
+    try {
     const { courseId } = req.body
 
     if (!courseId) {

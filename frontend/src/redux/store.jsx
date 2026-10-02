@@ -3,6 +3,7 @@ import cartReducer from "./slices/cartSlice";
 import authReducer from "./slices/authSlice";
 import profileReducer from "./slices/profileSlice";
 import courseReducer from "./slices/courseSlice";
+import viewCourseReducer from "./slices/viewCourseSlice";
 import { configureStore } from "@reduxjs/toolkit";
 
 export const store=configureStore({
@@ -10,6 +11,7 @@ export const store=configureStore({
         auth:authReducer,
         profile:profileReducer,
         cart:cartReducer,
-        course:courseReducer
+        course:courseReducer,
+        viewCourse: viewCourseReducer,
     }
 })
