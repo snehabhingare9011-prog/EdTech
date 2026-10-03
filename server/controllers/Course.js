@@ -283,6 +283,13 @@ exports.getFullCourseDetails = async (req, res) => {
       });
     }
 
+    if (req.user.accountType === "Instructor") {
+        return res.status(403).json({
+            success: false,
+            message: "Instructor is not allowed to view course lectures",
+        });
+    }
+
     // 4. Check whether student purchased/enrolled in this course
     if (req.user.accountType === "Student") {
       const isEnrolled = user.courses.some(
@@ -443,7 +450,6 @@ exports.editCourse=async(req,res)=>{
 };
 
 
-
 exports.getInstructorCourses = async (req, res) => {
   try {
     const instructorId = req.user.id;
@@ -469,8 +475,6 @@ exports.getInstructorCourses = async (req, res) => {
     });
   }
 };
-
-
 
 
 exports.deleteCourse = async (req, res) => {

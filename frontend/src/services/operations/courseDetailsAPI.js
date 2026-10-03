@@ -23,8 +23,140 @@ const {
 } = courseEndpoints
 
 
-
+// get full details of a course
 export const getFullDetailsOfCourse = async (courseId, token) => {
+  const toastId = toast.loading("Loading...");
+
+  let result = null;
+
+  try {
+    const response = await apiConnector(
+      "POST",
+      GET_FULL_COURSE_DETAILS_AUTHENTICATED,
+      {
+        courseId,
+      },
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
+
+    console.log( "COURSE_FULL_DETAILS_API API RESPONSE............", response );
+
+    if (!response.data.success) {
+      throw new Error(response.data.message);
+    }
+
+    result = response.data.data;
+
+  } catch (error) {
+    console.log( "COURSE_FULL_DETAILS_API API ERROR............", error );
+
+    const message = error?.response?.data?.message || error?.message || "Something went wrong";
+
+    toast.error(message);
+
+    result = error?.response?.data || { success: false, message, };
+
+  } finally {
+    toast.dismiss(toastId);
+  }
+
+  return result;
+};
+
+// mark a lecture as complete
+export const markLectureAsComplete = async (data, token) => {
+  const toastId = toast.loading("Marking lecture as complete...")
+
+  try {
+    console.log("mark complete data", data)
+
+    const response = await apiConnector(
+      "POST",
+      LECTURE_COMPLETION_API,
+      data,
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    )
+
+    console.log(
+      "MARK_LECTURE_AS_COMPLETE_API API RESPONSE............",
+      response
+    )
+
+    // Check whether backend operation was successful
+    if (!response?.data?.success) {
+      throw new Error(
+        response?.data?.message || "Could not mark lecture as complete"
+      )
+    }
+
+    toast.success("Lecture Completed")
+
+    return true
+
+  } catch (error) {
+
+    console.log(
+      "MARK_LECTURE_AS_COMPLETE_API API ERROR............",
+      error
+    )
+
+    // Show backend error message if available
+    toast.error(
+      error?.response?.data?.message ||
+      error?.message ||
+      "Could not mark lecture as complete"
+    )
+
+    return false
+
+  } finally {
+    // Always remove loading toast
+    toast.dismiss(toastId)
+  }
+}
+
+// create a rating for course
+export const createRating = async (data, token) => {
+  const toastId = toast.loading("Loading...")
+  let success = false
+
+  try {
+    const response = await apiConnector(
+      "POST",
+      CREATE_RATING_API,
+      data,
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    )
+    console.log("CREATE RATING API RESPONSE............", response)
+
+    if (!response?.data?.success) {
+      throw new Error(
+        response?.data?.message || "Could Not Create Rating"
+      )
+    }
+    toast.success("Rating Created")
+    success = true
+
+  } catch (error) {
+
+    console.log("CREATE RATING API ERROR............", error)
+    toast.error( error?.response?.data?.message || error?.message || "Could Not Create Rating" )
+    success = false
+
+  } finally {
+    toast.dismiss(toastId)
+  }
+
+  return success
+}
+
+export const fetchCourseDetails  = async (courseId, token) => {
   let result = null
   let toastId = null
 
@@ -35,7 +167,7 @@ export const getFullDetailsOfCourse = async (courseId, token) => {
 
     const response = await apiConnector(
       "POST",
-      GET_FULL_COURSE_DETAILS_AUTHENTICATED,
+      COURSE_DETAILS_API,
       {courseId},
       {
         Authorization: `Bearer ${token}`,
@@ -46,11 +178,11 @@ export const getFullDetailsOfCourse = async (courseId, token) => {
       throw new Error(response?.data?.message)
     }
 
-    console.log("getCourseDetails aip response",response);
+    console.log("fetchCourseDetails  aip response",response);
 
     result = response
   } catch (error) {
-    console.log("GET FULL COURSE DETAILS ERROR:", error)
+    console.log("fetchCourseDetails API ERROR:", error)
 
     toast.error(
       error?.response?.data?.message ||
@@ -64,6 +196,8 @@ export const getFullDetailsOfCourse = async (courseId, token) => {
 
   return result
 }
+
+
 
 export const deleteCourse = async (courseId, token) => {
   let result = null
@@ -128,6 +262,7 @@ export const getInstructorCourses = async (token) => {
 
   return result
 }
+
 // fetching the available course categories
 export const fetchCourseCategories = async () => {
   let result = []
@@ -211,7 +346,6 @@ export const editCourseDetails = async (data, token) => {
   return result;
 };
 
-
 // create a section
 export const createSection = async (data, token) => {
   let result = null;
@@ -247,7 +381,6 @@ export const createSection = async (data, token) => {
     return null;
   }
 };
-
 
 //update Section
 export const updateSection = async (data, token) => {

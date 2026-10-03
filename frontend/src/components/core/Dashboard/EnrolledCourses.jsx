@@ -4,31 +4,30 @@ import Loader from "../../common/Loader";
 import { useEffect, useState } from "react";
 import getUserEnrolledCourses from "../../../services/operations/profileAPI";
 import ProgressBar from "@ramonak/react-progress-bar"
+import { useNavigate } from "react-router-dom";
 
 const EnrolledCourses=()=>{
     console.log("inside the Enrolled Courses");
 
     const {token}=useSelector(state=>state.auth);
+    const navigate=useNavigate();
 
     const [enrolledCourses,setEnrolledCourses]=useState(null);
    
-
     const getEnrolledCoursesHandler=async()=>{
         try{
 
             const response= await getUserEnrolledCourses(token);
 
-            console.log("response inside the enrolled coursese",response);
-            setEnrolledCourses(response);
+            console.log("response inside the enrolled coursese",response.courses);
+            setEnrolledCourses(response.courses);      
 
-            
-
-
-        }catch(error){
+       }catch(error){
              console.log("Could not fetch enrolled courses.",error);
 
         }
     }
+
 
     useEffect(()=>{
 
@@ -67,7 +66,8 @@ const EnrolledCourses=()=>{
                         enrolledCourses.map((course,index)=>(
                             <div key={index}>
                                 {/* left  */}
-                                <div>
+                                
+                                <div onClick={()=>navigate(`/view-course/${course._id}/section/${course.courseContent?.[0]._id}/sub-section/${course?.courseContent?.[0].subSection?.[0]._id}`)}>
                                     <img src={course.thumbnail} alt="course_img" className="h-14 w-14 rounded-lg object-cover" />
                                     <div>
                                         <p>{course.courseName}</p>
@@ -82,8 +82,8 @@ const EnrolledCourses=()=>{
 
                                 {/* right */} 
                                 <div>
-                                    <p>Progress:{course?.progressPercentage||0}%</p>
-                                    <ProgressBar completed={course?.progressPercentage||0} height="8px" isLabelVisible={false} />
+                                    {/* <p>Progress:{course?.progressPercentage||0}%</p>
+                                    <ProgressBar completed={course?.progressPercentage||0} height="8px" isLabelVisible={false} /> */}
                                 </div>
 
                             </div>

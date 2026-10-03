@@ -6,17 +6,19 @@ import "./index.css"
 import {Toaster} from "react-hot-toast"
 import {store} from "./redux/store";
 import {Provider} from "react-redux";
-
+import Pra from "./pra"
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 
   <Provider store={store}>
-
-    <BrowserRouter>
-      <App />   
+ 
+  <BrowserRouter>
+       <App />   
       <Toaster />
-    </BrowserRouter>
+    </BrowserRouter> 
+
+    {/* <Pra/> */}
   
   </Provider> 
  

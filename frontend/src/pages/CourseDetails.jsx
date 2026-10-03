@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { BuyCourse } from "../services/operations/studentFeaturesAPI";
-import { getFullDetailsOfCourse } from "../services/operations/courseDetailsAPI";
+import { fetchCourseDetails } from "../services/operations/courseDetailsAPI";
 import { useEffect, useState } from "react";
 import GetAvgRating from "../utils/avgRating";
 import ConfirmationModal from "../components/common/ConfirmationModal";
@@ -41,7 +41,7 @@ const CourseDetails = () => {
   useEffect(() => {
     (async () => {
       try {
-        const result = await getFullDetailsOfCourse(courseId, token);
+        const result = await fetchCourseDetails(courseId, token);
 
         setCourseData(result.data);
 

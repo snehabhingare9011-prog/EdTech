@@ -1,10 +1,12 @@
 const express=require('express');
 const { auth,isAdmin,isInstructor,isStudent } = require('../middlewares/auth');
 const { createCategory,showallCategories,getCategoryPageDetails } = require('../controllers/category');
-const { createCourse,getCourseDetails,showAllCourses, editCourse, getInstructorCourses, deleteCourse ,deleteAllInstructorCourses} = require('../controllers/Course');
+const { createCourse,getCourseDetails,showAllCourses, editCourse, getInstructorCourses, deleteCourse ,deleteAllInstructorCourses,getFullCourseDetails} = require('../controllers/Course');
 const {createSection,updateSection,deleteSection}=require('../controllers/section');
 const {createSubSection,updateSubSection,deleteSubSection}=require('../controllers/subSection');
 const {createRating, getAverageRating ,getAllRating}=require("../controllers/RatingAndReviewController");
+
+const {updateCourseProgress}=require("../controllers/courseProgressController")
 
 
 const router=express.Router();
@@ -27,6 +29,7 @@ router.put('/updateSubSection',updateSubSection);
 
 router.post('/getCourseDetails',getCourseDetails);
 router.get('/showAllCourses',showAllCourses)
+router.post("/getFullCourseDetails", auth,getFullCourseDetails)
 
 router.post('/createRating',auth,isStudent,createRating);
 router.get('/getAverageRating',getAverageRating);
@@ -34,7 +37,7 @@ router.get("/getAllRating",getAllRating)
 
 router.get("/getInstructorCourses",auth,isInstructor,getInstructorCourses)
 router.get("/getCategoryPageDetails/:categoryId", getCategoryPageDetails)
-
+router.post("/updateCourseProgress", auth, isStudent, updateCourseProgress)
 router.delete( "/delete-all-courses", auth, isInstructor, deleteAllInstructorCourses );
 
 

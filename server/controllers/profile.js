@@ -241,24 +241,24 @@ exports.getEnrolledCourses=async(req,res)=>{
             });
         }
 
-         // Calculate total course duration
-        let totalDurationInSeconds = 0;
+        //  // Calculate total course duration
+        // let totalDurationInSeconds = 0;
 
-           userDetails.courses.courseContent.forEach((section) => {
-            section.subSection.forEach((subSection) => {
-                const timeDurationInSeconds = parseInt(
-                subSection.timeDuration
-                );
+        //    userDetails.courses.courseContent.forEach((section) => {
+        //     section.subSection.forEach((subSection) => {
+        //         const timeDurationInSeconds = parseInt(
+        //         subSection.timeDuration
+        //         );
 
-                totalDurationInSeconds += timeDurationInSeconds;
-            });
-            });
+        //         totalDurationInSeconds += timeDurationInSeconds;
+        //     });
+        //     });
 
         return res.status(200).json({
             success:true,
             data:{
                courses: userDetails.courses,
-               totalDurationInSeconds
+            //    totalDurationInSeconds
             }
 
         })

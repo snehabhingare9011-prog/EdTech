@@ -50,10 +50,10 @@ exports.createRating=async (req,res)=>{
 
         //  OR
 
-        // const courseDetails = await Course.findOne({
-        //      _id: courseId,
-        //       studentsEnrolled: userId
-        // });
+        const courseDetails = await Course.findOne({
+             _id: courseId,
+              studentsEnrolled: userId
+        });
 
         console.log("courseDetails",courseDetails)
        

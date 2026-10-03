@@ -26,9 +26,14 @@ import CourseBuilderForm from "./components/core/Dashboard/AddCourse/CourseBuild
 import MyCourses from "./components/core/Dashboard/MyCourses";
 import EditCourse from "./components/core/Dashboard/EditCourse/EditCourse";
 import CourseDetails from "./pages/CourseDetails";
+import ViewCourse from "./pages/ViewCourse";
+import { ACCOUNT_TYPE } from "./utils/constants";
+import { useSelector } from "react-redux";
+import VideoDetails from "./components/core/viewCourse/VideoDetails";
 
 const App = () => {
   console.log("inside the app");
+  const {user}=useSelector(state=>state.profile);
 
   return (
     <div className="relative w-full min-h-screen bg-richblack-900 font-inter">
@@ -81,6 +86,17 @@ const App = () => {
             <Route path="my-courses" element={<MyCourses/>}/>
             <Route path="edit-course/:courseId" element ={<EditCourse/>}/>
             
+          </Route>
+
+          {/* view Course */}
+           <Route path='/view-course' element={ <PrivateRoute><ViewCourse /> </PrivateRoute> } >
+            {user?.accountType === ACCOUNT_TYPE.STUDENT && (
+              <>
+                <Route path=':courseId/section/:sectionId/sub-section/:subSectionId' 
+                 element={<VideoDetails />} />
+
+              </>
+            )}
           </Route>
 
           {/* Catalog */}

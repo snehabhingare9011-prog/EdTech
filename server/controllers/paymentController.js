@@ -7,6 +7,7 @@ const {courseEnrollmentEmail} =require("../mail/templates/courseEnrollmentEmail"
 require("dotenv").config();
 const { paymentSuccessEmail}=require("../mail/templates/paymentSuccessEmail")
 const crypto=require("crypto");
+const CourseProgress=require("../models/courseProgress");
 
 exports.createPaymentOrder= async (req, res) => {
   try {
@@ -153,6 +154,14 @@ exports.verifySignature = async (req, res) => {
         new: true,
       }
     );
+
+    for (const courseId of courses) {
+      await CourseProgress.create({
+        courseId: courseId,
+        userId: userId,
+        completedVideos: [],
+      });
+    }
 
      // 9. Get course names
     const courseNames = courseDetails.map(

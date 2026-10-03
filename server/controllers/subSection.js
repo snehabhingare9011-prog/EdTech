@@ -69,7 +69,7 @@ exports.updateSubSection = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "Section ID and SubSection ID are required",
-      })
+      });
     }
 
     const updateData = {}
