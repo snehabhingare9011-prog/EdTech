@@ -1,9 +1,9 @@
 
 const Profile=require('../models/profile');
 const User=require('../models/user');
-const Course=require('../models/course');
 require("dotenv").config();
 const {uploadFileToCloudinary}=require('../utils/FileUpload');
+const CourseProgress=require("../models/courseProgress");
 
 
 // ❓🙋‍♂️ /^[6-9]\d{9}$/ ❓🙋‍♂️
@@ -215,61 +215,86 @@ exports.updateDisplayPicture=async(req,res)=>{
 }
 
 //getEnrolledCourses
-exports.getEnrolledCourses=async(req,res)=>{
-    try{
+exports.getEnrolledCourses = async (req, res) => {
+    try {
 
-        const userId=req.user.id;
-
-        console.log("inside the backend getEnrolledCourses",req.user.id);
-
-        const userDetails=await User.findById(userId)
+        const user = await User.findById(req.user.id)
             .populate({
-                path:"courses",
-                populate:{
-                    path:"courseContent",
-                    populate:{
-                        path:"subSection"
+                path: "courses",
+                populate: {
+                    path: "courseContent",
+                    populate: {
+                        path: "subSection",
                     }
                 }
+            })
+            .exec();
 
-            }).exec();
-
-        if(!userDetails){
-           return  res.status(404).json({
-                success:false,
-                message:"User not Found"
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found!"
             });
         }
 
-        //  // Calculate total course duration
-        // let totalDurationInSeconds = 0;
+        var userDetails = user.toObject();
 
-        //    userDetails.courses.courseContent.forEach((section) => {
-        //     section.subSection.forEach((subSection) => {
-        //         const timeDurationInSeconds = parseInt(
-        //         subSection.timeDuration
-        //         );
-
-        //         totalDurationInSeconds += timeDurationInSeconds;
-        //     });
-        //     });
-
-        return res.status(200).json({
-            success:true,
-            data:{
-               courses: userDetails.courses,
-            //    totalDurationInSeconds
-            }
-
-        })
-
-    }catch(error){
-
-        console.log('Error in getting enrolled courses: ', error);
-        return res.status(500).json({
-            success: false,
-            message: error.message,
+       const allProgress = await CourseProgress.find({
+            userId: user._id,
         });
 
+        // Store progress using courseId
+        const progressMap = new Map();
+
+        for (const progress of allProgress) {
+            progressMap.set(progress.courseId.toString(), progress);
+        }
+
+        // Calculate progress for each enrolled course
+        for (const currentCourse of userDetails.courses) {
+
+            let totalDuration = 0;
+            let totalLectures = 0;
+
+            // Calculate total duration and total lectures
+            for (const section of currentCourse.courseContent) {
+
+                totalDuration += section.subSection.reduce(
+                    (acc, curr) => acc + parseInt(curr.timeDuration),
+                    0
+                );
+
+                totalLectures += section.subSection.length;
+            }
+
+            currentCourse.totalDuration = totalDuration;
+
+            // Get progress of this course
+            const courseProgress = progressMap.get(
+                currentCourse._id.toString()
+            );
+
+            const completedLectures = courseProgress?.completedVideos?.length || 0;
+
+            // Calculate percentage
+            currentCourse.progressPercentage = totalLectures === 0 ? 100 : Math.round( (completedLectures / totalLectures) * 100 * 100 ) / 100;
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Enrolled courses fetch successfully!",
+            data: userDetails.courses,
+        });
+
+    } catch (err) {
+        console.log(
+            "Error in getting enrolled courses: ",
+            err
+        );
+
+        return res.status(500).json({
+            success: false,
+            message: "Error in getting enrolled courses",
+        });
     }
-}
+};

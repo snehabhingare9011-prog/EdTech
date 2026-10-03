@@ -1,100 +1,183 @@
-
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Loader from "../../common/Loader";
 import { useEffect, useState } from "react";
 import getUserEnrolledCourses from "../../../services/operations/profileAPI";
-import ProgressBar from "@ramonak/react-progress-bar"
 import { useNavigate } from "react-router-dom";
+import {formatDuration} from "../../../utils/formatDuration"
 
-const EnrolledCourses=()=>{
+const EnrolledCourses = () => {
     console.log("inside the Enrolled Courses");
 
-    const {token}=useSelector(state=>state.auth);
-    const navigate=useNavigate();
+    const { token } = useSelector((state) => state.auth);
+    const navigate = useNavigate();
 
-    const [enrolledCourses,setEnrolledCourses]=useState(null);
-   
-    const getEnrolledCoursesHandler=async()=>{
-        try{
+    const [enrolledCourses, setEnrolledCourses] = useState(null);
 
-            const response= await getUserEnrolledCourses(token);
+    const getEnrolledCoursesHandler = async () => {
+        try {
+            const response = await getUserEnrolledCourses(token);
 
-            console.log("response inside the enrolled coursese",response.courses);
-            setEnrolledCourses(response.courses);      
+            console.log( "response inside the enrolled courses", response );
 
-       }catch(error){
-             console.log("Could not fetch enrolled courses.",error);
+            setEnrolledCourses(response);
 
+        } catch (error) {
+            console.log(
+                "Could not fetch enrolled courses.",
+                error
+            );
         }
-    }
+    };
 
-
-    useEffect(()=>{
-
+    useEffect(() => {
         getEnrolledCoursesHandler();
+    }, []);
 
-    },[]);
+    return (
+        <div className="max-w-250 mx-auto">
 
-    return <div className="max-w-250 mx-auto">
-        <div className="text-3xl text-richblack-50">Enrolled Courses</div>
-          
-        {
-            !enrolledCourses?<Loader/>
-            : !enrolledCourses.length ? (
+            {/* Heading */}
+            <div className="text-3xl text-richblack-50">
+                Enrolled Courses
+            </div>
+
+            {/* Loading */}
+            {!enrolledCourses ? (
+                <div className="grid place-items-center">
+                    <Loader />
+                </div>
+
+            ) : !enrolledCourses.length ? (
+
+                /* No Courses */
                 <div className="mt-5 flex min-h-[40vh] flex-col items-center justify-center gap-3 rounded-lg border border-richblack-700 bg-richblack-800 p-8">
+
                     <h2 className="text-2xl font-semibold text-richblack-5">
                         No Courses Enrolled
                     </h2>
+
                     <p className="text-center text-richblack-300">
                         You haven't enrolled in any courses yet.
                     </p>
+
                     <p className="text-center text-sm text-richblack-400">
-                        Explore our catalog and start your learning journey today.
+                        Explore our catalog and start your learning
+                        journey today.
                     </p>
+
                 </div>
-            ):(
+
+            ) : (
+
+                /* Courses */
                 <div className="my-8 text-richblack-5">
+
                     {/* Headings */}
-                    <div className="flex rounded-t-lg bg-richblack-500 ">
-                        <p className="w-[45%] px-5 py-3">Course Name</p>
-                        <p className="w-1/4 px-2 py-3">Duration</p>
-                        <p className="flex-1 px-2 py-3">Progress</p>
+                    <div className="flex rounded-t-lg bg-richblack-500">
+
+                        <p className="w-[45%] px-5 py-3">
+                            Course Name
+                        </p>
+
+                        <p className="w-1/4 px-2 py-3">
+                            Duration
+                        </p>
+
+                        <p className="flex-1 px-2 py-3">
+                            Progress
+                        </p>
+
                     </div>
-                    {/* Courses Start Here */}
-                     
-                     {
-                        enrolledCourses.map((course,index)=>(
-                            <div key={index}>
-                                {/* left  */}
-                                
-                                <div onClick={()=>navigate(`/view-course/${course._id}/section/${course.courseContent?.[0]._id}/sub-section/${course?.courseContent?.[0].subSection?.[0]._id}`)}>
-                                    <img src={course.thumbnail} alt="course_img" className="h-14 w-14 rounded-lg object-cover" />
-                                    <div>
-                                        <p>{course.courseName}</p>
-                                        <p>{course.courseDescription}</p>
+
+                    {/* Course List */}
+                    {enrolledCourses.map((course, index, arr) => {
+
+                        const progress = Number.isFinite(
+                            course?.progressPercentage
+                        )
+                            ? course.progressPercentage
+                            : 0;
+
+                        const duration = Number.isFinite(
+                            course?.totalDuration
+                        )
+                            ? course.totalDuration
+                            : 0;
+
+                        return (
+                            <div
+                                key={course?._id || index}
+                                className={`flex items-center border border-richblack-700 ${
+                                    index === arr.length - 1
+                                        ? "rounded-b-lg"
+                                        : "rounded-none"
+                                }`}
+                            >
+
+                                {/* Course Name */}
+                                <div
+                                    className="flex w-[45%] cursor-pointer items-center gap-4 px-5 py-3"
+                                    onClick={() => {
+                                        navigate(
+                                            `/view-course/${course?._id}/section/${course?.courseContent?.[0]?._id}/sub-section/${course?.courseContent?.[0]?.subSection?.[0]?._id}`
+                                        );
+                                    }}
+                                >
+
+                                    <img
+                                        src={course?.thumbnail}
+                                        alt="course_img"
+                                        className="h-14 w-14 rounded-lg object-cover"
+                                    />
+
+                                    <div className="flex max-w-xs flex-col gap-2">
+
+                                        <p className="font-semibold">
+                                            {course?.courseName}
+                                        </p>
+
+                                        <p className="text-xs text-richblack-300">
+                                            {course?.courseDescription?.length > 50
+                                                ? `${course.courseDescription.slice(
+                                                      0,
+                                                      50
+                                                  )}...`
+                                                : course?.courseDescription}
+                                        </p>
+
                                     </div>
+
                                 </div>
 
-                                 {/* middle */}
-                                <div>
-                                    {/* {course?.totalDuration} */}
-                                </div> 
+                                {/* Duration */}
+                                <div className="w-1/4 px-2 py-3">
+                                    {formatDuration(duration)}
+                                </div>
 
-                                {/* right */} 
-                                <div>
-                                    {/* <p>Progress:{course?.progressPercentage||0}%</p>
-                                    <ProgressBar completed={course?.progressPercentage||0} height="8px" isLabelVisible={false} /> */}
+                                {/* Progress */}
+                                <div className="flex w-1/5 flex-col gap-2 px-2 py-3">
+
+                                    <p>
+                                        Progress: {progress}%
+                                    </p>
+
+                                    <div className="h-2 w-full rounded-full bg-richblack-600">
+                                        <div
+                                            className="h-2 rounded-full bg-yellow-50 transition-all duration-300"
+                                            style={{ width: `${progress}%` }}
+                                        ></div>
+                                    </div>
+
                                 </div>
 
                             </div>
+                        );
+                    })}
 
-                        ))
-                     }
                 </div>
-            )
-        }
-    </div>
-
-}
+            )}
+        </div>
+    );
+};
 
 export default EnrolledCourses;
