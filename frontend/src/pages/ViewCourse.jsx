@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet, useParams } from "react-router-dom";
-
-import CourseReviewModal from "../components/core/ViewCourse/CourseReviewModal";
-import VideoDetailsSidebar from "../components/core/ViewCourse/VideoDetailsSidebar";
+import CourseReviewModal from "../components/core/viewCourse/CourseReviewModal";
+import VideoDetailsSidebar from "../components/core/viewCourse/VideoDetailsSidebar"
 import { getFullDetailsOfCourse } from "../services/operations/courseDetailsAPI";
 
 import {
@@ -15,52 +14,28 @@ import {
 
 export default function ViewCourse() {
   const { courseId } = useParams();
-
   const { token } = useSelector((state) => state.auth);
-
   const dispatch = useDispatch();
-
   const [reviewModal, setReviewModal] = useState(false);
 
   useEffect(() => {
+     
     (async () => {
-      const courseData = await getFullDetailsOfCourse(
-        courseId,
-        token
-      );
+      const courseData = await getFullDetailsOfCourse( courseId, token );
 
-      dispatch(
-        setCourseSectionData(
-          courseData?.courseDetails?.courseContent || []
-        )
-      );
+      dispatch( setCourseSectionData( courseData?.courseDetails?.courseContent || [] ) );
+      dispatch( setEntireCourseData( courseData?.courseDetails || null ) );
+      dispatch( setCompletedLectures( courseData?.completedVideos || [] ) );
+      dispatch( setTotalNoOfLectures( courseData?.courseDetails?.totalNoOfLectures || 0 ) );
 
-      dispatch(
-        setEntireCourseData(
-          courseData?.courseDetails || null
-        )
-      );
-
-      dispatch(
-        setCompletedLectures(
-          courseData?.completedVideos || []
-        )
-      );
-
-      dispatch(
-        setTotalNoOfLectures(
-          courseData?.courseDetails?.totalNoOfLectures || 0
-        )
-      );
     })();
   }, [courseId, dispatch, token]);
 
   return (
     <>
-      <div className="relative flex min-h-[calc(100vh-66px)] w-full">
-        <VideoDetailsSidebar
-          setReviewModal={setReviewModal}
-        />
+      <div className="relative flex min-h-[calc(100vh-66px)] w-full overflow-hidden">
+
+        <VideoDetailsSidebar setReviewModal={setReviewModal} />
 
         <div className="h-[calc(100vh-66px)] flex-1 overflow-auto">
           <div className="mx-6">

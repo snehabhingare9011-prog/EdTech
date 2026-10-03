@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useState, useRef } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+
 import { updateCompletedLectures } from "../../../redux/slices/viewCourseSlice";
 import IconBtn from "./IconBtn";
 import { markLectureAsComplete } from "../../../services/operations/courseDetailsAPI";
@@ -9,59 +9,53 @@ import { markLectureAsComplete } from "../../../services/operations/courseDetail
 const VideoDetails = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const { courseId, sectionId, subSectionId } = useParams();
 
-  const { courseEntireData, completedLectures, courseSectionData, } = useSelector((state) => state.viewCourse);
+  const { courseEntireData, completedLectures, courseSectionData } =
+    useSelector((state) => state.viewCourse);
 
   const { token } = useSelector((state) => state.auth);
+
   const [videoData, setVideoData] = useState(null);
-
-  const playerRef = useRef(null);
-
   const [previewSource, setPreviewSource] = useState("");
   const [videoEnded, setVideoEnded] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const playerRef = useRef(null);
   const location = useLocation();
 
-
-
+  // Get current video data
   useEffect(() => {
-    (() => {
-      if (!courseSectionData?.length) return;
+    console.log("inde the useEffect of videoooooooooooooooooooooooooooooooo")
+    if (!courseSectionData?.length) return;
 
-      // If any required parameter is missing
-      if (!courseId || !sectionId || !subSectionId) {
-        navigate(`/dashboard/enrolled-courses`);
-      } else {
-        const filteredData = courseSectionData?.filter((section) => {
-          return section?._id === sectionId;
-        });
+    if (!courseId || !sectionId || !subSectionId) {
+      navigate(`/dashboard/enrolled-courses`);
+      return;
+    }
 
-        console.log("filterData", filteredData);
+    const filteredData = courseSectionData.filter(
+      (section) => section?._id === sectionId
+    );
 
-        const filteredVideoData = filteredData?.[0]?.subSection?.filter(
-          (subSection) => subSection?._id === subSectionId
-        );
+    const filteredVideoData = filteredData?.[0]?.subSection?.filter(
+      (subSection) => subSection?._id === subSectionId
+    );
 
-        console.log("filteredVideoData", filteredVideoData);
+    setVideoData(filteredVideoData?.[0] || null);
 
-        setVideoData(filteredVideoData?.[0] || null);
+    setPreviewSource(courseEntireData?.thumbnail || "");
 
-        setPreviewSource(courseEntireData?.thumbnail || "");
+    setVideoEnded(false);
+  }, [ courseId, sectionId, subSectionId, courseSectionData, courseEntireData, location.pathname, navigate, ]);
 
-        setVideoEnded(false);
-      }
-    })();
-  }, [ courseEntireData, courseSectionData, location.pathname,sectionId,subSectionId ]);
-
+  // Check if current video is first video
   const isFirstVideo = () => {
     const currentSectionIndx = courseSectionData?.findIndex(
       (section) => section?._id === sectionId
     );
 
-    if ( currentSectionIndx === -1 || currentSectionIndx === undefined ) {
+    if (currentSectionIndx === -1 || currentSectionIndx === undefined) {
       return false;
     }
 
@@ -70,46 +64,20 @@ const VideoDetails = () => {
         (subSection) => subSection?._id === subSectionId
       );
 
-    if ( currentSectionIndx === 0 && currentSubSectionIndx === 0 ) {
+    if (currentSectionIndx === 0 && currentSubSectionIndx === 0) {
       return true;
-    } else {
-      return false;
     }
+
+    return false;
   };
 
-  const isLastVideo = () => {
-    const currentSectionIndx = courseSectionData?.findIndex(
-      (section) => section?._id === sectionId
-    );
-
-    if ( currentSectionIndx === -1 || currentSectionIndx === undefined ) {
-      return false;
-    }
-
-    const noOfSubsections =
-      courseSectionData?.[currentSectionIndx]?.subSection?.length || 0;
-
-    const currentSubSectionIndx =
-      courseSectionData?.[currentSectionIndx]?.subSection?.findIndex(
-        (data) => data?._id === subSectionId
-      );
-
-    if ( currentSectionIndx === courseSectionData.length - 1 && currentSubSectionIndx === noOfSubsections - 1 ) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
+  // Go to next video
   const goToNextVideo = () => {
     const currentSectionIndx = courseSectionData?.findIndex(
       (section) => section?._id === sectionId
     );
 
-    if (
-      currentSectionIndx === -1 ||
-      currentSectionIndx === undefined
-    ) {
+    if (currentSectionIndx === -1 || currentSectionIndx === undefined) {
       return;
     }
 
@@ -123,6 +91,7 @@ const VideoDetails = () => {
 
     if (currentSubSectionIndx === -1) return;
 
+    // Next video in same section
     if (currentSubSectionIndx !== noOfSubsections - 1) {
       const nextSubSectionId =
         courseSectionData?.[currentSectionIndx]?.subSection?.[
@@ -135,6 +104,7 @@ const VideoDetails = () => {
         `/view-course/${courseId}/section/${sectionId}/sub-section/${nextSubSectionId}`
       );
     } else {
+      // First video of next section
       const nextSectionId =
         courseSectionData?.[currentSectionIndx + 1]?._id;
 
@@ -149,12 +119,41 @@ const VideoDetails = () => {
     }
   };
 
+  // Check if current video is last video
+  const isLastVideo = () => {
+    const currentSectionIndx = courseSectionData?.findIndex(
+      (section) => section?._id === sectionId
+    );
+
+    if (currentSectionIndx === -1 || currentSectionIndx === undefined) {
+      return false;
+    }
+
+    const noOfSubsections =
+      courseSectionData?.[currentSectionIndx]?.subSection?.length || 0;
+
+    const currentSubSectionIndx =
+      courseSectionData?.[currentSectionIndx]?.subSection?.findIndex(
+        (data) => data?._id === subSectionId
+      );
+
+    if (
+      currentSectionIndx === courseSectionData.length - 1 &&
+      currentSubSectionIndx === noOfSubsections - 1
+    ) {
+      return true;
+    }
+
+    return false;
+  };
+
+  // Go to previous video
   const goToPrevVideo = () => {
     const currentSectionIndx = courseSectionData?.findIndex(
       (section) => section?._id === sectionId
     );
 
-    if ( currentSectionIndx === -1 || currentSectionIndx === undefined ) {
+    if (currentSectionIndx === -1 || currentSectionIndx === undefined) {
       return;
     }
 
@@ -165,6 +164,7 @@ const VideoDetails = () => {
 
     if (currentSubSectionIndx === -1) return;
 
+    // Previous video in same section
     if (currentSubSectionIndx !== 0) {
       const prevSubSectionId =
         courseSectionData?.[currentSectionIndx]?.subSection?.[
@@ -177,6 +177,7 @@ const VideoDetails = () => {
         `/view-course/${courseId}/section/${sectionId}/sub-section/${prevSubSectionId}`
       );
     } else {
+      // Last video of previous section
       const prevSectionId =
         courseSectionData?.[currentSectionIndx - 1]?._id;
 
@@ -196,6 +197,7 @@ const VideoDetails = () => {
     }
   };
 
+  // Mark lecture as completed
   const handleLectureCompletion = async () => {
     setLoading(true);
 
@@ -216,7 +218,7 @@ const VideoDetails = () => {
 
   return (
     <div>
-       <div className="flex flex-col gap-5 text-white">
+      <div className="flex flex-col gap-5 text-white">
         {!videoData ? (
           previewSource ? (
             <img
@@ -237,9 +239,12 @@ const VideoDetails = () => {
               src={videoData?.videoUrl}
               controls
               playsInline
+               autoPlay
               onEnded={() => setVideoEnded(true)}
               poster={previewSource}
-            ></video>
+            >
+              Your browser does not support the video tag.
+            </video>
 
             {videoEnded && (
               <div

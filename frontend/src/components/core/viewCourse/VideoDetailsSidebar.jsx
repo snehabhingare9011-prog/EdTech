@@ -3,10 +3,11 @@ import { BsChevronDown } from "react-icons/bs";
 import { IoIosArrowBack } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import IconBtn from "./IconBtn"
 
-import IconBtn from "../../Common/IconBtn";
 
 export default function VideoDetailsSidebar({ setReviewModal }) {
+  console.log("inside the video details")
   const [activeStatus, setActiveStatus] = useState("");
   const [videoBarActive, setVideoBarActive] = useState("");
 
@@ -15,14 +16,10 @@ export default function VideoDetailsSidebar({ setReviewModal }) {
 
   const { sectionId, subSectionId } = useParams();
 
-  const {
-    courseSectionData,
-    courseEntireData,
-    totalNoOfLectures,
-    completedLectures,
-  } = useSelector((state) => state.viewCourse);
+  const { courseSectionData, courseEntireData, totalNoOfLectures, completedLectures, } = useSelector((state) => state.viewCourse);
 
   useEffect(() => {
+    console.log("inside the useEffect");
     if (!courseSectionData?.length) return;
 
     const currentSectionIndex = courseSectionData.findIndex(
@@ -31,28 +28,18 @@ export default function VideoDetailsSidebar({ setReviewModal }) {
 
     if (currentSectionIndex === -1) return;
 
-    const currentSection =
-      courseSectionData[currentSectionIndex];
+    const currentSection = courseSectionData[currentSectionIndex];
 
-    const currentSubSectionIndex =
-      currentSection?.subSections?.findIndex(
-        (subSection) => subSection?._id === subSectionId
-      );
+    const currentSubSectionIndex = currentSection?.subSection?.findIndex( (subSection) => subSection?._id === subSectionId );
 
-    const activeSubSectionId =
-      currentSection?.subSections?.[
-        currentSubSectionIndex
-      ]?._id;
+    const activeSubSectionId = currentSection?.subSection?.[ currentSubSectionIndex ]?._id;
 
     setActiveStatus(currentSection?._id || "");
 
     setVideoBarActive(activeSubSectionId || "");
-  }, [
-    courseSectionData,
-    sectionId,
-    subSectionId,
-    location.pathname,
-  ]);
+
+
+  }, [ courseSectionData, courseEntireData, location.pathname, ]);
 
   const handleSectionClick = (sectionId) => {
     setActiveStatus((prev) =>
@@ -104,12 +91,7 @@ export default function VideoDetailsSidebar({ setReviewModal }) {
           >
 
             {/* Section */}
-            <div
-              onClick={() =>
-                handleSectionClick(section?._id)
-              }
-              className="flex flex-row justify-between bg-richblack-600 px-5 py-4"
-            >
+            <div onClick={() => handleSectionClick(section?._id) } className="flex flex-row justify-between bg-richblack-600 px-5 py-4" >
               <div className="w-[70%] font-semibold">
                 {section?.sectionName}
               </div>
@@ -130,7 +112,7 @@ export default function VideoDetailsSidebar({ setReviewModal }) {
             {/* Sub Sections */}
             {activeStatus === section?._id && (
               <div>
-                {section?.subSections?.map(
+                {section?.subSection?.map(
                   (subSection, i) => (
                     <div
                       className={`flex gap-3 px-5 py-2 ${

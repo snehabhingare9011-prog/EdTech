@@ -5,6 +5,7 @@ import { useSelector } from "react-redux"
 import { TiStarFullOutline, TiStarOutline } from "react-icons/ti"
 import Rating from "react-rating"
 import {createRating } from "../../../services/operations/courseDetailsAPI";
+import toast from "react-hot-toast"
 
 export default function CourseReviewModal({ setReviewModal }) {
 
@@ -32,6 +33,7 @@ export default function CourseReviewModal({ setReviewModal }) {
 
   const onSubmit = async (data) => {
     if (!data.courseRating) {
+      toast.error("rating is required");
       return;
     }
 
