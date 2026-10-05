@@ -1,0 +1,147 @@
+.review-marquee {
+  width: 100%;
+  overflow: hidden;
+}
+
+.review-track {
+  display: flex;
+  width: max-content;
+  gap: 28px;
+
+  animation: review-scroll 28s linear infinite;
+}
+
+@keyframes review-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(calc(-50% - 14px));
+  }
+}
+
+/* Review Card */
+.review-card {
+  width: 380px;
+  min-height: 260px;
+
+  flex-shrink: 0;
+
+  padding: 22px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  background-color: #161d29;
+
+  border: 1px solid #2c333f;
+  border-radius: 10px;
+
+  box-sizing: border-box;
+
+  transition: border-color 0.3s ease;
+}
+
+.review-card:hover {
+  border-color: #4a5568;
+}
+
+
+/* Course Name */
+.review-card .course-name {
+  font-size: 15px;
+  font-weight: 500;
+
+  color: #a6a6b0;
+}
+
+/* User Name */
+.review-card h1 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #f1f2ff;
+  letter-spacing: 0.2px;
+}
+
+/* Review Text */
+.review-card .review-text {
+  margin-top: 10px;
+
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.55;
+
+  color: #a6a6b0;
+}
+
+
+
+/* Rating Section */
+.review-card .rating-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 20px;
+  padding-top: 14px;
+
+  border-top: 1px solid #2c333f;
+}
+
+/* Rating Number */
+.review-card .rating-number {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.review-card .rating-number .rating {
+  font-size: 16px;
+  font-weight: 600;
+
+  color: #e7c009;
+}
+
+.review-card .rating-number .out-of {
+  font-size: 13px;
+
+  color: #838894;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .review-card {
+    width: 350px;
+    min-height: 255px;
+  }
+
+  .review-track {
+    gap: 24px;
+    animation-duration: 28s;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .review-card {
+    width: 310px;
+    min-height: 245px;
+
+    padding: 20px;
+  }
+
+  .review-card h1 {
+    font-size: 15px;
+  }
+
+  .review-card .review-text {
+    font-size: 14px;
+  }
+
+  .review-track {
+    gap: 20px;
+    animation-duration: 25s;
+  }
+}

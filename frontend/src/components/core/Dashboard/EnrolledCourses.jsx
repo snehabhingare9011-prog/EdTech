@@ -155,20 +155,26 @@ const EnrolledCourses = () => {
                                 </div>
 
                                 {/* Progress */}
+                                
                                 <div className="flex w-1/5 flex-col gap-2 px-2 py-4">
 
-                                    <p className="text-sm text-richblack-5">
-                                        Progress: <span className="text-richblack-5">{progress}%</span>
-                                    </p>
+                                <p className="text-sm text-richblack-5">
+                                    Progress: <span className="text-richblack-5">{progress}%</span>
+                                </p>
 
-                                    {/* ProgressBar */}
+                                {/* Progress Bar */}
+                                <div className="h-1.5 w-full rounded-full bg-richblack-600">
 
-                                    <div className="h-1.5 w-full rounded-full bg-richblack-700">
-                                        <div
-                                            className="h-1.5 rounded-full bg-yellow-50 transition-all duration-300"
-                                            style={{ width: `${progress}%` }}
-                                        ></div>
-                                    </div>
+                                    {/* Completed Progress */}
+                                    <div
+                                    className="h-1.5 rounded-full transition-all duration-300"
+                                    style={{
+                                        width: `${progress}%`,
+                                        backgroundColor: "#6D28D9",
+                                    }}
+                                    ></div>
+
+                                </div>
 
                                 </div>
 
