@@ -8,6 +8,7 @@ import FoundingStory from "../assets/Images/FoundingStory.png"
 import LearningGrid from '../components/core/AboutUsPage/LearningGrid'
 import ContactFormSection from '../components/core/AboutUsPage/ContactFormSection'
 import Footer from "../components/common/Footer"
+import ReviewSlider from '../components/common/ReviewSlider'
 
 const About = () => {
   return (
@@ -165,6 +166,29 @@ const About = () => {
     </div>
 
     {/* TODO := sixth section review & rating */}
+     
+       <section className="relative overflow-hidden">
+
+        {/* Background decoration */}
+        <div className="pointer-events-none absolute left-1/2 top-20 h-80 w-80 -translate-x-1/2 rounded-full bg-purple-500/5 blur-3xl" />
+
+        <div className="relative z-10 mx-auto flex w-11/12 max-w-maxContent flex-col items-center gap-3 py-16 text-white">
+
+          <h1 className="text-center text-3xl font-semibold text-richblack-5 md:text-4xl">
+            Reviews from other learners
+          </h1>
+
+          <p className="max-w-2xl text-center text-sm leading-6 text-richblack-300 md:text-base">
+            See what our learners have to say about their learning experience.
+          </p>
+
+          <div className="mt-6 w-full">
+            <ReviewSlider />
+          </div>
+
+        </div>
+
+      </section>
 
     {/* seventh section:= footer  */}
      <Footer/>
