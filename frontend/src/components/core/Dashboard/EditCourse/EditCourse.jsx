@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom"
 import RenderSteps from "../AddCourse/RenderSteps";
 import Loader from "../../../common/Loader";
 import { setEditCourse,setCourse } from "../../../../redux/slices/courseSlice";
-import { getFullDetailsOfCourse } from "../../../../services/operations/courseDetailsAPI";
+import { getFullDetailsOfCourse} from "../../../../services/operations/courseDetailsAPI"
 
 export default function EditCourse() {
 
@@ -21,12 +21,12 @@ export default function EditCourse() {
       setLoading(true)
 
       const result = await getFullDetailsOfCourse(courseId, token);
-      console.log("result of course",result);
+      console.log("result of course",result.courseDetails);
 
-      if (result?.data) {
+      if (result?.courseDetails) {
 
         dispatch(setEditCourse(true));
-        dispatch(setCourse(result.data));
+        dispatch(setCourse(result.courseDetails));
       }
 
       setLoading(false)

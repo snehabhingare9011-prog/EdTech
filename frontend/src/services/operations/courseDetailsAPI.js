@@ -198,7 +198,6 @@ export const fetchCourseDetails  = async (courseId, token) => {
 }
 
 
-
 export const deleteCourse = async (courseId, token) => {
   let result = null
 
@@ -281,29 +280,46 @@ export const fetchCourseCategories = async () => {
   return result
 }
 
-// add the course details
+// create course details
 export const addCourseDetails = async (data, token) => {
-    console.log("data in back",data);
-  let result = null
-  const toastId = toast.loading("Loading...")
+  console.log("data in back", data);
+
+  let result = null;
+  const toastId = toast.loading("Loading...");
+
   try {
-    const response = await apiConnector("POST", CREATE_COURSE_API, data, {
-      "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${token}`,
-    })
+    const response = await apiConnector(
+      "POST",
+      CREATE_COURSE_API,
+      data,
+      {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      }
+    );
+
     console.log("CREATE COURSE API RESPONSE............", response);
+
     if (!response?.data?.success) {
-      throw new Error("Could Not Add Course Details")
+      throw new Error(response?.data?.message || "Could Not Add Course Details");
     }
-    toast.success("Course Details Added Successfully")
-    result = response?.data?.data
+
+    toast.success("Course Details Added Successfully");
+    result = response?.data?.data;
+
   } catch (error) {
-    console.log("CREATE COURSE API ERROR............", error)
-    toast.error(error.message)
+    console.log("CREATE COURSE API ERROR............", error);
+
+    toast.error(
+      error?.response?.data?.message || 
+      error?.message || 
+      "Something went wrong"
+    );
   }
-  toast.dismiss(toastId)
-  return result
-}
+
+  toast.dismiss(toastId);
+  return result;
+};
 
 export const editCourseDetails = async (data, token) => {
   let result = null;
@@ -453,7 +469,6 @@ export const createSubSection = async (data, token) => {
   toast.dismiss(toastId);
   return result
 }
-
 
 // update a subsection
 export const updateSubSection = async (data, token) => {

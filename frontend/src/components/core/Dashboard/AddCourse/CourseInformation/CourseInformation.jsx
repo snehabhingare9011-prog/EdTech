@@ -16,6 +16,7 @@ import { editCourseDetails } from "../../../../../services/operations/courseDeta
 
 
 const CourseInformation = () => {
+  
   const dispatch=useDispatch();
   const { register, handleSubmit, setValue, getValues, formState: { errors }, } = useForm();
   const [loading, setLoading] = useState(false);

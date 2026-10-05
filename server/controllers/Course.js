@@ -208,10 +208,7 @@ exports.getCourseDetails=async(req,res)=>{
             });
             });
 
-            
-
-
-
+          
          return res.status(200).json({
             success:true,
             message:"Course details fetched successfully",
@@ -283,13 +280,7 @@ exports.getFullCourseDetails = async (req, res) => {
       });
     }
 
-    if (req.user.accountType === "Instructor") {
-        return res.status(403).json({
-            success: false,
-            message: "Instructor is not allowed to view course lectures",
-        });
-    }
-
+   
     // 4. Check whether student purchased/enrolled in this course
     if (req.user.accountType === "Student") {
       const isEnrolled = user.courses.some(
