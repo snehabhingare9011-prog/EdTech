@@ -42,13 +42,9 @@ const InstructorChart = ({ courses }) => {
         ),
 
         backgroundColor: colors,
-
         borderColor: "#161D29",
-
         borderWidth: 2,
-
         hoverBorderColor: "#FFFFFF",
-
         hoverBorderWidth: 2,
       },
     ],
@@ -82,9 +78,7 @@ const InstructorChart = ({ courses }) => {
   // Chart options
   const options = {
     responsive: true,
-
     maintainAspectRatio: false,
-
     plugins: {
       // Legend
       legend: {
@@ -92,17 +86,11 @@ const InstructorChart = ({ courses }) => {
 
         labels: {
           color: "#AFB2BF",
-
           boxWidth: 12,
-
           boxHeight: 12,
-
           padding: 10,
-
           usePointStyle: true,
-
           pointStyle: "circle",
-
           font: {
             size: 11,
           },
