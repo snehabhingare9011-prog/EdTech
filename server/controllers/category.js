@@ -75,14 +75,18 @@ exports.getCategoryPageDetails=async(req,res)=>{
         }
 
         //// Get selected category and its courses
-         const selectedCategory = await Category.findById(categoryId)
+        const selectedCategory = await Category.findById(categoryId)
             .populate({
                 path: "courses",
                 match: { status: "Published" },
-                populate: {
-                    path: "instructor",
-                    
-                }
+                populate: [
+                    {
+                        path: "instructor"
+                    },
+                    {
+                        path: "ratingAndReviews"
+                    }
+                ]
             })
             .exec();
             
@@ -107,19 +111,22 @@ exports.getCategoryPageDetails=async(req,res)=>{
 
      
       // Get other categories and their published courses
-        const differentCategory = await Category.find({
-            _id: { $ne: categoryId },
-            
+         const differentCategory = await Category.find({
+            _id: { $ne: categoryId }
         })
-        .populate({
-            path: "courses",
-            match: { status: "Published" },
-            populate: {
-                path: "instructor",
-                
-            }
-        })
-        .exec();
+            .populate({
+                path: "courses",
+                match: { status: "Published" },
+                populate: [
+                    {
+                        path: "instructor"
+                    },
+                    {
+                        path: "ratingAndReviews"
+                    }
+                ]
+            })
+            .exec();
        
 
 
@@ -129,15 +136,21 @@ exports.getCategoryPageDetails=async(req,res)=>{
         // const top10Courses=topSellingCourses.slice(0,10);
 
         // Another Way to Get 10 selling courses
-       const allCategories = await Category.find() .populate({
-            path: "courses",
-            match: { status: "Published" },
-            populate: {
-                path: "instructor",
-                
-            }
-        })
-        .exec();
+        const allCategories = await Category.find()
+            .populate({
+                path: "courses",
+                match: { status: "Published" },
+                populate: [
+                    {
+                        path: "instructor"
+                    },
+                    {
+                        path: "ratingAndReviews"
+                    }
+                ]
+            })
+            .exec();
+            
 		const allCourses = allCategories.flatMap((category) => category.courses);
 		const mostSellingCourses = allCourses
 			.sort((a, b) => b.studentsEnrolled.length - a.studentsEnrolled.length)

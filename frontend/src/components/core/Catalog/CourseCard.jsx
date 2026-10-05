@@ -6,6 +6,8 @@ import GetAvgRating from "../../../utils/avgRating";
 function CourseCard({ course, Height }) {
   const [avgReviewCount, setAvgReviewCount] = useState(0)
 
+  console.log("course dekhna hai",course);
+
   useEffect(() => {
     const count = GetAvgRating(course.ratingAndReviews)
     setAvgReviewCount(count)

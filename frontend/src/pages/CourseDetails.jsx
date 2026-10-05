@@ -18,6 +18,7 @@ import CourseAccordionBar from "../components/core/Course/CourseAccordionBar";
 import Footer from "../components/common/Footer";
 
 
+
 const CourseDetails = () => {
   const { token } = useSelector((state) => state.auth);
   const { courseId } = useParams();
@@ -228,7 +229,7 @@ const CourseDetails = () => {
             </div>
 
             {/* Author Details */}
-            <div className="mb-12 py-4">
+            <div className="mb-13 py-4">
               <p className="text-[28px] font-semibold">Author</p>
               <div className="flex items-center gap-4 py-4">
                 <img
@@ -242,11 +243,14 @@ const CourseDetails = () => {
                 />
                 <p className="text-lg">{`${courseData.data.instructor.firstName} ${courseData.data.instructor.lastName}`}</p>
               </div>
+                <p className="text-richblack-50">
+                {courseData.data.instructor?.additionalDetails?.about}
+              </p>
              
             </div>
+            
 
           </div>
-
           
         </div>
       </div>

@@ -22,7 +22,7 @@ const Home = () => {
     <div className='w-full flex flex-col items-center mt-4'>
 
       {/* HW add this interactive bg to whole project */}
-        {/* Interactive Background */}
+      {/* Interactive Background */}
       {/* <InteractiveBackground /> */}
 
       {/* Section 1 */}
@@ -162,7 +162,7 @@ const Home = () => {
       {/* first part of section 3 */}
       <InstructorSection/>
 
-      {/* Second part of section 3 */}
+      {/* Second part of section 3  rating and review*/}
       <section className="relative overflow-hidden">
 
         {/* Background decoration */}
