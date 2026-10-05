@@ -166,7 +166,7 @@ const About = () => {
     </div>
 
     {/* TODO := sixth section review & rating */}
-     
+    
        <section className="relative overflow-hidden">
 
         {/* Background decoration */}
