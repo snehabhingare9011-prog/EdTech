@@ -6,7 +6,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Navbar from "./components/common/Navbar";
 import About from "./pages/About";
-import Instructor from "./components/core/Dashboard/Instructor";
+import Instructor from "./components/core/Dashboard/InstructorDashboard/Instructor"
 import OpenRoute from "./components/core/Authentication/OpenRoute";
 import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./components/core/Authentication/PrivateRoute";
