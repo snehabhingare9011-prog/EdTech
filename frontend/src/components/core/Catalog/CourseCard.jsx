@@ -14,7 +14,7 @@ function CourseCard({ course, Height }) {
   }, [course])
 
   return (
-    <Link to={`/courses/${course._id}`}>
+    <Link to={`/courses/${course._id}`} onClick={() => window.scrollTo(0, 0)}>
       <div className="group overflow-hidden rounded-xl bg-richblack-800 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
         
         {/* Thumbnail */}

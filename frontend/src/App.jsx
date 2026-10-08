@@ -39,7 +39,7 @@ const App = () => {
   console.log("user in home page",user);
 
   return (
-    <div className="relative w-full min-h-screen bg-richblack-900 font-inter">
+    <div className="relative w-full min-h-screen bg-richblack-900 font-inter pt-20">
 
       {/* Global Interactive Background */}
       <InteractiveBackground />

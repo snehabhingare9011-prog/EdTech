@@ -10,17 +10,31 @@ const Dashboard = () => {
   const profileLoading = useSelector((state) => state.profile.loading);
 
   return (
-    <div className='flex-1 w-full flex bg-richblack-900 overflow-hidden h-full'>
-      <div className='w-60 h-full'>
+    <div className='fixed left-0 right-0 top-20 bottom-0 flex w-full overflow-hidden bg-richblack-900'>
+
+      {/* Sidebar */}
+      <div className='fixed left-0 top-20 bottom-0 w-60'>
         <Sidebar />
       </div>
-      <div className='flex-1 h-full flex justify-center overflow-y-auto hide-scrollbar relative' id='dashboard-content'>
-        <div className='w-full max-w-500 h-full py-10 px-10'>
+
+      {/* Dashboard Content */}
+      <div
+        className='ml-60 flex h-full flex-1 justify-center overflow-y-auto hide-scrollbar'
+        id='dashboard-content'
+      >
+        <div className='min-h-full w-full max-w-500 px-10 py-10'>
           {
-            (authLoading || profileLoading) ? <div className='w-full h-full flex items-center justify-center'><Loader /></div> : <Outlet />
+            (authLoading || profileLoading)
+              ? (
+                <div className='flex h-full w-full items-center justify-center'>
+                  <Loader />
+                </div>
+              )
+              : <Outlet />
           }
         </div>
       </div>
+
     </div>
   )
 }

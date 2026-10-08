@@ -81,7 +81,8 @@ const Navbar = () => {
 
 
     return (
-        <header className="w-full border-b border-richblack-700 bg-richblack-900">
+        // <header className="w-full border-b border-richblack-700 bg-richblack-900">
+       <header className="fixed left-0 top-0 z-50 w-full border-b border-richblack-700 bg-richblack-900">
 
             <div className="mx-auto flex h-20 w-11/12 max-w-[1200px] items-center justify-between">
 
@@ -145,7 +146,7 @@ const Navbar = () => {
 
                                                 subLinks.map((category) => (
 
-                                                    <Link key={category._id} to={`/catalog/${category.name .split(" ") .join("-") .toLowerCase()}`} className=" block rounded-md px-4 py-3 text-[16px] text-richblack-800 transition-colors hover:bg-richblack-50 hover:text-yellow-600 " >
+                                                    <Link key={category._id} to={`/catalog/${category.name .split(" ") .join("-") .toLowerCase()}`}  onClick={() => window.scrollTo(0, 0)}className=" block rounded-md px-4 py-3 text-[16px] text-richblack-800 transition-colors hover:bg-richblack-50 hover:text-yellow-600 " >
                                                         {category.name}
                                                     </Link>
 
@@ -167,9 +168,23 @@ const Navbar = () => {
 
                                     /* ============== NORMAL LINK ============== */
 
+                                    // <NavLink
+                                    //     to={link.path}
+                                    //     className={ ({ isActive }) => ` text-[18px]  transition-colors ${ isActive ? "text-yellow-50" : "text-richblack-5 hover:text-yellow-50" } ` } >
+                                    //     {link.title}
+                                    // </NavLink>
+
                                     <NavLink
                                         to={link.path}
-                                        className={ ({ isActive }) => ` text-[18px]  transition-colors ${ isActive ? "text-yellow-50" : "text-richblack-5 hover:text-yellow-50" } ` } >
+                                        onClick={() => window.scrollTo(0, 0)}
+                                        className={({ isActive }) =>
+                                            ` text-[18px] transition-colors ${
+                                                isActive
+                                                    ? "text-yellow-50"
+                                                    : "text-richblack-5 hover:text-yellow-50"
+                                            }`
+                                        }
+                                    >
                                         {link.title}
                                     </NavLink>
 
