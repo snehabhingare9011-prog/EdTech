@@ -98,35 +98,65 @@ const Catalog = () => {
       </div>
 
        {/* Section 1 */}
-      <div className=" mx-auto w-full max-w-maxContentTab px-8 py-12 lg:max-w-maxContent">
-        <div className="section_heading">Courses to Get You Started</div>
+      
+      <div className="mx-auto w-full max-w-maxContentTab px-8 py-12 lg:max-w-maxContent">
+
+        <div className="section_heading">
+          Courses to Get You Started
+        </div>
+
         <div className="my-4 flex border-b border-b-richblack-600 text-sm">
+
+          {/* All */}
           <p
-            className={`px-4 py-2 ${
+            className={`cursor-pointer px-4 py-2 ${
               active === 1
                 ? "border-b border-b-yellow-25 text-yellow-25"
                 : "text-richblack-50"
-            } cursor-pointer`}
+            }`}
             onClick={() => setActive(1)}
           >
-            Most Popular
+            All
           </p>
+
+          {/* Most Popular */}
           <p
-            className={`px-4 py-2 ${
+            className={`cursor-pointer px-4 py-2 ${
               active === 2
                 ? "border-b border-b-yellow-25 text-yellow-25"
                 : "text-richblack-50"
-            } cursor-pointer`}
+            }`}
             onClick={() => setActive(2)}
+          >
+            Most Popular
+          </p>
+
+          {/* New */}
+          <p
+            className={`cursor-pointer px-4 py-2 ${
+              active === 3
+                ? "border-b border-b-yellow-25 text-yellow-25"
+                : "text-richblack-50"
+            }`}
+            onClick={() => setActive(3)}
           >
             New
           </p>
+
         </div>
+
         <div className="pt-3">
           <CourseSlider
-            Courses={catalogPageData?.data?.selectedCategory?.courses}
+            Courses={
+              active === 1
+                ? catalogPageData?.data?.selectedCategory?.allFromSelectedCategory
+                : active === 2
+                ? catalogPageData?.data?.selectedCategory?.topFromSelectedCategory
+                : catalogPageData?.data?.selectedCategory?.newFromSelectedCategory
+            }
           />
         </div>
+
       </div>
       
       {/* Section 2 */}
