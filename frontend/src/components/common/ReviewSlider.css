@@ -930,12 +930,14 @@
   }
 
 
+.review-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
 
-  .review-modal-overlay {
-
-    padding: 14px;
-
-  }
 
 
 
