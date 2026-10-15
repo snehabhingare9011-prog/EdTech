@@ -6,7 +6,7 @@ let initialState={
     cart:localStorage.getItem("cart")? JSON.parse(localStorage.getItem("cart")):[],
     totalItems:localStorage.getItem("totalItems")?JSON.parse(localStorage.getItem("totalItems")):0,
     total:localStorage.getItem("total")?JSON.parse(localStorage.getItem("total")):0,
-    purchaseType:"cart"
+    purchaseType:"cart" 
 }
 
 const cartSlice= createSlice({

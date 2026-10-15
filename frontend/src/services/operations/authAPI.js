@@ -4,6 +4,7 @@ import { apiConnector } from "../apiConnector";
 import { endpoints } from "../apis";
 import { setUser } from "../../redux/slices/profileSlice";
 import {contactusEndpoint} from "../apis";
+import { resetCart } from "../../redux/slices/cartSlice";
 
 const {LOGIN_API,SENDOTP_API,SIGNUP_API, RESETPASSTOKEN_API,RESETPASSWORD_API} =endpoints;
 const { CONTACT_US_API}=contactusEndpoint;
@@ -158,6 +159,7 @@ export function logout(){
 
         dispatch(setUser(null));
         dispatch(setToken(null));
+        dispatch(resetCart());
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         toast.success("Logged Out");

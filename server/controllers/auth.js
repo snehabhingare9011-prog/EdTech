@@ -236,7 +236,7 @@ exports.login=async (req,res)=>{
                 email:user.email
             }
             const token=jwt.sign(payload,process.env.SECRET_KEY,{
-                expiresIn:"5h"
+                expiresIn:"3d"
             });
 
             user=user.toObject();

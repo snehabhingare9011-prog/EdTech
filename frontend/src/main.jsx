@@ -7,13 +7,15 @@ import {Toaster} from "react-hot-toast"
 import {store} from "./redux/store";
 import {Provider} from "react-redux";
 import Pra from "./pra"
+import AuthInitializer from "./components/common/AuthInitializer";
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 
   <Provider store={store}>
  
-  <BrowserRouter>
+    <BrowserRouter>
+      <AuthInitializer/>
        <App />   
       <Toaster />
     </BrowserRouter> 
